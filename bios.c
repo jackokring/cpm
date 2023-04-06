@@ -10,6 +10,8 @@
  |  Copyright 1994-1995,2000 by CodeGen, Inc.  All Rights Reserved.           |
 \*-----------------------------------------------------------------------*/
 
+// This is the CP/M bios
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -954,6 +956,7 @@ bios(z80info *z80, unsigned int fn)
 		wrsector,	/* 14 */
 		liststat,	/* 15 */
 		secttran,	/* 16 */
+		// Classic CP/M finishes here
 		openunix,	/* 17 */
 		createunix,	/* 18 */
 		rdunix,		/* 19 */

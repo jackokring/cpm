@@ -1,5 +1,7 @@
 /* BDOS emulation */
 
+// BDOS for CP/M
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -338,6 +340,7 @@ char *bdos_decode(int n)
 	    case 34: return "write random record";
 	    case 35: return "compute file size";
 	    case 36: return "set random record";
+	    // Seems BDOS ends here
 	    case 41:
 	    default: return "unknown";
 	}
