@@ -429,7 +429,7 @@ int fixrc(z80info *z80, FILE *fp)
 }
 
 /* emulation of BDOS calls */
-
+int tempA;
 void check_BDOS_hook(z80info *z80) {
 		/* 0 to 36 */
     int i;
@@ -867,21 +867,30 @@ void check_BDOS_hook(z80info *z80) {
 			break; /* NOP no redirection */
 		case 30: /* Set File Attributes (are they any?) */
 		case 37: /* Reset Disk (try 13 but just one disk) */
+		case 40: /* Write Random with Zero Fill (try 34 with zeros) */
 			A = 0xFF;/* an error as can't close etc. and no attributes */
 			break;
 		case 3: /* Reader Input */
+		    	tmpA = C;
 			bios(z80, 7);
+		    	E = C;
+		    	C = tmpA;
 			break;
 		case 4: /* Punch Output */
+		    	tmpA = C;
+		    	C = E;
 			bios(z80, 6);
+		    	C = tmpA;
 			break;
 		case 5: /* List Output */
+		    	tmpA = C;
+		    	C = E;
 			bios(z80, 5);
+		    	C = tmpA;
 			break;
-		/* case 40: */ /* Write Random with Zero Fill (try 34 with zeros) */
 		case 27: /* Get Alloc Address (doesn't exist, ouside 64 kB) */
 			printf("\n\nThere is no way to use a custom linux Alloc Addr.\n");
-			/* fall through */
+			/* fall through as dangerous to proceed */
     default:
 	printf("\n\nUnrecognized BDOS-Function:\n");
 	printf("AF=%04x  BC=%04x  DE=%04x  HL=%04x  SP=%04x\nStack =",
