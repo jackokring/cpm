@@ -204,11 +204,19 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x16: /* SYN */
 		case 0x17: /* ETB */
 		case 0x19: /* EM */
-		case 0x1c: /* FS */
-		case 0x1d: /* GS */
-		case 0x1e: /* RS */
-		case 0x1f: /* US */
 			break;
+		case 0x1c: /* FS */
+			putmes("\"\f\"");
+			break;
+		case 0x1d: /* GS */
+			putmes("\"\n\n\"");
+			break;
+		case 0x1e: /* RS */
+			putmes("\"\n\"");
+			break;
+		case 0x1f: /* US */
+			putmes("\", \"");
+			break; /* don't quote me on this */
 			
 #ifdef VBELL
         case 0x07:              /* BEL: flash screen */
