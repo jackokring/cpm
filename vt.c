@@ -192,12 +192,8 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	switch (c) {
 		/* Jacko override put CTRL */
 		case 0: /* NUL */
-		case 4: /* ETX */
 		case 6: /* ACK */
-		case 8: /* BS */
-		case 9: /* HT */
-
-		case 0xb: /* VT */
+	
 		case 0xe: /* SO */
 		case 0xf: /* SI */
 		
