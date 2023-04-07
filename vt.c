@@ -191,19 +191,23 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     case 0:
 	switch (c) {
 		/* Jacko override put CTRL */
-		case 0: /* NUL */
-		case 6: /* ACK */
-	
+		/*^ the irony of LF equates to VT when the CR is not auto (the LF/CR what do auto point?) */
+		case 0: /* NUL (C string terminal, but nothing as a SYN duplicate but zero, so flash default) */
+		case 6: /* ACK (got you) */
+			break;
 		case 0xe: /* SO */
+			putmes("\033[37;40m"); /* wakey, not RYGB or M */
+			break;
 		case 0xf: /* SI */
-		
-		case 0x10: /* DLE */
-		case 0x11: /* DC1 */
-		case 0x14: /* DC4 */
-		case 0x15: /* NAK */
-		case 0x16: /* SYN */
-		case 0x17: /* ETB */
-		case 0x19: /* EM */
+			putmes("\033[91;40m");
+			break;
+		case 0x10: /* DLE (ask root RPC options) */
+		case 0x11: /* DC1 (user do) */
+		case 0x14: /* DC4 (user undo) */
+		case 0x15: /* NAK (say waht?) */
+		case 0x16: /* SYN (achives phase lock so needs bit changes) */
+		case 0x17: /* ETB (back later, busy) */
+		case 0x19: /* EM (back later, must buy magnetic media) */
 			break;
 		case 0x1c: /* FS */
 			putmes("\"\f\"");
