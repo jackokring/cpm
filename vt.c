@@ -223,11 +223,11 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			putmes("\"\f\"");
 			break;
 		case 0x1d: /* GS */
-			putmes("\"\n\n\"");
-			break;
-		case 0x1e: /* RS */
 			putmes("\"\n\"");
 			break;
+		/* case 0x1e: / RS / adm3a - home
+			putmes("\"\n\"");
+			break; */
 		case 0x1f: /* US */
 			putmes("\", \"");
 			break; /* don't quote me on this */
