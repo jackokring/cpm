@@ -190,6 +190,30 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     switch (state) {
     case 0:
 	switch (c) {
+		/* Jacko override put CTRL */
+		case 0: /* NUL */
+		case 4: /* ETX */
+		case 6: /* ACK */
+		case 8: /* BS */
+		case 9: /* HT */
+
+		case 0xb: /* VT */
+		case 0xe: /* SO */
+		case 0xf: /* SI */
+		
+		case 0x10: /* DLE */
+		case 0x11: /* DC1 */
+		case 0x14: /* DC4 */
+		case 0x15: /* NAK */
+		case 0x16: /* SYN */
+		case 0x17: /* ETB */
+		case 0x19: /* EM */
+		case 0x1c: /* FS */
+		case 0x1d: /* GS */
+		case 0x1e: /* RS */
+		case 0x1f: /* US */
+			break;
+			
 #ifdef VBELL
         case 0x07:              /* BEL: flash screen */
             putmes("\033[?5h\033[?5l");
@@ -220,7 +244,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	case 0x18: case 5:	/* clear to eol */
 	    putmes("\033[K");
 	    break;
-	case 0x12: case 0x13:
+	case 0x12: case 0x13: /* DC2, DC3 */
 	    break;
 	default:
 	    putch(c);
