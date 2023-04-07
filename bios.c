@@ -350,7 +350,7 @@ list(z80info *z80)
 static void
 punch(z80info *z80)
 {
-	putc(C, stderr);
+	putc(C & 0x7F, stderr);
 }
 
 /* return reader char in A, ^Z is EOF */
@@ -370,10 +370,13 @@ reader(z80info *z80)
 		}
 	}
 	
-	A = getc(fp);
+	do {
+		int tst = get(fp);
+		A = tst & 0x7F;	
+	} while(A != tst && tst != EOF) /* UTF-8 -> ASCII */
 
 	/* close up on EOF */
-	if (A == CNTL('D') || A == '\0')
+	if (tst == EOF || A == CNTL('D') || A == '\0')
 	{
 		pclose(fp);
 		fp = NULL;
