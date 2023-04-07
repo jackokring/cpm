@@ -20,6 +20,7 @@
 #define CPMLIBDIR "./"
 static int storedfps = 0;
 unsigned short usercode = 0x00;
+/* restrict changing directories  = -1 */
 int restricted_mode = 0;
 int silent_exit = 0;
 char *stuff_cmd = 0;
@@ -341,12 +342,12 @@ char *bdos_decode(int n)
 	    case 35: return "Compute File Size";
 	    case 36: return "Set Random Record";
 	    /* Seems BDOS ends here */
-	    case 37: /* Reset Drive (but 13) */
+	    case 37: return "Reset Drive (Use 13)"; /* Reset Drive (but 13) */
 	    /* 38, 39 not used Access and Free Drive */
-	    case 40: /* Write Random with Zero Fill (rare? but 34) */ 
+	    case 40: return "Write Random with Zero Fill (Use 34)"; /* Write Random with Zero Fill (rare? but 34) */ 
 	    /* CP/M 2.2 ends here */
 	    case 41: /* seems to use chdir() */
-	    default: return "unknown";
+	    default: return "Unknown";
 	}
 }
 
@@ -430,6 +431,7 @@ int fixrc(z80info *z80, FILE *fp)
 /* emulation of BDOS calls */
 
 void check_BDOS_hook(z80info *z80) {
+		/* 0 to 36 */
     int i;
     char name[32];
     char name2[32];
@@ -850,11 +852,36 @@ void check_BDOS_hook(z80info *z80) {
 	}
 	break;
     case 41:
+    /* Assume something linux based */
 	for (s = (char *)(z80->mem + DE); *s; ++s)
 	    *s = tolower(*(unsigned char *)s);
 	HL = (restricted_mode || chdir((char  *)(z80->mem + DE))) ? 0xff : 0x00;
         B = H; A = L;
 	break;
+	/* Additions Jacko additions possible or better defaults */
+		case 7: /* Get IO Byte */
+			A = 0xA9; /* custom mapping */
+			break;
+		case 8: /* Set IO Byte */
+		case 28: /* Write Protect Disk (no protection) */
+			break; /* NOP no redirection */
+		case 30: /* Set File Attributes (are they any?) */
+		case 37: /* Reset Disk (try 13 but just one disk) */
+			A = 0xFF;/* an error as can't close etc. and no attributes */
+			break;
+		case 3: /* Reader Input */
+			bios(z80, 7);
+			break;
+		case 4: /* Punch Output */
+			bios(z80, 6);
+			break;
+		case 5: /* List Output */
+			bios(z80, 5);
+			break;
+		/* case 40: */ /* Write Random with Zero Fill (try 34 with zeros) */
+		case 27: /* Get Alloc Address (doesn't exist, ouside 64 kB) */
+			printf("\n\nThere is no way to use a custom linux Alloc Addr.\n");
+			/* fall through */
     default:
 	printf("\n\nUnrecognized BDOS-Function:\n");
 	printf("AF=%04x  BC=%04x  DE=%04x  HL=%04x  SP=%04x\nStack =",
