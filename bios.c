@@ -350,15 +350,36 @@ list(z80info *z80)
 static void
 punch(z80info *z80)
 {
-	(void)z80;
+	putc(C, stderr);
 }
 
 /* return reader char in A, ^Z is EOF */
 static void
 reader(z80info *z80)
 {
-	(void)z80;
-	A = CNTL('Z');
+	static FILE *fp = NULL;
+
+	if (fp == NULL)
+	{
+		/* linux netcat listen command */
+		fp = popen("nc -l 17202", "r");
+
+		if (fp == NULL) {
+			A = CNTL('Z');
+			return;
+		}
+	}
+	
+	A = getc(fp);
+
+	/* close up on EOF */
+	if (A == CNTL('D') || A == '\0')
+	{
+		pclose(fp);
+		fp = NULL;
+		A = CNTL('Z');
+		return;
+	}
 }
 
 static void

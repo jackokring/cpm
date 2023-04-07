@@ -1,5 +1,7 @@
 # Extending for Utility
 * `lpr` printer.
+* `punch` is write to `stderr`.
+* `reader` is a network netcat server on `17202` (there is no responder as the socket is not defined before connect).
 
 # Ideas?
 * Add punch and reader (I/O channel use)
@@ -14,4 +16,5 @@
 * Default BDOS intercept by `check_BDOS_hook` in `bdos.c` from `z80.c` (after instruction execute).
 * `chdir` in `bdos.c` code 41? User?
 * `BDOS_HOOK` address is `0xDC06`.
+* `punch` and `reader` in `bios.c` for aux IO device.
 
