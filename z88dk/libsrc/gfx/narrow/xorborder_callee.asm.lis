@@ -1,0 +1,112 @@
+/tmp/tmpXXhaWCpl.asm:
+     1                          MODULE xorborder_callee_asm
+     2                          LINE 0, "xorborder_callee.asm"
+xorborder_callee.asm:
+                                
+     1                          
+     2                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     3                              SECTION code_graphics
+     4                          
+     5                              PUBLIC  xorborder_callee
+     6                              PUBLIC  _xorborder_callee
+     7                          
+     8                              PUBLIC  asm_xorborder
+     9                          
+    10                              EXTERN  xorpixel
+    11                              EXTERN  swapgfxbk
+    12                              EXTERN  swapgfxbk1
+    13                              INCLUDE "graphics/grafix.inc"
+    14                          
+    15                          
+    16                          ;
+    17                          ;    $Id: xorborder_callee.asm $
+    18                          ;
+    19                          
+    20                          ; ***********************************************************************
+    21                          ;
+    22                          ; XORs a dotted box.  Useful for GUIs.
+    23                          ; Generic version
+    24                          ;
+    25                          ; Stefano Bodrato - March 2002
+    26                          ;
+    27                          ;
+    28                          ; IN:    HL    = (x,y)
+    29                          ;    BC    = (width,heigth)
+    30                          ;
+    31                          
+    32                          .xorborder_callee
+    33                          ._xorborder_callee
+    34                          
+    35                              pop     af
+    36                              pop     bc    ; height
+    37                              pop     de
+    38                              ld      b,e    ; width
+    39                              pop     hl    ; x
+    40                              pop     de
+    41                              ld      h,e    ; y
+    42                              push    af
+    43                          
+    44                          .asm_xorborder
+    45                          
+    46                          
+    47                          IF NEED_swapgfxbk = 1
+    48                              call    swapgfxbk
+    49                          ENDIF
+    50                              push    bc
+    51                              push    hl
+    52                          
+    53                          ; -- Vertical lines --
+    54                              push    hl
+    55                              ld      a,h
+    56                              add     a,b
+    57                              ;ret    c    ; overflow ?
+    58                              dec     a
+    59                              ld      h,a
+    60                              pop     de
+    61                          .rowloop
+    62                              push    bc
+    63                          
+    64                              inc     l
+    65                              ex      de,hl
+    66                              push    hl
+    67                              push    de
+    68                              call    xorpixel
+    69                              pop     de
+    70                              pop     hl
+    71                              inc     l
+    72                              pop     bc
+    73                              dec     c
+    74                              jr      nz,rowloop
+    75                          
+    76                              pop     hl
+    77                              pop     bc
+    78                          
+    79                          ; -- Horizontal lines --
+    80                              push    hl
+    81                              ld      a,l
+    82                              add     a,c
+    83                              ;ret    c    ; overflow ?
+    84                              dec     a
+    85                              ld      l,a
+    86                              pop     de
+    87                          
+    88                          .vrowloop
+    89                              push    bc
+    90                          
+    91                              push    hl
+    92                              push    de
+    93                              call    xorpixel
+    94                              pop     de
+    95                              pop     hl
+    96                              inc     h
+    97                              ex      de,hl
+    98                              inc     h
+    99                              pop     bc
+   100                              djnz    vrowloop
+   101                          IF NEED_swapgfxbk = 1
+   102                              jp      swapgfxbk1
+   103                          ELSE
+   104                              ret
+   105                          ENDIF
+   106                          ENDIF
+   107                          

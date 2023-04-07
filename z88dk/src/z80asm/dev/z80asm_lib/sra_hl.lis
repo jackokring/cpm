@@ -1,0 +1,46 @@
+sra_hl.asm:
+     1                          ; Emulate 'sra hl' instruction, only carry is affected
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  99    99
+     4                          ; 8085   7     7
+     5                          ; gbz80 16    16
+     6                          ; r2ka   8     8
+     7                          ; z180  14    14
+     8                          ; z80   16    16
+     9                          ; z80n  16    16
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__sra_hl
+    13                          
+    14                          __z80asm__sra_hl:
+    15                          
+    16                            IF    __CPU_INTEL__
+    17                                  push    af
+    18                          
+    19                                  ld      a, h
+    20                                  rla                             ; save bit 7 in carry
+    21                                  ld      a, h
+    22                                  rra                             ; rotate right, maitain bit 7
+    23                                  ld      h, a
+    24                          
+    25                                  ld      a, l
+    26                                  rra
+    27                                  ld      l, a
+    28                          
+    29                                  jr      nc, carry0
+    30                          
+    31                                  pop     af
+    32                                  scf
+    33                                  ret
+    34                          
+    35                          carry0:
+    36                                  pop     af
+    37                                  and     a
+    38                                  ret
+    39                            ELSE
+    40  0000  cb2c                      sra     h
+    41  0002  cb1d                      rr      l
+    42  0004  c9                        ret
+    43                            ENDIF
+    44                          
+    45                          

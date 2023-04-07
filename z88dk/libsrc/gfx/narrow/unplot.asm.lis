@@ -1,0 +1,28 @@
+/tmp/tmpXXWpMOam.asm:
+     1                          MODULE unplot_asm
+     2                          LINE 0, "unplot.asm"
+unplot.asm:
+                                
+     1                          ; ----- void  unplot(int x, int y)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  unplot
+     8                              PUBLIC  _unplot
+     9                          
+    10                              EXTERN  asm_unplot
+    11                          
+    12                          .unplot
+    13                          ._unplot
+    14                              pop     bc    ; ret addr
+    15                              pop     hl    ; y
+    16                              pop     de    ; x
+    17                              push    de
+    18                              push    hl
+    19                              ld      h,e
+    20                              push    bc    ; ret addr
+    21                              jp      asm_unplot
+    22                          ENDIF
+    23                          

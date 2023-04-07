@@ -1,0 +1,34 @@
+adc_hl_hl.asm:
+     1                          ; Substitute for the z80 adc hl,hl instruction
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  110   110
+     4                          ; 8085  111   111
+     5                          ; gbz80  84    84
+     6                          ; r2ka    4     4
+     7                          ; z180   10    10
+     8                          ; z80    15    15
+     9                          ; z80n   15    15
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__adc_hl_hl
+    13                          
+    14                          __z80asm__adc_hl_hl:
+    15  0000  d5                        push    de
+    16                          
+    17                            IF    __CPU_INTEL__
+    18                                  push    af
+    19                                  ld      a, 0
+    20                                  ld      d, a
+    21                                  rla
+    22                                  ld      e, a
+    23                                  pop     af
+    24                            ELSE
+    25  0001  110000                    ld      de, 0
+    26  0004  cb13                      rl      e                       ; de = carry
+    27                            ENDIF
+    28  0006  29                        add     hl, hl
+    29  0007  19                        add     hl, de
+    30                          
+    31  0008  d1                        pop     de
+    32  0009  c9                        ret
+    33                          

@@ -1,0 +1,83 @@
+/tmp/tmpXXczHUDg.asm:
+     1                          MODULE bit_open_asm
+     2                          LINE 0, "bit_open.asm"
+bit_open.asm:
+                                
+     1                          	SECTION code_clib
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_RABBIT__ & !__CPU_GBZ80__
+     5                          
+     6                              PUBLIC     bit_open
+     7                              PUBLIC     _bit_open
+     8                          	PUBLIC     bit_open_di
+     9                              PUBLIC     _bit_open_di
+    10                          
+    11                              PUBLIC	bit_close
+    12                              PUBLIC	_bit_close
+    13                              PUBLIC	bit_close_ei
+    14                              PUBLIC	_bit_close_ei
+    15                          
+    16                              EXTERN     __snd_tick
+    17                              EXTERN     __bit_irqstatus
+    18                          
+    19                          	EXTERN	psg_init
+    20                          	EXTERN	psg_tone
+    21                          
+    22                          ;	$Id: bit_open.asm $
+    23                          
+    24                          ;==============================================================
+    25                          ; void bit_open();
+    26                          ; void bit_open_di();
+    27                          ; void bit_close();
+    28                          ; void bit_close_ei();
+    29                          ;==============================================================
+    30                          ; Generic 1 bit sound functions
+    31                          ;==============================================================
+    32                          
+    33                          .bit_open_di
+    34                          ._bit_open_di
+    35                          	ld a,i		; get the current status of the irq line
+    36                          	di
+    37                          	push af
+    38                          
+    39                          	ex (sp),hl
+    40                          	ld (__bit_irqstatus),hl
+    41                          	pop hl
+    42                          
+    43                          
+    44                          .bit_open
+    45                          ._bit_open
+    46                          
+    47                          	call psg_init
+    48                          	ld	de,1	; channel 1, frequency 1 (fixed high output, volume will change the level)
+    49                          	push de
+    50                          	push de
+    51                          	call psg_tone
+    52                          	pop de
+    53                          	pop de
+    54                          
+    55                          	ld	a,$BF	; channel 1 ($20) + set volume command ($90) + max attenuation ($0F)
+    56                          	ld	(__snd_tick),a
+    57                          	;out	(psgport), a	; Sends it, but I think it is not necessary, the OUT instruction will happen in bit_* library
+    58                          
+    59                          	ret
+    60                          
+    61                          
+    62                          .bit_close_ei
+    63                          ._bit_close_ei
+    64                          	push hl
+    65                          	ld	hl,(__bit_irqstatus)
+    66                          	ex	(sp),hl
+    67                          	pop af
+    68                          
+    69                          	ret po
+    70                          
+    71                          	ei
+    72                          
+    73                          
+    74                          .bit_close
+    75                          ._bit_close
+    76                          	ret
+    77                          ENDIF
+    78                          

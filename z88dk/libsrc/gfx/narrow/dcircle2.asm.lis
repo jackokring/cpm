@@ -1,0 +1,174 @@
+/tmp/tmpXXI42Zlr.asm:
+     1                          MODULE dcircle2_asm
+     2                          LINE 0, "dcircle2.asm"
+dcircle2.asm:
+                                
+     1                          
+     2                          ; This version of the CIRCLE function leaves AF' untouched
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                              PUBLIC  draw_circle
+     7                          
+     8                          
+     9                          DEFVARS 0
+    10                          {
+    11                              x0      ds.b    1
+    12                              y0      ds.b    1
+    13                              radius  ds.b    1
+    14                              scale   ds.b    1
+    15                              cx      ds.b    1
+    16                              da      ds.b    1
+    17                              asave   ds.b    1
+    18                              func    ds.w    1
+    19                          }
+    20                          
+    21                          
+    22                          
+    23                          ;ix points to table on stack (above)
+    24                          
+    25                          ;Entry:
+    26                          ;     b=x0 c=y0, d=radius, e=scale factor
+    27                          ;     ix=plot routine
+    28                          
+    29                          .draw_circle
+    30                              ld      ix,-9   ;create buffer on stack
+    31                              add     ix,sp
+    32                              ld      sp,ix
+    33                              ld      (ix+x0),b
+    34                              ld      (ix+y0),c
+    35                              ld      (ix+radius),d
+    36                              ld      (ix+scale),e      ;step factor - usually 1
+    37                              ld      (ix+func),l
+    38                              ld      (ix+func+1),h
+    39                              call    l9900
+    40                              ld      hl,9
+    41                              add     hl,sp
+    42                              ld      sp,hl
+    43                              ret
+    44                          
+    45                          ;Line 9900
+    46                          .l9900
+    47                              ld      (ix+cx),0
+    48                              srl     d
+    49                              ld      (ix+da),d
+    50                          ;Line 9905
+    51                          .l9905
+    52                              ld      a,(ix+cx)
+    53                              cp      (ix+radius)
+    54                              ret     nc
+    55                          ;Line 9910
+    56                              ld      a,(ix+da)
+    57                              and     a
+    58                              jp      p,l9915
+    59                              add     a,(ix+radius)
+    60                              ld      (ix+da),a
+    61                              ld      a,(ix+radius)
+    62                              sub     (ix+scale)
+    63                              ld      (ix+radius),a
+    64                          ;Line 9915
+    65                          .l9915
+    66                              ld      a,(ix+da)
+    67                              dec     a
+    68                              sub     (ix+cx)
+    69                              ld      (ix+da),a
+    70                          
+    71                          .l9920
+    72                              ld      a,(ix+y0)
+    73                              add     a,(ix+radius)
+    74                              ld      (ix+asave),a
+    75                              ld      l,a
+    76                          ;    ex      af,af'
+    77                              ld      a,(ix+x0)
+    78                              add     a,(ix+cx)
+    79                              ld      h,a
+    80                              call    doplot
+    81                          ;    ex      af,af'
+    82                          ;    ld      l,a
+    83                              ld      l,(ix+asave)
+    84                          	ld      (ix+asave),a
+    85                              ld      a,(ix+x0)
+    86                              sub     (ix+cx)
+    87                              ld      h,a
+    88                              call    doplot
+    89                          
+    90                              ld      a,(ix+y0)
+    91                              sub     (ix+radius)
+    92                              ld      (ix+asave),a
+    93                              ld      l,a
+    94                          ;    ex      af,af'
+    95                              ld      a,(ix+x0)
+    96                              add     a,(ix+cx)
+    97                              ld      h,a
+    98                              call    doplot
+    99                          ;    ex      af,af'
+   100                          ;    ld      l,a
+   101                              ld      l,(ix+asave)
+   102                          	ld      (ix+asave),a
+   103                              ld      a,(ix+x0)
+   104                              sub     (ix+cx)
+   105                              ld      h,a
+   106                              call    doplot
+   107                          
+   108                          ;Line 9925
+   109                          
+   110                              ld      a,(ix+y0)
+   111                              add     a,(ix+cx)
+   112                              ld      (ix+asave),a
+   113                              ld      l,a
+   114                          ;    ex      af,af'
+   115                              ld      a,(ix+x0)
+   116                              add     a,(ix+radius)
+   117                              ld      h,a
+   118                              call    doplot
+   119                          ;    ex      af,af'
+   120                          ;    ld      l,a
+   121                              ld      l,(ix+asave)
+   122                          	ld      (ix+asave),a
+   123                              ld      a,(ix+x0)
+   124                              sub     (ix+radius)
+   125                              ld      h,a
+   126                              call    doplot
+   127                          
+   128                              ld      a,(ix+y0)
+   129                              sub     (ix+cx)
+   130                              ld      (ix+asave),a
+   131                              ld      l,a
+   132                          ;    ex      af,af'
+   133                              ld      a,(ix+x0)
+   134                              add     a,(ix+radius)
+   135                              ld      h,a
+   136                              call    doplot
+   137                          ;    ex      af,af'
+   138                          ;    ld      l,a
+   139                              ld      l,(ix+asave)
+   140                          	ld      (ix+asave),a
+   141                              ld      a,(ix+x0)
+   142                              sub     (ix+radius)
+   143                              ld      h,a
+   144                              call    doplot
+   145                          
+   146                          ;Line 9930
+   147                              ld      a,(ix+cx)
+   148                              add     a,(ix+scale)
+   149                              ld      (ix+cx),a
+   150                              jp      l9905
+   151                          
+   152                          ;Entry to my plot is the same as for the z88 plot - very convenient!
+   153                          
+   154                          .doplot
+   155                              ret     c
+   156                              push    ix
+   157                              ld      e,(ix+func)
+   158                              ld      d,(ix+func+1)
+   159                              push    de
+   160                              pop     ix
+   161                              ; h, l = coordinates
+   162                              call    jpix
+   163                              pop     ix
+   164                              ret
+   165                          jpix:
+   166                              jp      (ix)
+   167                          
+   168                          ENDIF
+   169                          

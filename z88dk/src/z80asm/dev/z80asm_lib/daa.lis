@@ -1,0 +1,122 @@
+daa.asm:
+     1                          ;------------------------------------------------------------------------------
+     2                          ; Z88DK Z80 Macro Assembler
+     3                          ;
+     4                          ; DAA emulation for Rabbit - based on the Fuse implementation
+     5                          ;
+     6                          ; Copyright (C) Paulo Custodio, 2011-2022
+     7                          ; License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
+     8                          ; Repository: https://github.com/z88dk/z88dk
+     9                          ;------------------------------------------------------------------------------
+    10                          
+    11                          
+    12                            IF    __CPU_RABBIT__
+    13                                  SECTION code_l_sccz80
+    14                                  PUBLIC  __z80asm__daa
+    15                          
+    16                          __z80asm__daa:
+    17                                  push    bc
+    18                                  push    af
+    19                                  ex      (sp), hl                ; H is A, L is F
+    20                          
+    21                          ; libspectrum_byte add = 0, carry = ( F & FLAG_C );
+    22                                  ld      bc, 0                   ; B = add
+    23                                  rl      c                       ; C = 1 if carry, 0 otherwise
+    24                          
+    25                          ; if( ( F & FLAG_H ) || ( ( A & 0x0f ) > 9 ) ) add = 6;
+    26                                  bit     4, l                    ; check H
+    27                                  jr      nz, t1_true
+    28                          
+    29                                  ld      a, h
+    30                                  and     $0F
+    31                                  cp      9+1                     ; A >= 10 -> no carry
+    32                                  jr      c, t1_cont
+    33                          
+    34                          t1_true:
+    35                                  ld      b, 6                    ; add = 6
+    36                          
+    37                          t1_cont:
+    38                          
+    39                          ; if( carry || ( A > 0x99 ) ) add |= 0x60;
+    40                                  bit     0, c                    ; check carry
+    41                                  jr      nz, t2_true
+    42                          
+    43                                  ld      a, h
+    44                                  cp      0x99+1
+    45                                  jr      c, t2_cont
+    46                          
+    47                          t2_true:
+    48                                  ld      a, 0x60
+    49                                  or      b
+    50                                  ld      b, a
+    51                          
+    52                          t2_cont:
+    53                          
+    54                          ; if( A > 0x99 ) carry = FLAG_C;
+    55                                  ld      a, h
+    56                                  cp      0x99+1
+    57                                  jr      c, t3_cont
+    58                          
+    59                          t3_true:
+    60                                  set     0, c                    ; store carry=1 in C
+    61                          
+    62                          t3_cont:
+    63                          
+    64                          ; if( F & FLAG_N ) { SUB(add); } else { ADD(add); }
+    65                                  bit     1, l                    ; check N
+    66                          
+    67                                  ld      a, h                    ; prepare to add/subtract
+    68                                  jr      z, t4_zero
+    69                          
+    70                          t4_one:
+    71                                  sub     b
+    72                                  jr      t4_cont
+    73                          
+    74                          t4_zero:
+    75                                  add     a, b
+    76                          
+    77                          t4_cont:
+    78                                  ld      h, a
+    79                          
+    80                          ; F = ( F & ~( FLAG_C | FLAG_P ) ) | carry | parity_table[A];
+    81                                  ld      a, l
+    82                                  and     ~$01                    ; clear C
+    83                                  or      $04                     ; set P/V (even = 1, odd = 0)
+    84                                  or      c                       ; | carry
+    85                                  ld      l, a
+    86                          
+    87                                  ld      b, $80
+    88                          parity_loop:
+    89                                  ld      a, h
+    90                                  and     b                       ; check each bit
+    91                                  jr      z, bit0
+    92                          
+    93                                  ld      a, l
+    94                                  xor     $04                     ; invert parity bit
+    95                                  ld      l, a
+    96                          bit0:
+    97                                  rr      b
+    98                                  jr      nc, parity_loop
+    99                          
+   100                          ; set zero flag
+   101                                  ld      a, h
+   102                                  and     a
+   103                                  jr      nz, not_z
+   104                          
+   105                                  set     6, l                    ; set Z flag
+   106                          not_z:
+   107                          
+   108                          ; set sign flag
+   109                                  bit     7, h
+   110                                  jr      z, positive
+   111                          
+   112                                  set     7, l                    ; set S flag
+   113                          positive:
+   114                          
+   115                          ; return
+   116                                  ex      (sp), hl
+   117                                  pop     af
+   118                                  pop     bc
+   119                                  ret
+   120                            ENDIF
+   121                          

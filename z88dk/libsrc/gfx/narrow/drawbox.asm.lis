@@ -1,0 +1,96 @@
+/tmp/tmpXXkb8UQl.asm:
+     1                          MODULE drawbox_asm
+     2                          LINE 0, "drawbox.asm"
+drawbox.asm:
+                                
+     1                          
+     2                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     3                              SECTION    code_graphics
+     4                          
+     5                              PUBLIC    drawbox
+     6                          
+     7                          ;
+     8                          ;    $Id: drawbox.asm $
+     9                          ;
+    10                          
+    11                          ; ***********************************************************************
+    12                          ;
+    13                          ; Draw a box.
+    14                          ; Generic version
+    15                          ;
+    16                          ; Stefano Bodrato - March 2002
+    17                          ;
+    18                          ;
+    19                          ; IN:    HL    = (x,y)
+    20                          ;    BC    = (width,heigth)
+    21                          ;
+    22                          
+    23                          .drawbox
+    24                              push    bc
+    25                              push    hl
+    26                          
+    27                          ; -- Vertical lines --
+    28                              push    hl
+    29                              ld    a,h
+    30                              add    a,b
+    31                              dec    a
+    32                              ld    h,a
+    33                              pop    de
+    34                          .rowloop
+    35                              push    bc
+    36                          
+    37                              call p_sub
+    38                              inc    l
+    39                              ex    de,hl
+    40                          
+    41                              call p_sub
+    42                              inc    l
+    43                              ex    de,hl
+    44                          
+    45                              pop    bc
+    46                              dec    c
+    47                              jr    nz,rowloop
+    48                          
+    49                              pop    hl
+    50                              pop    bc
+    51                          
+    52                          ; -- Horizontal lines --
+    53                              inc    h
+    54                              dec b
+    55                              dec b
+    56                              push    hl
+    57                              ld    a,l
+    58                              add    a,c
+    59                              dec    a
+    60                              ld    l,a
+    61                              pop    de
+    62                          
+    63                          .vrowloop
+    64                              push    bc
+    65                          
+    66                              call p_sub
+    67                              inc    h
+    68                              ex    de,hl
+    69                          
+    70                              call p_sub
+    71                              inc    h
+    72                              ex    de,hl
+    73                          
+    74                              pop    bc
+    75                          
+    76                              djnz    vrowloop
+    77                          
+    78                              ret
+    79                          
+    80                          .p_sub
+    81                              push    hl
+    82                              push    de
+    83                              ld    de, p_RET1
+    84                              push    de
+    85                              jp    (ix)    ;    execute PLOT at (h,l)
+    86                          .p_RET1
+    87                              pop    de
+    88                              pop    hl
+    89                              ret
+    90                          ENDIF
+    91                          

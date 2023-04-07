@@ -1,0 +1,21 @@
+adc_hl_bc.asm:
+     1                          ; Substitute for the z80 adc hl,bc instruction
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  47    52
+     4                          ; 8085  48    51
+     5                          ; gbz80 36    44
+     6                          ; r2ka   4     4
+     7                          ; z180  10    10
+     8                          ; z80   15    15
+     9                          ; z80n  15    15
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__adc_hl_bc
+    13                          
+    14                          __z80asm__adc_hl_bc:
+    15  0000  3001                      jr      nc, carry0
+    16  0002  23                        inc     hl
+    17                          carry0:
+    18  0003  09                        add     hl, bc
+    19  0004  c9                        ret
+    20                          

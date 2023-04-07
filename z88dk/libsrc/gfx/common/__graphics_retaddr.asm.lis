@@ -1,0 +1,13 @@
+/tmp/tmpXXAKEmXA.asm:
+     1                          MODULE __graphics_retaddr_asm
+     2                          LINE 0, "__graphics_retaddr.asm"
+__graphics_retaddr.asm:
+                                
+     1                          
+     2                          	SECTION    bss_graphics
+     3                          
+     4                          	PUBLIC	__graphics_retaddr
+     5                          
+     6                          __graphics_retaddr:
+     7  0000  0000              	defw	0
+     8                          

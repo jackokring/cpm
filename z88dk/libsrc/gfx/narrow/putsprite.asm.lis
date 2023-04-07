@@ -1,0 +1,214 @@
+/tmp/tmpXXoblFKO.asm:
+     1                          MODULE putsprite_asm
+     2                          LINE 0, "putsprite.asm"
+putsprite.asm:
+                                
+     1                          ;
+     2                          ; Sprite Rendering Routine
+     3                          ; original code by Patrick Davidson (TI 85)
+     4                          ; modified by Stefano Bodrato - Jan 2001
+     5                          ;
+     6                          ; Generic version (just a bit slow)
+     7                          ;
+     8                          ;
+     9                          ; $Id: putsprite.asm,v 1.9 2016-07-02 09:01:35 dom Exp $
+    10                          ;
+    11                          
+    12                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    13                              SECTION   smc_clib
+    14                              PUBLIC    putsprite
+    15                              PUBLIC    _putsprite
+    16                              EXTERN    pixeladdress
+    17                              EXTERN    swapgfxbk
+    18                              EXTERN    __graphics_end
+    19                          
+    20                              INCLUDE    "graphics/grafix.inc"
+    21                          
+    22                          ; __gfx_coords: d,e (vert-horz)
+    23                          ; sprite: (ix)
+    24                          
+    25                          
+    26                          
+    27                          
+    28                          .putsprite
+    29                          ._putsprite
+    30                              push    ix
+    31                                ld    hl,4
+    32                                add    hl,sp
+    33                                ld    e,(hl)
+    34                                inc    hl
+    35                                ld    d,(hl)  ; sprite address
+    36                              push    de
+    37                              pop    ix
+    38                          
+    39                                inc    hl
+    40                                ld    e,(hl)
+    41                              inc    hl
+    42                                inc    hl
+    43                                ld    d,(hl)    ; x and y __gfx_coords
+    44                          
+    45                              inc    hl
+    46                          
+    47                                inc    hl
+    48                                ld    a,(hl)  ; and/or/xor mode
+    49                                ld    (ortype+1),a    ; Self modifying code
+    50                                ld    (ortype2+1),a    ; Self modifying code
+    51                          
+    52                                inc    hl
+    53                                ld    a,(hl)
+    54                                ld    (ortype),a    ; Self modifying code
+    55                                ld    (ortype2),a    ; Self modifying code
+    56                          
+    57                          
+    58                              ld    h,d
+    59                              ld    l,e
+    60                          
+    61                              ld    (actcoord),hl    ; save current coordinates
+    62                          
+    63                          IF NEED_swapgfxbk = 1
+    64                              call    swapgfxbk
+    65                          ENDIF
+    66                              call    pixeladdress
+    67                          
+    68                              ld     hl,offsets_table
+    69                              ld     c,a
+    70                              ld     b,0
+    71                              add    hl,bc
+    72                              ld     a,(hl)
+    73                              ld     (wsmc1+1),a
+    74                              ld     (wsmc2+1),a
+    75                              ld     (_smc1+1),a
+    76                              ld    h,d
+    77                              ld    l,e
+    78                          
+    79                              ld    a,(ix+0)
+    80                              cp    9
+    81                              jr    nc,putspritew
+    82                          
+    83                              ld     d,(ix+0)
+    84                              ld     b,(ix+1)
+    85                          ._oloop  push    bc        ;Save # of rows
+    86                              ld     b,d       ;Load width
+    87                              ld     c,(ix+2)    ;Load one line of image
+    88                              inc    ix
+    89                          ._smc1   ld     a,1       ;Load pixel mask
+    90                          ._iloop  sla    c        ;Test leftmost pixel
+    91                              jr     nc,_noplot      ;See if a plot is needed
+    92                              ld     e,a
+    93                          
+    94                          .ortype
+    95                              nop    ; changed into nop / cpl
+    96                              nop    ; changed into and/or/xor (hl)
+    97                              ld     (hl),a
+    98                              ld     a,e
+    99                          ._noplot rrca
+   100                              jr     nc,_notedge     ;Test if edge of byte reached
+   101                              inc    hl        ;Go to next byte
+   102                          ._notedge djnz    _iloop
+   103                          
+   104                              ; ---------
+   105                              push    de
+   106                                ld    hl,(actcoord)
+   107                              inc    l
+   108                              ld    (actcoord),hl
+   109                              call    pixeladdress
+   110                              ld    h,d
+   111                              ld    l,e
+   112                              pop    de
+   113                              ; ---------
+   114                          
+   115                              pop    bc        ;Restore data
+   116                              djnz    _oloop
+   117                          IF NEED_swapgfxbk
+   118                              jp      __graphics_end
+   119                          ELSE
+   120                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   121                              pop     ix
+   122                            ENDIF
+   123                              ret
+   124                          ENDIF
+   125                          
+   126                          .putspritew
+   127                              ld     d,(ix+0)
+   128                              ld     b,(ix+1)
+   129                          .woloop  push    bc        ;Save # of rows
+   130                              ld     b,d       ;Load width
+   131                              ld     c,(ix+2)    ;Load one line of image
+   132                              inc    ix
+   133                          .wsmc1    ld     a,1       ;Load pixel mask
+   134                          .wiloop  sla    c        ;Test leftmost pixel
+   135                              jr     nc,wnoplot    ;See if a plot is needed
+   136                              ld     e,a
+   137                          
+   138                          .ortype2
+   139                              nop    ; changed into nop / cpl
+   140                              nop    ; changed into and/or/xor (hl)
+   141                              ld     (hl),a
+   142                              ld     a,e
+   143                          .wnoplot rrca
+   144                              jr     nc,wnotedge      ;Test if edge of byte reached
+   145                              inc    hl        ;Go to next byte
+   146                          .wnotedge
+   147                          .wsmc2   cp     1
+   148                              jr     z,wover_1
+   149                          
+   150                              djnz    wiloop
+   151                          
+   152                              ; ---------
+   153                              push    de
+   154                                ld    hl,(actcoord)
+   155                              inc    l
+   156                              ld    (actcoord),hl
+   157                              call    pixeladdress
+   158                              ld    h,d
+   159                              ld    l,e
+   160                              pop    de
+   161                              ; ---------
+   162                          
+   163                              pop    bc        ;Restore data
+   164                              djnz    woloop
+   165                          IF NEED_swapgfxbk
+   166                              jp      __graphics_end
+   167                          ELSE
+   168                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   169                              pop     ix
+   170                            ENDIF
+   171                              ret
+   172                          ENDIF
+   173                          
+   174                          .wover_1 ld     c,(ix+2)
+   175                              inc    ix
+   176                              djnz    wiloop
+   177                              dec    ix
+   178                          
+   179                              ; ---------
+   180                              push    de
+   181                                ld    hl,(actcoord)
+   182                              inc    l
+   183                              ld    (actcoord),hl
+   184                              call    pixeladdress
+   185                              ld    h,d
+   186                              ld    l,e
+   187                              pop    de
+   188                              ; ---------
+   189                          
+   190                              pop    bc
+   191                              djnz    woloop
+   192                          IF NEED_swapgfxbk
+   193                              jp      __graphics_end
+   194                          ELSE
+   195                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   196                              pop     ix
+   197                            ENDIF
+   198                              ret
+   199                          ENDIF
+   200                              SECTION bss_graphics
+   201                          .actcoord
+   202                              defw    0
+   203                          
+   204                              SECTION    rodata_clib
+   205                          
+   206                          .offsets_table
+   207                              defb    1,2,4,8,16,32,64,128
+   208                          ENDIF
+   209                          

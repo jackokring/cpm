@@ -1,0 +1,80 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:02 2023
+
+
+	C_LINE	0,"8080/Issue_1431_8080_long_promotion.c"
+
+	MODULE	X8080_Issue_1431_8080_long_promotion_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	EXTERN	saved_hl
+	EXTERN	saved_de
+	C_LINE	5,"8080/Issue_1431_8080_long_promotion.c"
+	C_LINE	6,"8080/Issue_1431_8080_long_promotion.c"
+	C_LINE	9,"8080/Issue_1431_8080_long_promotion.c"
+	SECTION	code_compiler
+
+; Function func flags 0x00000200 __smallc 
+; int func()
+	C_LINE	10,"8080/Issue_1431_8080_long_promotion.c::func::0::0"
+._func
+	ld	hl,(_points)
+	push	hl
+	ld	hl,(_level)
+	ld	h,0
+	ld	de,0
+	push	de
+	push	hl
+	ld	hl,5	;const
+	ld	de,0
+	call	l_long_mult
+	ld	bc,100
+	add	hl,bc
+	jp	nc,ASMPC+4
+	inc	de
+	ld	b,h
+	ld	c,l
+	ld	hl,0
+	ex	(sp),hl
+	ld	a,h
+	rlca
+	jr	nc,i_3
+	ex	(sp),hl
+	dec	hl
+	ex	(sp),hl
+.i_3
+	push	hl
+	ld	h,b
+	ld	l,c
+	call	l_long_add
+	ld	(_points),hl
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._points	defs	2
+._level	defs	1
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

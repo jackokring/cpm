@@ -1,0 +1,50 @@
+/tmp/tmpXXJBsK6D.asm:
+     1                          MODULE xordrawb_callee_asm
+     2                          LINE 0, "xordrawb_callee.asm"
+xordrawb_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ xordrawb(int x, int y, int h, int v)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  xordrawb_callee
+     8                              PUBLIC  _xordrawb_callee
+     9                          
+    10                              PUBLIC  asm_xordrawb
+    11                          
+    12                              EXTERN  drawbox
+    13                              EXTERN  xorpixel
+    14                              EXTERN  swapgfxbk
+    15                              EXTERN  __graphics_end
+    16                          
+    17                          
+    18                          .xordrawb_callee
+    19                          ._xordrawb_callee
+    20                              pop     af
+    21                              pop     bc    ; height
+    22                              pop     de
+    23                              ld      b,e    ; width
+    24                              pop     hl    ; x
+    25                              pop     de
+    26                              ld      h,e    ; y
+    27                              push    af
+    28                          
+    29                          .asm_xordrawb
+    30                              push    ix
+    31                              ld      ix,xorpixel
+    32                          IF NEED_swapgfxbk = 1
+    33                              call    swapgfxbk
+    34                          ENDIF
+    35                              call    drawbox
+    36                          IF NEED_swapgfxbk
+    37                              jp      __graphics_end
+    38                          ELSE
+    39                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    40                              pop     ix
+    41                            ENDIF
+    42                              ret
+    43                          ENDIF
+    44                          ENDIF
+    45                          

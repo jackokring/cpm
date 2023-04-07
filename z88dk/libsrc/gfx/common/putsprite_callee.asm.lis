@@ -1,0 +1,41 @@
+/tmp/tmpXXsw4rOt.asm:
+     1                          MODULE putsprite_callee_asm
+     2                          LINE 0, "putsprite_callee.asm"
+putsprite_callee.asm:
+                                
+     1                          ;
+     2                          ;  Generic trick to adapt a classic function to the CALLEE mode
+     3                          ;
+     4                          ; ----- void __CALLEE__ putsprite(int ortype, int x, int y, void *sprite);
+     5                          ;
+     6                          ;
+     7                          ;	$Id: putsprite_callee.asm $
+     8                          ;
+     9                          
+    10                          IF !__CPU_GBZ80__
+    11                          SECTION code_graphics
+    12                          PUBLIC putsprite_callee
+    13                          PUBLIC _putsprite_callee
+    14                          
+    15                          	EXTERN    putsprite
+    16                          	EXTERN	   __graphics_retaddr
+    17                          
+    18                          .putsprite_callee
+    19                          ._putsprite_callee
+    20  0000  210b00            	ld	hl,retaddr
+    21  0003  e3                	ex	(sp),hl
+    22  0004  220000            	ld	(__graphics_retaddr),hl
+    23  0007  210000            	ld	hl,putsprite
+    24  000a  e9                	jp (hl)
+    25                          
+    26                          .retaddr
+    27  000b  c1                    pop bc ; *sprite
+    28  000c  c1                    pop bc
+    29  000d  c1                    pop bc
+    30  000e  c1                    pop bc	; ortype
+    31  000f  2a0000                ld	hl,(__graphics_retaddr)
+    32  0012  e9                    jp (hl)
+    33                          
+    34                          
+    35                          ENDIF
+    36                          

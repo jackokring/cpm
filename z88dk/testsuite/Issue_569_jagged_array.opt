@@ -1,0 +1,117 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:55 2023
+
+
+	C_LINE	0,"Issue_569_jagged_array.c"
+
+	MODULE	Issue_569_jagged_array_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_569_jagged_array.c"
+	C_LINE	5,"Issue_569_jagged_array.c"
+	SECTION	data_compiler
+._starField
+	defw	__starField + 0
+	defw	__starField + 64
+	defw	__starField + 128
+	defw	__starField + 192
+	defw	__starField + 256
+	defw	__starField + 320
+	defw	__starField + 384
+	defw	__starField + 448
+	defw	__starField + 512
+	defw	__starField + 576
+	defw	__starField + 640
+	defw	__starField + 704
+	SECTION	code_compiler
+	C_LINE	20,"Issue_569_jagged_array.c"
+
+; Function main flags 0x00000000 __stdc 
+; void main()
+	C_LINE	21,"Issue_569_jagged_array.c::main::0::1"
+._main
+	push	bc
+	ld	hl,(_starField+4)
+	ld	bc,20
+	add	hl,bc
+	ld	(hl),10
+	ld	hl,1	;const
+	add	hl,sp
+	ld	(hl),0
+	jp	i_5	;EOS
+.i_3
+	ld	hl,1	;const
+	add	hl,sp
+	inc	(hl)
+.i_5
+	ld	hl,1	;const
+	add	hl,sp
+	ld	a,(hl)
+	cp	12
+	jp	z,i_4	;
+	ld	hl,0	;const
+	add	hl,sp
+	ld	(hl),0
+	jp	i_8	;EOS
+.i_6
+	ld	hl,0	;const
+	add	hl,sp
+	inc	(hl)
+.i_8
+	ld	hl,0	;const
+	add	hl,sp
+	ld	a,(hl)
+	cp	64
+	jp	z,i_7	;
+	ld	hl,_starField
+	push	hl
+	ld	hl,3	;const
+	add	hl,sp
+	ld	l,(hl)
+	ld	h,0
+	add	hl,hl
+	pop	de
+	add	hl,de
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	pop	hl
+	push	hl
+	ld	h,0
+	add	hl,de
+	ld	(hl),12
+	jp	i_6	;EOS
+.i_4
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+	defc	i_7 = i_3
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+.__starField	defs	768
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	__starField
+	GLOBAL	_starField
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

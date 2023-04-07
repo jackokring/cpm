@@ -1,0 +1,219 @@
+/tmp/tmpXXZIvpDz.asm:
+     1                          MODULE lftscrol_asm
+     2                          LINE 0, "lftscrol.asm"
+lftscrol.asm:
+                                
+     1                          IF !__CPU_GBZ80__ & !__CPU_INTEL__
+     2                          	SECTION	code_graphics
+     3                          	PUBLIC	scroll_left
+     4                          
+     5                          	EXTERN pixeladdress
+     6                          	EXTERN leftbitmask, rightbitmask
+     7                          
+     8                          ;
+     9                          ;	$Id: lftscrol.asm,v 1.6 2016-04-13 21:09:09 dom Exp $
+    10                          ;
+    11                          
+    12                          ; ***********************************************************************
+    13                          ;
+    14                          ; Scroll specified graphics area leftward horisontally
+    15                          ;
+    16                          ; Design & programming by Gunther Strube, Copyright (C) InterLogic 1995
+    17                          ;
+    18                          ; IN:  HL	= (x,y)
+    19                          ;	  BC	= (width,heigth)
+    20                          ;	   A	= scroll distance, 1 to 8 pixels.
+    21                          ;
+    22                          ;	  Variables on	stack; ix	pointer to base of variables:
+    23                          ;    (ix+0)	scroll distance
+    24                          ;    (ix+1)	y
+    25                          ;    (ix+2)	height
+    26                          ;    (ix+3,4)	adr0
+    27                          ;    (ix+5,6)	adr1
+    28                          ;    (ix+7)	bitmask0    bitmask for leftmost byte of pixel	row
+    29                          ;    (ix+8)	bitmask1    bitmask for rightmost byte of	pixel row
+    30                          ;    (ix+9)	rowbytes    number of	bytes in pixel	row to scroll
+    31                          ;    (ix+10)	lastbyte
+    32                          ;
+    33                          ; OUT: None. (graphics area is scrolled)
+    34                          ;
+    35                          ; Registers changed	after return:
+    36                          ;   ......../IXIY same
+    37                          ;   AFBCDEHL/.... different
+    38                          ;
+    39                          .scroll_left    push	ix
+    40                                 push	iy
+    41                                 ld	de,0
+    42                                 ex	de,hl
+    43                                 add	hl,sp
+    44                                 ex	de,hl
+    45                                 ld	ix,-11
+    46                                 add	ix,sp    ; ix	points at	base	of variables
+    47                                 ld	sp,ix    ; local variable area created
+    48                                 push	de    	; remember pointer to original ix,	iy
+    49                          
+    50                                 ld	(ix+0),a    ; remember scroll distance
+    51                                 ld	(ix+1),l    ; remember y
+    52                                 ld	(ix+2),c    ; remember height
+    53                                 push	bc
+    54                                 call	pixeladdress	; adr0, bitpos0 = PixelAddress(x,y)
+    55                                 ld	(ix+3),e
+    56                                 ld	(ix+4),d
+    57                                 call	leftbitmask
+    58                                 ld	(ix+7),a    ; bitmask0 = LeftBitMask(bitpos0)
+    59                                 pop	bc
+    60                                 ld	a,h
+    61                                 add	a,b
+    62                                 dec	a
+    63                                 ld	h,a
+    64                                 push	de
+    65                                 call	pixeladdress	; adr1, bitpos1 = PixelAddress(x+width-1,y)
+    66                                 ld	(ix+5),e
+    67                                 ld	(ix+6),d
+    68                                 call	rightbitmask
+    69                                 ld	(ix+8),a    ; bitmask1 = LeftBitMask(bitpos0)
+    70                                 pop	hl
+    71                                 ex	de,hl
+    72                                 cp	a
+    73                                 sbc	hl,de    ; (adr1-adr0)
+    74                                 srl	l
+    75                                 srl	l
+    76                                 srl	l
+    77                                 ld	(ix+9),l    ; rowbytes = (adr1-adr0)	div 8, no. of bytes	in row
+    78                                       ; 0 means	that	scroll area is	within same address
+    79                                       ; FOR h =	1 TO	height
+    80                          .scroll_l_height	ld	iy,0       ; offset=0
+    81                                 ld	e,(ix+3)
+    82                                 ld	d,(ix+4)    	; DE	= adr0
+    83                                 ld	a,(de)    	; byte = (adr0)
+    84                                 ld	h,a
+    85                                 ld	l,0
+    86                                 xor	a
+    87                                 cp	(ix+9)       ; if	rowbytes = 0
+    88                                 jr	nz, scrollrow_left    ; scroll area is within one byte...
+    89                                 	ld	b,(ix+0)
+    90                                 	call	scrollleft    ; byte = Scrollleft(byte,0,scrolldist)
+    91                                 	ld	b,h
+    92                                 	ld	l,(ix+7)
+    93                                 	ld	a,l
+    94                                 	cpl       	; NOT bitmask0
+    95                                 	and	b
+    96                                 	ld	b,a       ; byte = byte AND (NOT bitmask0)
+    97                                 	ld	h,(ix+8)
+    98                                 	ld	a,h
+    99                                 	cpl       	; NOT bitmask1
+   100                                 	and	b       ; byte = byte AND (NOT bitmask1)
+   101                                 	ld	b,a
+   102                                 	ld	a,(de)
+   103                                 	and	l
+   104                                 	ld	l,a       ; byte0 =	(adr0) AND bitmask0
+   105                                 	ld	a,(de)
+   106                                 	and	h       ; byte1 =	(adr0) AND bitmask1
+   107                                 	or	b       ; byte = byte OR byte1
+   108                                 	or	l       ; byte = byte OR byte0
+   109                                 	ld	(de),a    	; (adr0) = byte
+   110                                 	jr	leftscroll_nextrow
+   111                          .scrollrow_left          ; else
+   112                                 	push	de       ; scroll area is defined	as row of	bytes
+   113                                 	ld	e,(ix+5)
+   114                                 	ld	d,(ix+6)
+   115                                 	ld	a,(de)
+   116                                 	ld	(ix+10),a    	; lastbyte = (adr1)
+   117                                 	ld	b,a
+   118                                 	ld	a,(ix+8)    	; bitmask1
+   119                                 	cpl
+   120                                 	and	b       ; (adr1) = (adr1) AND (NOT bitmask1)
+   121                                 	ld	(de),a    	; - preserve only bits within	scroll area
+   122                                 	pop	de       ; - the other bits are restored after scroll
+   123                                 	push	iy
+   124                                 	add	iy,de
+   125                                 	ld	l,(iy+8)    	; (adr0+8)
+   126                                 	pop	iy
+   127                          
+   128                                 	ld	b,(ix+0)
+   129                                 	call	scrollleft    ; byte = Scrollleft(byte,(adr0+8),scrolldist)
+   130                                 	ld	b,h
+   131                                 	ld	a,(ix+7)
+   132                                 	cpl       	; NOT bitmask0
+   133                                 	and	b
+   134                                 	ld	b,a       ; byte = byte AND (NOT bitmask0)
+   135                                 	ld	c,(ix+7)    	; bitmask0
+   136                                 	ld	a,(de)    	; byte0 =	(adr0)
+   137                                 	and	c       ; byte0 =	byte0 AND	bitmask0
+   138                                 	or	b
+   139                                 	ld	(de),a    	; (adr0) = byte0 OR	byte
+   140                                 	ld	bc,8
+   141                                 	add	iy,bc    	; offset += 8
+   142                                 	ld	b,(ix+9)    	; r = rowbytes
+   143                          
+   144                          .scroll_row_left_loop	dec	b       ; while (	--r != 0 )
+   145                                 	jr	z, endrow_left
+   146                                 	push	bc
+   147                                 	push	iy       	; DE	= adr0
+   148                                 	add	iy,de       ; adr0+offset
+   149                                 	ld	b,(ix+0)       ; scrolldist
+   150                                 	ld	h,(iy+0)       ; (adr0+offset)
+   151                                 	ld	l,(iy+8)       ; (adr0+offset+8)
+   152                                 	call	scrollleft    	; byte = Scrollleft( (adr0+offset),(adr0+offset+8),scrolldist)
+   153                                 	ld	(iy+0),h       ; (adr0+offset) = byte
+   154                                 	pop	iy
+   155                                 	ld	bc,8
+   156                                 	add	iy,bc       ; offset += 8
+   157                                 	pop	bc
+   158                                 	jr	scroll_row_left_loop
+   159                          
+   160                          .endrow_left    	ld	e,(ix+5)
+   161                                 	ld	d,(ix+6)    	; adr1, addr of last byte in row to scroll
+   162                                 	ld	a,(de)    	; byte = (adr1)
+   163                                 	ld	h,a
+   164                                 	ld	l,0
+   165                                 	ld	b,(ix+0)
+   166                                 	call	scrollleft    ; byte = Scrollleft( (adr1),0,scrolldist)
+   167                                 	ld	a,(ix+8)
+   168                                 	and	(ix+10)    	; lastbyte = lastbyte AND bitmask1	: clear scroll	area
+   169                                 	or	h       ; mask in	what	has been scrolled, the rest is outside scroll area.
+   170                                 	ld	(de),a    	; (adr1) = byte OR lastbyte, last byte of row completed.
+   171                                       	; endif
+   172                          
+   173                          .leftscroll_nextrow	inc	(ix+1)    	; inc y
+   174                                 ld	a,(ix+1)
+   175                                 and	@00000111    	; if	y MOD 8 <> 0
+   176                                 jr	z, leftscroll_newline
+   177                          .inc_l_row    	inc	(ix+3)    	; inc adr0
+   178                                 	inc	(ix+5)    	; inc adr1
+   179                                 	jr	leftscroll_next_h
+   180                                       	; else
+   181                          .leftscroll_newline    ld	a,(ix+3)
+   182                                 	add	a,256-7
+   183                                 	ld	(ix+3),a
+   184                                 	inc	(ix+4)    	; adr0 +=	256
+   185                                 	ld	a,(ix+5)
+   186                                 	add	a,256-7
+   187                                 	ld	(ix+5),a
+   188                                 	inc	(ix+6)    	; adr1 +=	256
+   189                          
+   190                          .leftscroll_next_h	dec	(ix+2)    ; END FOR	h
+   191                                 jp	nz, scroll_l_height
+   192                          
+   193                          .end_scroll_left	pop	hl
+   194                                 ld	sp,hl    ; pointer	to original ix, iy
+   195                                 pop	iy
+   196                                 pop	ix
+   197                                 ret
+   198                          
+   199                          
+   200                          ; ************************************************************************
+   201                          ;
+   202                          ; Scroll bytes	left, b1 into b0, total of B pixels
+   203                          ;
+   204                          ; IN:  H = b0
+   205                          ;	  L = b1
+   206                          ;	  B = scroll distance, 1	to 8	pixels.
+   207                          ;
+   208                          ; OUT: H = scrolled	byte
+   209                          ;
+   210                          .scrollleft    add	hl,hl
+   211                                 djnz	scrollleft
+   212                                 ret
+   213                          ENDIF
+   214                          

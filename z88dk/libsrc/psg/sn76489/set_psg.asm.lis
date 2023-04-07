@@ -1,0 +1,38 @@
+/tmp/tmpXXx4RuFb.asm:
+     1                          MODULE set_psg_asm
+     2                          LINE 0, "set_psg.asm"
+set_psg.asm:
+                                
+     1                          ;
+     2                          ;	SN76489 (a.k.a. SN76494,SN76496,TMS9919,SN94624) sound routines
+     3                          ;	by Stefano Bodrato, 2018
+     4                          ;
+     5                          ;	int set_psg(int reg, int val);
+     6                          ;
+     7                          ;	Play a sound by PSG
+     8                          ;
+     9                          ;
+    10                          ;	$Id: set_psg.asm $
+    11                          ;
+    12                          
+    13                          IF !__CPU_INTEL__ & !__CPU_RABBIT__ & !__CPU_GBZ80__
+    14                              SECTION code_clib
+    15                              PUBLIC	set_psg
+    16                              PUBLIC	_set_psg
+    17                              EXTERN  asm_set_psg
+    18                          
+    19                          set_psg:
+    20                          _set_psg:
+    21                          
+    22                          	pop	bc
+    23                          	pop	de
+    24                          	pop	hl
+    25                          
+    26                          	push	hl
+    27                          	push	de
+    28                          	push	bc
+    29                          
+    30                          	jp asm_set_psg
+    31                          
+    32                          ENDIF
+    33                          

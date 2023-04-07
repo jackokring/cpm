@@ -1,0 +1,45 @@
+/tmp/tmpXXqrCY7n.asm:
+     1                          MODULE undrawr_callee_asm
+     2                          LINE 0, "undrawr_callee.asm"
+undrawr_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ undrawr_callee(int x2, int y2)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  undrawr_callee
+     8                              PUBLIC  _undrawr_callee
+     9                              PUBLIC  asm_undrawr
+    10                          
+    11                              EXTERN  swapgfxbk
+    12                              EXTERN  __graphics_end
+    13                          
+    14                              EXTERN  Line_r
+    15                              EXTERN  respixel
+    16                              INCLUDE "graphics/grafix.inc"
+    17                          
+    18                          
+    19                          .undrawr_callee
+    20                          ._undrawr_callee
+    21                              pop     af    ; ret addr
+    22                              pop     de    ; y
+    23                              pop     hl    ; x
+    24                              push    af    ; ret addr
+    25                          
+    26                          .asm_undrawr
+    27                              push    ix
+    28                              call    swapgfxbk
+    29                              ld      ix,respixel
+    30                              call    Line_r
+    31                          IF NEED_swapgfxbk
+    32                              jp      __graphics_end
+    33                          ELSE
+    34                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    35                              pop     ix
+    36                            ENDIF
+    37                              ret
+    38                          ENDIF
+    39                          ENDIF
+    40                          

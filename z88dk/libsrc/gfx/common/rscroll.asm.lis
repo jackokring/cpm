@@ -1,0 +1,30 @@
+/tmp/tmpXXU7xr1o.asm:
+     1                          MODULE rscroll_asm
+     2                          LINE 0, "rscroll.asm"
+rscroll.asm:
+                                
+     1                          ; void rscroll(int x, int y, int width, int height, int pixels)
+     2                          
+     3                          IF !__CPU_GBZ80__ & !__CPU_INTEL__
+     4                          
+     5                              SECTION code_graphics
+     6                              PUBLIC  rscroll
+     7                              PUBLIC  _rscroll
+     8                          
+     9                              EXTERN  scroll_right
+    10                          
+    11                          
+    12                          .rscroll
+    13                          ._rscroll
+    14                              push    ix
+    15                              ld      ix,2
+    16                              add     ix,sp
+    17                              ld      a,(ix+2)
+    18                              ld      c,(ix+4)
+    19                              ld      b,(ix+6)
+    20                              ld      l,(ix+8)
+    21                              ld      h,(ix+10)
+    22                              pop     ix
+    23                              jp      scroll_right
+    24                          ENDIF
+    25                          

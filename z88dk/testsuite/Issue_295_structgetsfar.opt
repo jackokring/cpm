@@ -1,0 +1,103 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:49 2023
+
+
+	C_LINE	0,"Issue_295_structgetsfar.c"
+
+	MODULE	Issue_295_structgetsfar_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	4,"Issue_295_structgetsfar.c"
+	C_LINE	10,"Issue_295_structgetsfar.c"
+	C_LINE	11,"Issue_295_structgetsfar.c"
+	C_LINE	12,"Issue_295_structgetsfar.c"
+	C_LINE	13,"Issue_295_structgetsfar.c"
+	C_LINE	15,"Issue_295_structgetsfar.c"
+	SECTION	rodata_compiler
+._rooms
+	defw	_room0_desc + 0
+	defb	1
+	defb	2
+	defb	3
+	defw	_room1_desc + 0
+	defb	1
+	defb	2
+	defb	3
+	defw	_room2_desc + 0
+	defb	1
+	defb	2
+	defb	3
+	defw	_room3_desc + 0
+	defb	0
+	defb	0
+	defb	0
+	SECTION	code_compiler
+	C_LINE	22,"Issue_295_structgetsfar.c"
+	SECTION	data_compiler
+._room0_desc
+	defm	"room0"
+	defb	10
+
+	defm	""
+	defb	0
+
+	SECTION	code_compiler
+	C_LINE	24,"Issue_295_structgetsfar.c"
+	SECTION	data_compiler
+._room1_desc
+	defm	"room1"
+	defb	10
+
+	defm	""
+	defb	0
+
+	SECTION	code_compiler
+	C_LINE	26,"Issue_295_structgetsfar.c"
+	SECTION	data_compiler
+._room2_desc
+	defm	"room2"
+	defb	10
+
+	defm	""
+	defb	0
+
+	SECTION	code_compiler
+	C_LINE	28,"Issue_295_structgetsfar.c"
+	SECTION	data_compiler
+._room3_desc
+	defm	"room3"
+	defb	10
+
+	defm	""
+	defb	0
+
+	SECTION	code_compiler
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_room0_desc
+	GLOBAL	_room1_desc
+	GLOBAL	_room2_desc
+	GLOBAL	_room3_desc
+	GLOBAL	_rooms
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

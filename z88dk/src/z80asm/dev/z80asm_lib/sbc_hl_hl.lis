@@ -1,0 +1,20 @@
+sbc_hl_hl.asm:
+     1                          ; Substitute for the z80 sbc hl,hl instruction
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  38    47
+     4                          ; 8085  40    50
+     5                          ; gbz80 32    48
+     6                          ; r2ka   4     4
+     7                          ; z180  10    10
+     8                          ; z80   15    15
+     9                          ; z80n  15    15
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__sbc_hl_hl
+    13                          
+    14                          __z80asm__sbc_hl_hl:
+    15  0000  210000                    ld      hl, 0
+    16  0003  d0                        ret     nc
+    17  0004  2b                        dec     hl
+    18  0005  c9                        ret
+    19                          

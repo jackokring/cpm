@@ -1,0 +1,58 @@
+/tmp/tmpXXCvTNGC.asm:
+     1                          MODULE bksave2_asm
+     2                          LINE 0, "bksave2.asm"
+bksave2.asm:
+                                
+     1                          ;
+     2                          ;    Fast background save
+     3                          ;
+     4                          ;    Generic version (just a bit slow)
+     5                          ;
+     6                          ;    $Id: bksave2.asm $
+     7                          ;
+     8                          
+     9                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    10                              SECTION   code_clib
+    11                          
+    12                              PUBLIC    bksave
+    13                              PUBLIC    _bksave
+    14                          
+    15                              EXTERN    getsprite_sub
+    16                          
+    17                          
+    18                          .bksave
+    19                          ._bksave
+    20                          
+    21                              push    ix
+    22                              ld    hl,4
+    23                              add    hl,sp
+    24                          
+    25                              ld    e,(hl)
+    26                              inc    hl
+    27                              ld    d,(hl)
+    28                              inc    hl
+    29                              push    de    ;sprite address
+    30                              pop    ix
+    31                          
+    32                              ld    e,(hl)
+    33                              inc    hl
+    34                              inc    hl
+    35                              ld    d,(hl)    ; x and y __gfx_coords
+    36                          
+    37                              ld    b,(ix+0)    ; x sz
+    38                              ld    c,(ix+1)    ; y sx
+    39                              inc ix
+    40                              inc ix
+    41                              ld    (ix+0),d    ; x pos
+    42                              ld    (ix+1),e    ; y pos
+    43                              inc ix
+    44                              inc ix
+    45                          
+    46                              ;  now we create the sprite struct
+    47                              ld    (ix+0),b    ; x sz
+    48                              ld    (ix+1),c    ; y sz
+    49                          
+    50                          
+    51                              jp getsprite_sub
+    52                          ENDIF
+    53                          

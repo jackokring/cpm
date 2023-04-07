@@ -1,0 +1,32 @@
+/tmp/tmpXXQvAacw.asm:
+     1                          MODULE undraw_asm
+     2                          LINE 0, "undraw.asm"
+undraw.asm:
+                                
+     1                          ; CALLER LINKAGE FOR FUNCTION POINTERS
+     2                          ; ----- void  undraw(int x, int y, int x2, int y2)
+     3                          
+     4                          
+     5                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     6                              SECTION code_graphics
+     7                          
+     8                              PUBLIC  undraw
+     9                              PUBLIC  _undraw
+    10                          
+    11                              EXTERN  asm_undraw
+    12                          
+    13                          
+    14                          .undraw
+    15                          ._undraw
+    16                              push    ix
+    17                              ld      ix,2
+    18                              add     ix,sp
+    19                              ld      l,(ix+6)    ;y0
+    20                              ld      h,(ix+8)    ;x0
+    21                              ld      e,(ix+2)    ;y1
+    22                              ld      d,(ix+4)    ;x1
+    23                              pop     ix
+    24                              jp      asm_undraw
+    25                          
+    26                          ENDIF
+    27                          

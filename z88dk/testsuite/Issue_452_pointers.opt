@@ -1,0 +1,264 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:50 2023
+
+
+	C_LINE	0,"Issue_452_pointers.c"
+
+	MODULE	Issue_452_pointers_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"Issue_452_pointers.c"
+	C_LINE	6,"Issue_452_pointers.c"
+	SECTION	code_compiler
+
+; Function ptr_char flags 0x00000200 __smallc 
+; int ptr_char()
+	C_LINE	7,"Issue_452_pointers.c::ptr_char::0::0"
+._ptr_char
+	ld	hl,0	;const
+	push	hl
+	push	hl
+	dec	hl
+	dec	hl
+	pop	de
+	pop	bc
+	push	hl
+	push	de
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	16,"Issue_452_pointers.c::ptr_char::0::1"
+
+; Function ptr_int flags 0x00000200 __smallc 
+; int ptr_int()
+	C_LINE	17,"Issue_452_pointers.c::ptr_int::0::1"
+._ptr_int
+	ld	hl,0	;const
+	push	hl
+	push	hl
+	ld	bc,-4
+	add	hl,bc
+	pop	de
+	pop	bc
+	push	hl
+	push	de
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	srl	h
+	rr	l
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	26,"Issue_452_pointers.c::ptr_int::0::2"
+
+; Function ptr_long flags 0x00000200 __smallc 
+; int ptr_long()
+	C_LINE	27,"Issue_452_pointers.c::ptr_long::0::2"
+._ptr_long
+	ld	hl,0	;const
+	push	hl
+	push	hl
+	ld	bc,-8
+	add	hl,bc
+	pop	de
+	pop	bc
+	push	hl
+	push	de
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	srl	h
+	rr	l
+	srl	h
+	rr	l
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	36,"Issue_452_pointers.c::ptr_long::0::3"
+
+; Function ptr_double flags 0x00000200 __smallc 
+; int ptr_double()
+	C_LINE	37,"Issue_452_pointers.c::ptr_double::0::3"
+._ptr_double
+	ld	hl,0	;const
+	push	hl
+	push	hl
+	ld	bc,-12
+	add	hl,bc
+	pop	de
+	pop	bc
+	push	hl
+	push	de
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ld	de,6
+	ex	de,hl
+	call	l_div_u
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	46,"Issue_452_pointers.c::ptr_double::0::4"
+
+; Function ptr_struct flags 0x00000200 __smallc 
+; int ptr_struct()
+	C_LINE	47,"Issue_452_pointers.c::ptr_struct::0::4"
+._ptr_struct
+	ld	hl,0	;const
+	push	hl
+	push	hl
+	ld	bc,-6
+	add	hl,bc
+	pop	de
+	pop	bc
+	push	hl
+	push	de
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ld	de,3
+	ex	de,hl
+	call	l_div_u
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	56,"Issue_452_pointers.c::ptr_struct::0::5"
+	C_LINE	58,"Issue_452_pointers.c::ptr_struct::0::5"
+
+; Function struct_offset1 flags 0x00000200 __smallc 
+; int struct_offset1()
+	C_LINE	59,"Issue_452_pointers.c::struct_offset1::0::5"
+._struct_offset1
+	push	bc
+	push	bc
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ex	de,hl
+	ld	hl,_array
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ld	de,3
+	ex	de,hl
+	call	l_div_u
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	66,"Issue_452_pointers.c::struct_offset1::0::6"
+
+; Function struct_offset2 flags 0x00000200 __smallc 
+; int struct_offset2()
+	C_LINE	67,"Issue_452_pointers.c::struct_offset2::0::6"
+._struct_offset2
+	push	bc
+	push	bc
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ex	de,hl
+	ld	hl,_array
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ld	de,3
+	ex	de,hl
+	call	l_div_u
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	73,"Issue_452_pointers.c::struct_offset2::0::7"
+
+; Function struct_offset3 flags 0x00000200 __smallc 
+; int struct_offset3()
+	C_LINE	74,"Issue_452_pointers.c::struct_offset3::0::7"
+._struct_offset3
+	push	bc
+	push	bc
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ex	de,hl
+	ld	hl,_array
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._array	defs	30
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_ptr_char
+	GLOBAL	_ptr_int
+	GLOBAL	_ptr_long
+	GLOBAL	_ptr_double
+	GLOBAL	_ptr_struct
+	GLOBAL	_struct_offset1
+	GLOBAL	_struct_offset2
+	GLOBAL	_struct_offset3
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

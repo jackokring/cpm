@@ -1,0 +1,112 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:46 2023
+
+
+	C_LINE	0,"Issue_1466_float16_callee.c"
+
+	MODULE	Issue_1466_float16_callee_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_1466_float16_callee.c"
+	C_LINE	3,"Issue_1466_float16_callee.c"
+	C_LINE	4,"Issue_1466_float16_callee.c"
+	C_LINE	6,"Issue_1466_float16_callee.c"
+	C_LINE	8,"Issue_1466_float16_callee.c"
+	SECTION	code_compiler
+
+; Function powf16 flags 0x000002c0 __smallc __z88dk_callee 
+; _Float16 half_tpowf16(_Float16 x, _Float16 y)
+; parameter '_Float16 y' at sp+2 size(2)
+; parameter '_Float16 x' at sp+4 size(2)
+	C_LINE	9,"Issue_1466_float16_callee.c::powf16::0::0"
+.powf16
+	GLOBAL	_powf16
+._powf16
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	ld	hl,0	;const
+	call	l_f16_le
+	ld	a,h
+	or	l
+	jp	z,i_2	;
+	ld	hl,0	;const
+	pop	bc
+	pop	af
+	pop	af
+	push	bc
+	ret
+
+
+.i_2
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,0	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_3	;
+	ld	hl,15360	;const
+	pop	bc
+	pop	af
+	pop	af
+	push	bc
+	ret
+
+
+.i_3
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_4	;
+	call	l_gint4sp	;
+	pop	bc
+	pop	af
+	pop	af
+	push	bc
+	ret
+
+
+.i_4
+	call	l_gint4sp	;
+	call	logf16
+	push	hl
+	call	l_gint4sp	;
+	call	l_f16_mul
+	call	expf16
+	pop	bc
+	pop	af
+	pop	af
+	push	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	expf16
+	GLOBAL	logf16
+	GLOBAL	powf16
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

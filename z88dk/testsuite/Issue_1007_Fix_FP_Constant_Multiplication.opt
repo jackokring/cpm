@@ -1,0 +1,64 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:39 2023
+
+
+	C_LINE	0,"Issue_1007_Fix_FP_Constant_Multiplication.c"
+
+	MODULE	Issue_1007_Fix_FP_Constant_Multiplication_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"Issue_1007_Fix_FP_Constant_Multiplication.c"
+	C_LINE	6,"Issue_1007_Fix_FP_Constant_Multiplication.c"
+	SECTION	code_compiler
+
+; Function do_something flags 0x00000200 __smallc 
+; void do_something(unsigned char param1, unsigned char param2)
+; parameter 'unsigned char param2' at sp+2 size(1)
+; parameter 'unsigned char param1' at sp+4 size(1)
+	C_LINE	7,"Issue_1007_Fix_FP_Constant_Multiplication.c::do_something::0::0"
+._do_something
+	ret
+
+
+	C_LINE	10,"Issue_1007_Fix_FP_Constant_Multiplication.c::do_something::0::1"
+
+; Function main flags 0x00000000 __stdc 
+; void main()
+	C_LINE	11,"Issue_1007_Fix_FP_Constant_Multiplication.c::main::0::2"
+._main
+	ld	hl,9	;const
+	push	hl
+	ld	l,20
+	push	hl
+	call	_do_something
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_do_something
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

@@ -1,0 +1,91 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:48 2023
+
+
+	C_LINE	0,"Issue_1805_signed_cost_char_le.c"
+
+	MODULE	Issue_1805_signed_cost_char_le_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_1805_signed_cost_char_le.c"
+	C_LINE	3,"Issue_1805_signed_cost_char_le.c"
+	SECTION	code_compiler
+
+; Function initialize_challenges flags 0x00000200 __smallc 
+; void initialize_challenges(unsigned char index, char initial_x, char initial_y)
+; parameter 'char initial_y' at sp+2 size(1)
+; parameter 'char initial_x' at sp+4 size(1)
+; parameter 'unsigned char index' at sp+6 size(1)
+	C_LINE	3,"Issue_1805_signed_cost_char_le.c::initialize_challenges::0::0"
+._initialize_challenges
+	ld	hl,4	;const
+	add	hl,sp
+	call	l_gchar
+	ld	a,l
+	xor	128
+	sub	129
+	ret	nc
+	ld	hl,i_1+0
+	push	hl
+	call	_test
+	pop	bc
+.i_2
+	ret
+
+
+	C_LINE	9,"Issue_1805_signed_cost_char_le.c::initialize_challenges::0::2"
+
+; Function main flags 0x00000000 __stdc 
+; int main(int argc, char * argv)
+; parameter 'int argc' at 2 size(2)
+; parameter 'char * argv' at 4 size(2)
+	C_LINE	9,"Issue_1805_signed_cost_char_le.c::main::0::3"
+._main
+	ld	hl,1	;const
+	push	hl
+	dec	hl
+	push	hl
+	ld	hl,14	;const
+	push	hl
+	call	_initialize_challenges
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+	SECTION	rodata_compiler
+.i_1
+	defm	"Hello"
+	defb	10
+
+	defm	""
+	defb	0
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_test
+	GLOBAL	_initialize_challenges
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

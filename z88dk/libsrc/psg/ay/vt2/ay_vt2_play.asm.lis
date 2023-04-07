@@ -1,0 +1,45 @@
+/tmp/tmpXXipj3dz.asm:
+     1                          MODULE ay_vt2_play_asm
+     2                          LINE 0, "ay_vt2_play.asm"
+ay_vt2_play.asm:
+                                
+     1                          
+     2                          	SECTION	code_psg
+     3                          
+     4                          	PUBLIC	ay_vt2_play
+     5                          	PUBLIC	_ay_vt2_play
+     6                          	PUBLIC	ay_vt2_start
+     7                          	PUBLIC	_ay_vt2_start
+     8                          	PUBLIC	ay_vt2_stop
+     9                          	PUBLIC	_ay_vt2_stop
+    10                          
+    11                          	EXTERN	asm_VT_PLAY
+    12                          	EXTERN	asm_VT_MUTE
+    13                          
+    14                          ay_vt2_play:
+    15                          _ay_vt2_play:
+    16  0000  3a0000            	ld	a,(__ay_vt2_play_enabled)
+    17  0003  a7                	and	a
+    18  0004  c40000            	call	nz,asm_VT_PLAY
+    19  0007  c9                	ret
+    20                          
+    21                          ay_vt2_start:
+    22                          _ay_vt2_start:
+    23  0008  3e01              	ld	a,1
+    24  000a  320000            	ld	(__ay_vt2_play_enabled),a
+    25  000d  c9                	ret
+    26                          
+    27                          ay_vt2_stop:
+    28                          _ay_vt2_stop:
+    29  000e  af                	xor	a
+    30  000f  320000            	ld	(__ay_vt2_play_enabled),a
+    31  0012  cd0000            	call	asm_VT_MUTE
+    32  0015  c9                	ret
+    33                          
+    34                          
+    35                          
+    36                          	SECTION	data_psg
+    37                          
+    38  0000  01                __ay_vt2_play_enabled:	defb	1
+    39                          
+    40                          

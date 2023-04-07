@@ -1,0 +1,68 @@
+/tmp/tmpXXWvnuCF.asm:
+     1                          MODULE bkrestore_asm
+     2                          LINE 0, "bkrestore.asm"
+bkrestore.asm:
+                                
+     1                          ;
+     2                          ;    Fast background restore
+     3                          ;
+     4                          ;    Generic version (just a bit slow)
+     5                          ;
+     6                          ;    $Id: bkrestore.asm $
+     7                          ;
+     8                          
+     9                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    10                              SECTION smc_clib
+    11                          
+    12                              PUBLIC    bkrestore
+    13                              PUBLIC    _bkrestore
+    14                              EXTERN    pixeladdress
+    15                          
+    16                          .bkrestore
+    17                          ._bkrestore
+    18                              push    ix
+    19                          ; __FASTCALL__ : sprite ptr in HL
+    20                          
+    21                              push    hl
+    22                              pop    ix
+    23                          
+    24                              ld    h,(ix+2)
+    25                              ld    l,(ix+3)
+    26                          
+    27                              push    hl
+    28                              call    pixeladdress
+    29                              pop    hl
+    30                          
+    31                              ld    a,(ix+0)
+    32                              ld    b,(ix+1)
+    33                          
+    34                              dec    a
+    35                              srl    a
+    36                              srl    a
+    37                              srl    a
+    38                              inc    a
+    39                              inc    a    ; INT ((Xsize-1)/8+2)
+    40                              ld    (rbytes+1),a
+    41                          
+    42                          .bkrestores
+    43                              push    bc
+    44                          .rbytes
+    45                              ld    b,0
+    46                          .rloop
+    47                              ld    a,(ix+4)
+    48                              ld    (de),a
+    49                              inc    de
+    50                              inc    ix
+    51                              djnz    rloop
+    52                          
+    53                              inc    l
+    54                              push    hl
+    55                              call    pixeladdress
+    56                              pop    hl
+    57                          
+    58                              pop    bc
+    59                              djnz    bkrestores
+    60                              pop    ix
+    61                              ret
+    62                          ENDIF
+    63                          

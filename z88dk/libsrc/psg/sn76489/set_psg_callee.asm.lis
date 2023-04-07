@@ -1,0 +1,49 @@
+/tmp/tmpXX5whDNb.asm:
+     1                          MODULE set_psg_callee_asm
+     2                          LINE 0, "set_psg_callee.asm"
+set_psg_callee.asm:
+                                
+     1                          ;
+     2                          ;	SN76489 (a.k.a. SN76494,SN76496,TMS9919,SN94624) sound routines
+     3                          ;	by Stefano Bodrato, 2018
+     4                          ;
+     5                          ;	int set_psg(int reg, int val);
+     6                          ;
+     7                          ;	Play a sound by PSG
+     8                          ;
+     9                          ;
+    10                          ;	$Id: set_psg_callee.asm $
+    11                          ;
+    12                          
+    13                          IF !__CPU_INTEL__ & !__CPU_RABBIT__ & !__CPU_GBZ80__
+    14                              SECTION code_clib
+    15                              PUBLIC	set_psg_callee
+    16                              PUBLIC	_set_psg_callee
+    17                          
+    18                              PUBLIC asm_set_psg
+    19                          
+    20                          
+    21                              INCLUDE	"sn76489.inc"
+    22                          
+    23                          
+    24                          set_psg_callee:
+    25                          _set_psg_callee:
+    26                          
+    27                             pop hl
+    28                             pop de
+    29                             ex (sp),hl
+    30                          .asm_set_psg
+    31                          
+    32                              LD	BC,psgport
+    33                              OUT	(C),L
+    34                          IF PSGLatchPort
+    35                              in a,(PSGLatchPort)
+    36                          ENDIF
+    37                              OUT	(C),E
+    38                          IF PSGLatchPort
+    39                              in a,(PSGLatchPort)
+    40                          ENDIF
+    41                              ret
+    42                          
+    43                          ENDIF
+    44                          

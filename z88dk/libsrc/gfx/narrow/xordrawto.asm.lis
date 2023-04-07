@@ -1,0 +1,29 @@
+/tmp/tmpXXvZDyJy.asm:
+     1                          MODULE xordrawto_asm
+     2                          LINE 0, "xordrawto.asm"
+xordrawto.asm:
+                                
+     1                          ; ----- void  xordrawto(int x2, int y2)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  xordrawto
+     8                              PUBLIC  _xordrawto
+     9                          
+    10                              EXTERN  asm_xordrawto
+    11                          
+    12                          
+    13                          .xordrawto
+    14                          ._xordrawto
+    15                              pop     af    ; ret addr
+    16                              pop     de    ; y2
+    17                              pop     hl
+    18                              push    hl
+    19                              push    de
+    20                              ld      d,l    ; x2
+    21                              push    af    ; ret addr
+    22                              jp      asm_xordrawto
+    23                          ENDIF
+    24                          

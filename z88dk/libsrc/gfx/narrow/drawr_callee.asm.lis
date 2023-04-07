@@ -1,0 +1,48 @@
+/tmp/tmpXX6y7gLg.asm:
+     1                          MODULE drawr_callee_asm
+     2                          LINE 0, "drawr_callee.asm"
+drawr_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ drawr(int x2, int y2)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  drawr_callee
+     7                              PUBLIC  _drawr_callee
+     8                          
+     9                              PUBLIC  asm_drawr
+    10                          
+    11                              EXTERN  swapgfxbk
+    12                              EXTERN  __graphics_end
+    13                          
+    14                              EXTERN  Line_r
+    15                              EXTERN  plotpixel
+    16                              INCLUDE "graphics/grafix.inc"
+    17                          
+    18                          
+    19                          .drawr_callee
+    20                          ._drawr_callee
+    21                              pop     af    ; ret addr
+    22                              pop     de    ; y
+    23                              pop     hl    ; x
+    24                              push    af    ; ret addr
+    25                          
+    26                          .asm_drawr
+    27                              push    ix
+    28                          IF NEED_swapgfxbk = 1
+    29                              call    swapgfxbk
+    30                          ENDIF
+    31                              ld      ix,plotpixel
+    32                              call    Line_r
+    33                          IF NEED_swapgfxbk
+    34                              jp      __graphics_end
+    35                          ELSE
+    36                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    37                              pop     ix
+    38                            ENDIF
+    39                              ret
+    40                          ENDIF
+    41                          
+    42                          ENDIF
+    43                          

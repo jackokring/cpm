@@ -1,0 +1,118 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:45 2023
+
+
+	C_LINE	0,"Issue_1283_2d_arrays.c"
+
+	MODULE	Issue_1283_2d_arrays_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"Issue_1283_2d_arrays.c"
+	SECTION	rodata_compiler
+._selected_data
+	defb	255
+	defb	255
+	defb	128
+	defb	255
+	defb	128
+	defb	255
+	defb	128
+	defb	255
+	defb	128
+	defb	255
+	defb	128
+	defb	255
+	defb	128
+	defb	255
+	defb	128
+	defb	254
+	defb	129
+	defb	253
+	defb	130
+	defb	250
+	defb	132
+	defb	245
+	defb	136
+	defb	235
+	defb	128
+	defb	231
+	defb	128
+	defb	216
+	defb	128
+	defb	255
+	defb	255
+	defb	128
+	SECTION	code_compiler
+	C_LINE	9,"Issue_1283_2d_arrays.c"
+	C_LINE	11,"Issue_1283_2d_arrays.c"
+	C_LINE	14,"Issue_1283_2d_arrays.c"
+
+; Function test1 flags 0x00000200 __smallc 
+; int test1()
+	C_LINE	14,"Issue_1283_2d_arrays.c::test1::0::0"
+._test1
+	ld	hl,_selected_data
+	push	hl
+	call	_func
+	ld	hl,_selected_data+16
+	ex	(sp),hl
+	call	_func
+	pop	bc
+	ld	hl,(_selected_data+2)
+	ld	h,0
+	push	hl
+	call	_ifunc
+	pop	bc
+	ret
+
+
+	C_LINE	20,"Issue_1283_2d_arrays.c::test1::0::1"
+	SECTION	data_compiler
+._values
+	defw	1
+	defw	2
+	defw	3
+	SECTION	code_compiler
+	C_LINE	22,"Issue_1283_2d_arrays.c::test1::0::1"
+
+; Function test2 flags 0x00000200 __smallc 
+; int test2()
+	C_LINE	22,"Issue_1283_2d_arrays.c::test2::0::1"
+._test2
+	ld	hl,(_values+4)
+	push	hl
+	call	_ifunc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_selected_data
+	GLOBAL	_func
+	GLOBAL	_ifunc
+	GLOBAL	_test1
+	GLOBAL	_values
+	GLOBAL	_test2
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

@@ -10,7 +10,7 @@
  |  Copyright 1994-1995,2000 by CodeGen, Inc.  All Rights Reserved.           |
 \*-----------------------------------------------------------------------*/
 
-// This is the CP/M bios
+/* This is the CP/M bios */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -317,7 +317,7 @@ consout(z80info *z80)
 	output(z80, 0x00, 0x00, C & 0x7F);
 }
 
-/* list character in C */
+/* list or printer print character in C */
 static void
 list(z80info *z80)
 {
@@ -325,7 +325,8 @@ list(z80info *z80)
 
 	if (fp == NULL)
 	{
-		fp = fopen("list", "w");
+		/* linux lpr command spooling */
+		fp = popen("lpr -J 'CP/M'", "w");
 
 		if (fp == NULL)
 			return;
@@ -334,7 +335,7 @@ list(z80info *z80)
 	/* close up on EOF */
 	if (C == CNTL('D') || C == '\0')
 	{
-		fclose(fp);
+		pclose(fp);
 		fp = NULL;
 		return;
 	}
@@ -956,7 +957,7 @@ bios(z80info *z80, unsigned int fn)
 		wrsector,	/* 14 */
 		liststat,	/* 15 */
 		secttran,	/* 16 */
-		// Classic CP/M finishes here
+		/* Classic CP/M finishes here */
 		openunix,	/* 17 */
 		createunix,	/* 18 */
 		rdunix,		/* 19 */

@@ -1,0 +1,61 @@
+/tmp/tmpXXDDOdBG.asm:
+     1                          MODULE stencil_add_lineto_asm
+     2                          LINE 0, "stencil_add_lineto.asm"
+stencil_add_lineto.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Written around the Interlogic Standard Library
+     5                          ;
+     6                          ;    Trace a relative line in the stencil vectors
+     7                          ;
+     8                          ;     Stefano Bodrato - 08/10/2009
+     9                          ;
+    10                          ;
+    11                          ;    $Id: stencil_add_lineto.asm,v 1.8 2016-07-02 09:01:35 dom Exp $
+    12                          ;
+    13                          
+    14                          ;; void stencil_add_lineto(int x, int y, unsigned char *stencil)
+    15                          
+    16                          
+    17                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    18                              SECTION   code_graphics
+    19                                  PUBLIC    stencil_add_lineto
+    20                                  PUBLIC    _stencil_add_lineto
+    21                          
+    22                                  EXTERN    Line
+    23                                  EXTERN    stencil_add_pixel
+    24                          
+    25                              EXTERN    __gfx_coords
+    26                          
+    27                                  ;EXTERN    swapgfxbk
+    28                                  ;EXTERN    swapgfxbk1
+    29                          
+    30                                  EXTERN    stencil_ptr
+    31                              ;EXTERN    __graphics_end
+    32                          
+    33                          .stencil_add_lineto
+    34                          ._stencil_add_lineto
+    35                              push    ix
+    36                              ld    ix,2
+    37                              add    ix,sp
+    38                          
+    39                              ld    l,(ix+2)    ;pointer to stencil
+    40                              ld    h,(ix+3)
+    41                              ld    (stencil_ptr),hl
+    42                          
+    43                              ld    hl,(__gfx_coords)
+    44                              ld    e,(ix+4)    ;y1
+    45                              ld    d,(ix+6)    ;x1
+    46                          
+    47                              ;call    swapgfxbk
+    48                          
+    49                                  ld    ix,stencil_add_pixel
+    50                                  call    Line
+    51                          
+    52                                  ;jp    __graphics_end
+    53                              pop    ix
+    54                              ret
+    55                          ENDIF
+    56                          

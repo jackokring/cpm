@@ -1,0 +1,556 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:48 2023
+
+
+	C_LINE	0,"Issue_188_builtins.c"
+
+	MODULE	Issue_188_builtins_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/compiler.h"
+	C_LINE	4,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	50,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	60,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	70,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	80,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	89,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	93,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	94,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	95,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	101,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	106,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	5,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	7,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	8,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	12,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	14,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	19,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	20,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	24,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	25,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	29,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	30,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	39,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	46,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	47,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	53,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	57,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	59,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	64,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	69,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	72,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	78,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	79,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	83,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	92,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	97,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	99,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	104,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	105,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	109,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	111,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	116,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	118,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	123,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	125,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	133,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	135,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	139,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	141,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	145,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	146,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	150,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	152,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	157,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	158,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	162,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	163,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	167,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	168,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	172,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	173,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	177,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	178,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	182,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	183,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	187,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	188,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	192,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	193,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	197,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	200,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	203,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	204,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	208,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	210,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	215,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	217,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	222,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	225,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	228,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	230,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	235,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	237,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	242,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	244,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	249,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	251,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	256,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	258,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	263,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	264,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	268,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	269,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	273,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	274,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	278,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	279,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	283,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	284,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	288,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	289,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	293,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	296,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	297,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	301,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	304,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	305,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	309,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	310,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	314,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	315,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	319,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	322,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	323,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	327,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	329,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	334,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	337,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	339,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	343,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	344,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	348,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	349,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	352,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	353,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	410,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	416,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	422,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	428,"/home/jackokring/cpm/z88dk/lib/config//../..//include/string.h"
+	C_LINE	2,"Issue_188_builtins.c"
+	C_LINE	5,"Issue_188_builtins.c"
+	SECTION	code_compiler
+
+; Function strchr1 flags 0x00000200 __smallc 
+; void strchr1(char * ptr, int c)
+; parameter 'int c' at sp+2 size(2)
+; parameter 'char * ptr' at sp+4 size(2)
+	C_LINE	6,"Issue_188_builtins.c::strchr1::0::0"
+._strchr1
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	ex	de,hl
+	pop	hl
+.i_2
+	ld	a,(hl)
+	cp	e
+	jr	z,i_3
+	and	a
+	inc	hl
+	jr	nz,i_2
+	ld	h,a
+	ld	l,h
+.i_3
+	ret
+
+
+	C_LINE	10,"Issue_188_builtins.c::strchr1::0::1"
+
+; Function strchr2 flags 0x00000200 __smallc 
+; void strchr2(char * ptr, int c)
+; parameter 'int c' at sp+2 size(2)
+; parameter 'char * ptr' at sp+4 size(2)
+	C_LINE	11,"Issue_188_builtins.c::strchr2::0::1"
+._strchr2
+	call	l_gint4sp	;
+	ld	e,97
+.i_4
+	ld	a,(hl)
+	cp	e
+	jr	z,i_5
+	and	a
+	inc	hl
+	jr	nz,i_4
+	ld	h,a
+	ld	l,h
+.i_5
+	ret
+
+
+	C_LINE	15,"Issue_188_builtins.c::strchr2::0::2"
+
+; Function memset1 flags 0x00000200 __smallc 
+; void memset1(char * ptr, int c, int s)
+; parameter 'int s' at sp+2 size(2)
+; parameter 'int c' at sp+4 size(2)
+; parameter 'char * ptr' at sp+6 size(2)
+	C_LINE	16,"Issue_188_builtins.c::memset1::0::2"
+._memset1
+	call	l_gint6sp	;
+	push	hl
+	ld	e,0
+	ld	b,13
+.i_6
+	ld	(hl),e
+	inc	hl
+	djnz	i_6
+	pop	hl
+	ret
+
+
+	C_LINE	20,"Issue_188_builtins.c::memset1::0::3"
+
+; Function memset2 flags 0x00000200 __smallc 
+; void memset2(char * ptr, int c, int s)
+; parameter 'int s' at sp+2 size(2)
+; parameter 'int c' at sp+4 size(2)
+; parameter 'char * ptr' at sp+6 size(2)
+	C_LINE	21,"Issue_188_builtins.c::memset2::0::3"
+._memset2
+	ld	hl,6	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	ex	de,hl
+	pop	hl
+	push	hl
+	ld	b,13
+.i_7
+	ld	(hl),e
+	inc	hl
+	djnz	i_7
+	pop	hl
+	ret
+
+
+	C_LINE	24,"Issue_188_builtins.c::memset2::0::4"
+
+; Function memset3 flags 0x00000200 __smallc 
+; void memset3(char * ptr, int c, int s)
+; parameter 'int s' at sp+2 size(2)
+; parameter 'int c' at sp+4 size(2)
+; parameter 'char * ptr' at sp+6 size(2)
+	C_LINE	25,"Issue_188_builtins.c::memset3::0::4"
+._memset3
+	ld	hl,6	;const
+	call	l_g2intspsp	;
+	call	l_gint6sp	;
+	push	hl
+	call	memset_callee
+	ret
+
+
+	C_LINE	28,"Issue_188_builtins.c::memset3::0::5"
+
+; Function memset4 flags 0x00000200 __smallc 
+; void memset4(char * ptr, int c, int s)
+; parameter 'int s' at sp+2 size(2)
+; parameter 'int c' at sp+4 size(2)
+; parameter 'char * ptr' at sp+6 size(2)
+	C_LINE	29,"Issue_188_builtins.c::memset4::0::5"
+._memset4
+	call	l_gint6sp	;
+	push	hl
+	ld	e,0
+	ld	b,0
+.i_8
+	ld	(hl),e
+	inc	hl
+	djnz	i_8
+	pop	hl
+	ret
+
+
+	C_LINE	33,"Issue_188_builtins.c::memset4::0::6"
+
+; Function strcpy1 flags 0x00000200 __smallc 
+; void strcpy1(char * a, char * b)
+; parameter 'char * b' at sp+2 size(2)
+; parameter 'char * a' at sp+4 size(2)
+	C_LINE	34,"Issue_188_builtins.c::strcpy1::0::6"
+._strcpy1
+	call	l_gint4sp	;
+	ex	de,hl
+	ld	hl,i_1+0
+	push	de
+	xor	a
+.i_9
+	cp	(hl)
+	ldi
+	jr	nz,i_9
+	pop	hl
+	ret
+
+
+	C_LINE	38,"Issue_188_builtins.c::strcpy1::0::7"
+
+; Function strcpy2 flags 0x00000200 __smallc 
+; void strcpy2(char * a, char * b)
+; parameter 'char * b' at sp+2 size(2)
+; parameter 'char * a' at sp+4 size(2)
+	C_LINE	39,"Issue_188_builtins.c::strcpy2::0::7"
+._strcpy2
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	push	de
+	xor	a
+.i_10
+	cp	(hl)
+	ldi
+	jr	nz,i_10
+	pop	hl
+	ret
+
+
+	C_LINE	44,"Issue_188_builtins.c::strcpy2::0::8"
+
+; Function memcpy1 flags 0x00000200 __smallc 
+; void memcpy1(char * a, char * b)
+; parameter 'char * b' at sp+2 size(2)
+; parameter 'char * a' at sp+4 size(2)
+	C_LINE	45,"Issue_188_builtins.c::memcpy1::0::8"
+._memcpy1
+	call	l_gint4sp	;
+	push	hl
+	ex	de,hl
+	ld	hl,1000
+	ld	bc,10
+	ldir
+	pop	hl
+	ret
+
+
+	C_LINE	49,"Issue_188_builtins.c::memcpy1::0::9"
+
+; Function memcpy2 flags 0x00000200 __smallc 
+; void memcpy2(char * a, char * b)
+; parameter 'char * b' at sp+2 size(2)
+; parameter 'char * a' at sp+4 size(2)
+	C_LINE	50,"Issue_188_builtins.c::memcpy2::0::9"
+._memcpy2
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	pop	de
+	push	de
+	ld	bc,10
+	ldir
+	pop	hl
+	ret
+
+
+	C_LINE	54,"Issue_188_builtins.c::memcpy2::0::10"
+
+; Function memcpy3 flags 0x00000200 __smallc 
+; void memcpy3(char * a, char * b, int n)
+; parameter 'int n' at sp+2 size(2)
+; parameter 'char * b' at sp+4 size(2)
+; parameter 'char * a' at sp+6 size(2)
+	C_LINE	55,"Issue_188_builtins.c::memcpy3::0::10"
+._memcpy3
+	ld	hl,6	;const
+	call	l_g2intspsp	;
+	call	l_gint6sp	;
+	push	hl
+	call	memcpy_callee
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+	SECTION	rodata_compiler
+.i_1
+	defm	"hello"
+	defb	0
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	bcmp
+	GLOBAL	bcmp_callee
+	GLOBAL	bcopy
+	GLOBAL	bcopy_callee
+	GLOBAL	bzero
+	GLOBAL	bzero_callee
+	GLOBAL	index
+	GLOBAL	index_callee
+	GLOBAL	rindex
+	GLOBAL	rindex_callee
+	GLOBAL	strset
+	GLOBAL	strset_callee
+	GLOBAL	strnset
+	GLOBAL	strnset_callee
+	GLOBAL	rawmemchr
+	GLOBAL	rawmemchr_callee
+	GLOBAL	_memlwr_
+	GLOBAL	_memlwr__callee
+	GLOBAL	_memstrcpy_
+	GLOBAL	_memstrcpy__callee
+	GLOBAL	_memupr_
+	GLOBAL	_memupr__callee
+	GLOBAL	_strrstrip_
+	GLOBAL	ffs
+	GLOBAL	ffsl
+	GLOBAL	memccpy
+	GLOBAL	memccpy_callee
+	GLOBAL	memchr
+	GLOBAL	memchr_callee
+	GLOBAL	memcmp
+	GLOBAL	memcmp_callee
+	GLOBAL	memcpy
+	GLOBAL	memcpy_callee
+	GLOBAL	memmem
+	GLOBAL	memmem_callee
+	GLOBAL	memmove
+	GLOBAL	memmove_callee
+	GLOBAL	memrchr
+	GLOBAL	memrchr_callee
+	GLOBAL	memset
+	GLOBAL	memset_callee
+	GLOBAL	memset_wr
+	GLOBAL	memset_wr_callee
+	GLOBAL	memswap
+	GLOBAL	memswap_callee
+	GLOBAL	stpcpy
+	GLOBAL	stpcpy_callee
+	GLOBAL	stpncpy
+	GLOBAL	stpncpy_callee
+	GLOBAL	strcasecmp
+	GLOBAL	strcasecmp_callee
+	GLOBAL	strcat
+	GLOBAL	strcat_callee
+	GLOBAL	strchr
+	GLOBAL	strchr_callee
+	GLOBAL	strchrnul
+	GLOBAL	strchrnul_callee
+	GLOBAL	strcmp
+	GLOBAL	strcmp_callee
+	GLOBAL	strcoll
+	GLOBAL	strcoll_callee
+	GLOBAL	strcpy
+	GLOBAL	strcpy_callee
+	GLOBAL	strcspn
+	GLOBAL	strcspn_callee
+	GLOBAL	strdup
+	GLOBAL	strerror
+	GLOBAL	stricmp
+	GLOBAL	stricmp_callee
+	GLOBAL	strlcat
+	GLOBAL	strlcat_callee
+	GLOBAL	strlcpy
+	GLOBAL	strlcpy_callee
+	GLOBAL	strlen
+	GLOBAL	strlwr
+	GLOBAL	strncasecmp
+	GLOBAL	strncasecmp_callee
+	GLOBAL	strncat
+	GLOBAL	strncat_callee
+	GLOBAL	strnchr
+	GLOBAL	strnchr_callee
+	GLOBAL	strncmp
+	GLOBAL	strncmp_callee
+	GLOBAL	strncpy
+	GLOBAL	strncpy_callee
+	GLOBAL	strndup
+	GLOBAL	strndup_callee
+	GLOBAL	strnicmp
+	GLOBAL	strnicmp_callee
+	GLOBAL	strnlen
+	GLOBAL	strnlen_callee
+	GLOBAL	strpbrk
+	GLOBAL	strpbrk_callee
+	GLOBAL	strrchr
+	GLOBAL	strrchr_callee
+	GLOBAL	strrcspn
+	GLOBAL	strrcspn_callee
+	GLOBAL	strrev
+	GLOBAL	strrspn
+	GLOBAL	strrspn_callee
+	GLOBAL	strrstrip
+	GLOBAL	strsep
+	GLOBAL	strsep_callee
+	GLOBAL	strspn
+	GLOBAL	strspn_callee
+	GLOBAL	strstr
+	GLOBAL	strstr_callee
+	GLOBAL	strstrip
+	GLOBAL	strtok
+	GLOBAL	strtok_callee
+	GLOBAL	strtok_r
+	GLOBAL	strtok_r_callee
+	GLOBAL	strupr
+	GLOBAL	strxfrm
+	GLOBAL	strxfrm_callee
+	GLOBAL	strrstr
+	GLOBAL	strrstr_callee
+	GLOBAL	memopi
+	GLOBAL	memopi_callee
+	GLOBAL	memopd
+	GLOBAL	memopd_callee
+	GLOBAL	__builtin_memset
+	GLOBAL	__builtin_memcpy
+	GLOBAL	__builtin_strcpy
+	GLOBAL	__builtin_strchr
+	GLOBAL	_strchr1
+	GLOBAL	_strchr2
+	GLOBAL	_memset1
+	GLOBAL	_memset2
+	GLOBAL	_memset3
+	GLOBAL	_memset4
+	GLOBAL	_strcpy1
+	GLOBAL	_strcpy2
+	GLOBAL	_memcpy1
+	GLOBAL	_memcpy2
+	GLOBAL	_memcpy3
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

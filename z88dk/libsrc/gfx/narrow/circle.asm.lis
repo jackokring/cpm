@@ -1,0 +1,29 @@
+/tmp/tmpXXH3h4hB.asm:
+     1                          MODULE circle_asm
+     2                          LINE 0, "circle.asm"
+circle.asm:
+                                
+     1                          ; Usage: circle(int x, int y, int radius, int skip);
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION    code_graphics
+     6                          
+     7                              PUBLIC    circle
+     8                              PUBLIC    _circle
+     9                          
+    10                              EXTERN    asm_circle
+    11                          
+    12                          
+    13                          .circle
+    14                          ._circle
+    15                              push    ix
+    16                              ld      ix,2
+    17                              add     ix,sp
+    18                              ld      e,(ix+2)    ;skip
+    19                              ld      d,(ix+4)    ;radius
+    20                              ld      c,(ix+6)    ;y
+    21                              ld      b,(ix+8)    ;x
+    22                              jp      asm_circle
+    23                          ENDIF
+    24                          

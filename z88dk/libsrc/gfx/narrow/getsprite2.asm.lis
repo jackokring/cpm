@@ -1,0 +1,147 @@
+/tmp/tmpXXHuXcv9.asm:
+     1                          MODULE getsprite2_asm
+     2                          LINE 0, "getsprite2.asm"
+getsprite2.asm:
+                                
+     1                          ;
+     2                          ; Getsprite - Picks up a sprite from display with the given size
+     3                          ; by Stefano Bodrato - 2019
+     4                          ;
+     5                          ; The original putsprite code is by Patrick Davidson (TI 85)
+     6                          ;
+     7                          ; Generic version (just a bit slow)
+     8                          ;
+     9                          ;
+    10                          ; $Id: getsprite2.asm $
+    11                          ;
+    12                          
+    13                          
+    14                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    15                              SECTION   smc_clib
+    16                          
+    17                              PUBLIC    getsprite
+    18                              PUBLIC    _getsprite
+    19                              PUBLIC    getsprite_sub
+    20                          
+    21                              EXTERN    pointxy
+    22                          
+    23                              EXTERN    swapgfxbk
+    24                              EXTERN    __graphics_end
+    25                              INCLUDE "graphics/grafix.inc"
+    26                          
+    27                          
+    28                          ; __gfx_coords: d,e (vert-horz)
+    29                          ; sprite: (ix)
+    30                          
+    31                          
+    32                          
+    33                          .getsprite
+    34                          ._getsprite
+    35                          
+    36                              push    ix
+    37                          
+    38                              ld    hl,4
+    39                              add    hl,sp
+    40                              ld    e,(hl)
+    41                              inc    hl
+    42                              ld    d,(hl)  ; sprite address
+    43                              push    de
+    44                              pop    ix
+    45                          
+    46                              inc    hl
+    47                              ld    e,(hl)
+    48                              inc    hl
+    49                              inc    hl
+    50                              ld    d,(hl)    ; x and y __gfx_coords
+    51                          
+    52                          
+    53                          .getsprite_sub
+    54                              ld    h,d    ; X
+    55                              ld    l,e    ; Y
+    56                          
+    57                              dec h
+    58                              ld    c,h    ; keep copy of X position
+    59                          
+    60                          IF NEED_swapgfxbk = 1
+    61                              call    swapgfxbk
+    62                          ENDIF
+    63                          
+    64                              ld    b,(ix+0)    ; x size (iloop)
+    65                              ld    d,(ix+1)    ; y size (oloop)
+    66                          
+    67                              ld    e,$fe    ; trailing byte for "set 7,.." instruction
+    68                          
+    69                              ld    a,7
+    70                              and    b    ; SMC for an extra the byte boundary check if the sprite edge is not exactly on a byte
+    71                              jr    z,skip_inc    ; NOP
+    72                              ld    a,$23    ; INC IX
+    73                          .skip_inc
+    74                              ld    (inc_smc+1),a
+    75                              inc b
+    76                          
+    77                          .oloop
+    78                              xor a
+    79                              ld    (ix+2),a
+    80                              push de
+    81                              push bc    ; keep copy of counters
+    82                          
+    83                              ld    (nopoint-1),a
+    84                              ld    e,a
+    85                          
+    86                          .iloop
+    87                              push bc
+    88                              push de
+    89                              push hl
+    90                              call    pointxy
+    91                              pop hl
+    92                              pop de
+    93                          
+    94                              jr z,nopoint
+    95                              set 7,(ix+2)    ; SMC (23 T)
+    96                          .nopoint
+    97                          
+    98                              ld    a,e
+    99                              sub 8    ; next bit (count 7 to 0)
+   100                              cp $c6-8    ; trailing byte for "set 0,.." instruction  (rightmost bit)
+   101                              jr    nc,next_bit
+   102                          
+   103                              inc ix    ; next byte in the sprite data
+   104                              xor a
+   105                              ld    (ix+2),a
+   106                              ld    a,$fe    ; trailing byte for "set 0,.." instruction
+   107                          
+   108                          .next_bit
+   109                              ld    (nopoint-1),a
+   110                              ld    e,a
+   111                          
+   112                              inc h    ; increment X
+   113                          
+   114                              pop bc    ;
+   115                              djnz iloop
+   116                          
+   117                              ld    a,$fe    ; trailing byte for "set 7,.." instruction
+   118                              cp  e
+   119                              jr z,noinc
+   120                          .inc_smc
+   121                              inc ix    ; next byte in the sprite data
+   122                          .noinc
+   123                          
+   124                              pop bc    ; restore counters
+   125                              pop de
+   126                          
+   127                              ld    h,c    ; reset X
+   128                              inc l    ; increment Y
+   129                          
+   130                              dec d
+   131                              jr nz,oloop
+   132                          
+   133                          IF NEED_swapgfxbk
+   134                              jp      __graphics_end
+   135                          ELSE
+   136                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   137                              pop     ix
+   138                            ENDIF
+   139                              ret
+   140                          ENDIF
+   141                          ENDIF
+   142                          

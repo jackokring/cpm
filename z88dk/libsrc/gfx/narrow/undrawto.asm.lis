@@ -1,0 +1,30 @@
+/tmp/tmpXXSdY4Jq.asm:
+     1                          MODULE undrawto_asm
+     2                          LINE 0, "undrawto.asm"
+undrawto.asm:
+                                
+     1                          ; ----- void  undrawto(int x2, int y2)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  undrawto
+     7                              PUBLIC  _undrawto
+     8                          
+     9                              EXTERN  asm_undrawto
+    10                          
+    11                          
+    12                          
+    13                          .undrawto
+    14                          ._undrawto
+    15                              pop     af    ; ret addr
+    16                              pop     de    ; y2
+    17                              pop     hl
+    18                              push    hl
+    19                              push    de
+    20                              ld      d,l    ; x2
+    21                              push    af    ; ret addr
+    22                              jp      asm_undrawto
+    23                          
+    24                          ENDIF
+    25                          

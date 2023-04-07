@@ -1,0 +1,16 @@
+/tmp/tmpXXsdEueG.asm:
+     1                          MODULE gfx_refresh_asm
+     2                          LINE 0, "gfx_refresh.asm"
+gfx_refresh.asm:
+                                
+     1                          
+     2                          
+     3                          SECTION code_graphics
+     4                          
+     5                          PUBLIC gfx_refresh
+     6                          PUBLIC _gfx_refresh
+     7                          EXTERN l_ret
+     8                          
+     9                          defc gfx_refresh = l_ret
+    10                          defc _gfx_refresh = gfx_refresh
+    11                          

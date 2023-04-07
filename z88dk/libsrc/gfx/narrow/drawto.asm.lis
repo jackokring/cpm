@@ -1,0 +1,27 @@
+/tmp/tmpXXK9Nmad.asm:
+     1                          MODULE drawto_asm
+     2                          LINE 0, "drawto.asm"
+drawto.asm:
+                                
+     1                          ; ----- void  drawto(int x2, int y2)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  drawto
+     7                              PUBLIC  _drawto
+     8                          
+     9                              EXTERN  asm_drawto
+    10                          
+    11                          .drawto
+    12                          ._drawto
+    13                              pop     af    ; ret addr
+    14                              pop     de    ; y2
+    15                              pop     hl
+    16                              push    hl
+    17                              push    de
+    18                              ld      d,l    ; x2
+    19                              push    af    ; ret addr
+    20                              jp      asm_drawto
+    21                          ENDIF
+    22                          

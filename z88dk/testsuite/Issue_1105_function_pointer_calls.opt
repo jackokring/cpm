@@ -1,0 +1,717 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:42 2023
+
+
+	C_LINE	0,"Issue_1105_function_pointer_calls.c"
+
+	MODULE	Issue_1105_function_pointer_calls_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/compiler.h"
+	C_LINE	4,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	50,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	60,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	70,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	80,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	89,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	93,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	94,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	95,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	101,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	106,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	11,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	13,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	14,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	15,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	18,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	19,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	21,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	22,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	23,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	25,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	27,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	29,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	30,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	31,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	33,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	37,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	38,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	43,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	44,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	49,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	54,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	5,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	37,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	38,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	39,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	42,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	44,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	53,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	54,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	57,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	76,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	98,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	99,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	100,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	78,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	141,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	160,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	165,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	166,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	175,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	178,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	182,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	183,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	184,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	185,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	186,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	187,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	191,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	192,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	194,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	225,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	227,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	228,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	230,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	231,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	232,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	235,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	236,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	237,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	238,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	253,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	254,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	257,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	260,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	261,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	268,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	271,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	272,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	273,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	274,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	275,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	276,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	282,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	289,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	290,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	291,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	292,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	293,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	303,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	308,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	313,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	316,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	319,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	322,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	324,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	327,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	329,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	330,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	332,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	334,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	338,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	340,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	344,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	347,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	356,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	358,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	361,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	363,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	365,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	1,"Issue_1105_function_pointer_calls.c"
+	C_LINE	4,"Issue_1105_function_pointer_calls.c"
+	SECTION	code_compiler
+
+; Function placeholder flags 0x00000200 __smallc 
+; void placeholder(int val, char * str)
+; parameter 'char * str' at sp+2 size(2)
+; parameter 'int val' at sp+4 size(2)
+	C_LINE	4,"Issue_1105_function_pointer_calls.c::placeholder::0::0"
+._placeholder
+	ld	hl,i_1+0
+	push	hl
+	ld	hl,6	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	push	hl
+	ld	a,3
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	11,"Issue_1105_function_pointer_calls.c::placeholder::0::1"
+
+; Function s_fastcall flags 0x00000208 __smallc __z88dk_fastcall 
+; void s_fastcall(char * str)
+; parameter 'char * str' at sp+2 size(2)
+	C_LINE	11,"Issue_1105_function_pointer_calls.c::s_fastcall::0::1"
+._s_fastcall
+	ld	de,65535	;const
+	ex	de,hl
+	push	de
+	push	hl
+	ex	de,hl
+	push	hl
+	call	_placeholder
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	15,"Issue_1105_function_pointer_calls.c::s_fastcall::0::2"
+
+; Function test2 flags 0x00000200 __smallc 
+; void test2()
+	C_LINE	15,"Issue_1105_function_pointer_calls.c::test2::0::2"
+._test2
+	ld	hl,_s_fastcall
+	push	hl
+	ld	hl,i_1+7
+	call	_s_fastcall
+	pop	hl
+	push	hl
+	push	hl
+	ld	hl,i_1+20
+	pop	af
+	ld	bc,i_2
+	push	bc
+	push	af
+	ret
+.i_2
+	pop	bc
+	ret
+
+
+	C_LINE	21,"Issue_1105_function_pointer_calls.c::test2::0::3"
+
+; Function s_regular flags 0x00000200 __smallc 
+; void s_regular(char * str)
+; parameter 'char * str' at sp+2 size(2)
+	C_LINE	21,"Issue_1105_function_pointer_calls.c::s_regular::0::3"
+._s_regular
+	ld	hl,65535	;const
+	push	hl
+	call	l_gint4sp	;
+	push	hl
+	call	_placeholder
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	25,"Issue_1105_function_pointer_calls.c::s_regular::0::4"
+
+; Function test3 flags 0x00000200 __smallc 
+; void test3()
+	C_LINE	25,"Issue_1105_function_pointer_calls.c::test3::0::4"
+._test3
+	ld	hl,_s_regular
+	push	hl
+	ld	hl,i_1+26
+	push	hl
+	call	_s_regular
+	pop	bc
+	pop	hl
+	push	hl
+	push	hl
+	ld	hl,i_1+39
+	ex	(sp),hl
+	call	l_jphl
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	31,"Issue_1105_function_pointer_calls.c::test3::0::5"
+
+; Function is_regular flags 0x00000200 __smallc 
+; void is_regular(int val, char * str)
+; parameter 'char * str' at sp+2 size(2)
+; parameter 'int val' at sp+4 size(2)
+	C_LINE	31,"Issue_1105_function_pointer_calls.c::is_regular::0::5"
+._is_regular
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	push	hl
+	call	_placeholder
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	35,"Issue_1105_function_pointer_calls.c::is_regular::0::6"
+
+; Function test4 flags 0x00000200 __smallc 
+; void test4()
+	C_LINE	35,"Issue_1105_function_pointer_calls.c::test4::0::6"
+._test4
+	ld	hl,_is_regular
+	push	hl
+	ld	hl,10	;const
+	push	hl
+	ld	hl,i_1+45
+	push	hl
+	call	_is_regular
+	pop	bc
+	pop	bc
+	ld	hl,0	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,4	;const
+	push	bc
+	push	hl
+	ld	hl,i_1+58
+	ex	(sp),hl
+	call	l_jphl
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	41,"Issue_1105_function_pointer_calls.c::test4::0::7"
+
+; Function l_regular flags 0x00000200 __smallc 
+; void l_regular(long val)
+; parameter 'long val' at sp+2 size(4)
+	C_LINE	41,"Issue_1105_function_pointer_calls.c::l_regular::0::7"
+._l_regular
+	ld	hl,i_1+64
+	push	hl
+	ld	hl,4	;const
+	add	hl,sp
+	call	l_glong
+	push	de
+	push	hl
+	ld	a,3
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	45,"Issue_1105_function_pointer_calls.c::l_regular::0::8"
+
+; Function test5 flags 0x00000200 __smallc 
+; void test5()
+	C_LINE	45,"Issue_1105_function_pointer_calls.c::test5::0::8"
+._test5
+	ld	hl,_l_regular
+	push	hl
+	ld	hl,101	;const
+	ld	de,0
+	push	de
+	push	hl
+	call	_l_regular
+	pop	bc
+	pop	bc
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	ld	hl,65535	;const
+	ld	de,65535
+	ex	de,hl
+	ex	(sp),hl
+	push	de
+	call	l_jphl
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	51,"Issue_1105_function_pointer_calls.c::test5::0::9"
+
+; Function d_fastcall flags 0x00000208 __smallc __z88dk_fastcall 
+; void d_fastcall(double d)
+; parameter 'double d' at sp+2 size(6)
+	C_LINE	51,"Issue_1105_function_pointer_calls.c::d_fastcall::0::9"
+._d_fastcall
+	call	dpush
+	ld	hl,i_1+78
+	push	hl
+	ld	hl,2	;const
+	add	hl,sp
+	call	dldpsh
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	55,"Issue_1105_function_pointer_calls.c::d_fastcall::0::10"
+
+; Function test6 flags 0x00000200 __smallc 
+; void test6()
+	C_LINE	55,"Issue_1105_function_pointer_calls.c::test6::0::10"
+._test6
+	ld	hl,_d_fastcall
+	push	hl
+	ld	hl,20	;const
+	call	l_int2long_u_float
+	call	_d_fastcall
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	pop	af
+	ld	bc,i_3
+	push	bc
+	push	af
+	ret
+.i_3
+	pop	bc
+	ret
+
+
+	C_LINE	61,"Issue_1105_function_pointer_calls.c::test6::0::11"
+
+; Function ll_fastcall flags 0x00000208 __smallc __z88dk_fastcall 
+; void ll_fastcall(long a, long b)
+; parameter 'long b' at sp+2 size(4)
+; parameter 'long a' at sp+6 size(4)
+	C_LINE	61,"Issue_1105_function_pointer_calls.c::ll_fastcall::0::11"
+._ll_fastcall
+	push	de
+	push	hl
+	ld	hl,i_1+94
+	push	hl
+	ld	hl,8	;const
+	add	hl,sp
+	call	l_glong2sp
+	ld	hl,6	;const
+	add	hl,sp
+	call	l_glong
+	push	de
+	push	hl
+	ld	a,5
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	65,"Issue_1105_function_pointer_calls.c::ll_fastcall::0::12"
+
+; Function test7 flags 0x00000200 __smallc 
+; void test7()
+	C_LINE	65,"Issue_1105_function_pointer_calls.c::test7::0::12"
+._test7
+	ld	hl,_ll_fastcall
+	push	hl
+	ld	hl,100	;const
+	ld	de,0
+	push	de
+	push	hl
+	ld	hl,65526	;const
+	ld	de,65535
+	call	_ll_fastcall
+	pop	bc
+	pop	bc
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	ld	hl,10	;const
+	ld	de,0
+	ex	de,hl
+	ex	(sp),hl
+	push	de
+	push	hl
+	ld	hl,65535	;const
+	ld	de,65535
+	pop	af
+	ld	bc,i_4
+	push	bc
+	push	af
+	ret
+.i_4
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	72,"Issue_1105_function_pointer_calls.c::test7::0::13"
+
+; Function is_fastcall flags 0x00000208 __smallc __z88dk_fastcall 
+; void is_fastcall(int val, char * str)
+; parameter 'char * str' at sp+2 size(2)
+; parameter 'int val' at sp+4 size(2)
+	C_LINE	72,"Issue_1105_function_pointer_calls.c::is_fastcall::0::13"
+._is_fastcall
+	push	hl
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	push	hl
+	call	_placeholder
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	76,"Issue_1105_function_pointer_calls.c::is_fastcall::0::14"
+
+; Function test1 flags 0x00000200 __smallc 
+; void test1()
+	C_LINE	76,"Issue_1105_function_pointer_calls.c::test1::0::14"
+._test1
+	ld	hl,_is_fastcall
+	push	hl
+	ld	hl,10	;const
+	push	hl
+	ld	hl,i_1+111
+	call	_is_fastcall
+	pop	bc
+	ld	hl,0	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,1	;const
+	push	bc
+	push	hl
+	ld	hl,i_1+124
+	pop	af
+	ld	bc,i_5
+	push	bc
+	push	af
+	ret
+.i_5
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	82,"Issue_1105_function_pointer_calls.c::test1::0::15"
+
+; Function main flags 0x00000000 __stdc 
+; int main()
+	C_LINE	82,"Issue_1105_function_pointer_calls.c::main::0::16"
+._main
+	call	_test1
+	call	_test2
+	call	_test3
+	call	_test4
+	call	_test5
+	call	_test6
+	call	_test7
+	ld	hl,0	;const
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+	SECTION	rodata_compiler
+.i_1
+	defm	"%d %s"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"test2-direct"
+	defb	0
+
+	defm	"test2"
+	defb	0
+
+	defm	"test3-direct"
+	defb	0
+
+	defm	"test3"
+	defb	0
+
+	defm	"test4-direct"
+	defb	0
+
+	defm	"test4"
+	defb	0
+
+	defm	"Long val %ld"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"Double val %lf"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"A = %ld b = %ld"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"test1-direct"
+	defb	0
+
+	defm	"test1"
+	defb	0
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	open
+	GLOBAL	creat
+	GLOBAL	close
+	GLOBAL	read
+	GLOBAL	write
+	GLOBAL	lseek
+	GLOBAL	readbyte
+	GLOBAL	writebyte
+	GLOBAL	getcwd
+	GLOBAL	chdir
+	GLOBAL	getwd
+	GLOBAL	rmdir
+	GLOBAL	__RND_BLOCKSIZE
+	GLOBAL	rnd_loadblock
+	GLOBAL	rnd_saveblock
+	GLOBAL	rnd_erase
+	GLOBAL	__FOPEN_MAX
+	GLOBAL	__sgoioblk
+	GLOBAL	__sgoioblk_end
+	GLOBAL	fopen_zsock
+	GLOBAL	fileno
+	GLOBAL	fopen
+	GLOBAL	freopen
+	GLOBAL	fdopen
+	GLOBAL	_freopen1
+	GLOBAL	fmemopen
+	GLOBAL	funopen
+	GLOBAL	fclose
+	GLOBAL	fflush
+	GLOBAL	closeall
+	GLOBAL	fgets
+	GLOBAL	fputs
+	GLOBAL	fputc
+	GLOBAL	fputs_callee
+	GLOBAL	fputc_callee
+	GLOBAL	fgetc
+	GLOBAL	ungetc
+	GLOBAL	feof
+	GLOBAL	ferror
+	GLOBAL	puts
+	GLOBAL	ftell
+	GLOBAL	fgetpos
+	GLOBAL	fseek
+	GLOBAL	fread
+	GLOBAL	fwrite
+	GLOBAL	gets
+	GLOBAL	printf
+	GLOBAL	fprintf
+	GLOBAL	sprintf
+	GLOBAL	snprintf
+	GLOBAL	vfprintf
+	GLOBAL	vsnprintf
+	GLOBAL	printn
+	GLOBAL	scanf
+	GLOBAL	fscanf
+	GLOBAL	sscanf
+	GLOBAL	vfscanf
+	GLOBAL	vsscanf
+	GLOBAL	getarg
+	GLOBAL	fchkstd
+	GLOBAL	fgetc_cons
+	GLOBAL	fgetc_cons_inkey
+	GLOBAL	fputc_cons
+	GLOBAL	fgets_cons
+	GLOBAL	puts_cons
+	GLOBAL	fabandon
+	GLOBAL	fdtell
+	GLOBAL	fdgetpos
+	GLOBAL	rename
+	GLOBAL	remove
+	GLOBAL	getk
+	GLOBAL	getk_inkey
+	GLOBAL	printk
+	GLOBAL	perror
+	GLOBAL	set_fputc_cons
+	GLOBAL	fputc_cons_native
+	GLOBAL	fputc_cons_generic
+	GLOBAL	fputc_cons_ansi
+	GLOBAL	_placeholder
+	GLOBAL	_s_fastcall
+	GLOBAL	_test2
+	GLOBAL	_s_regular
+	GLOBAL	_test3
+	GLOBAL	_is_regular
+	GLOBAL	_test4
+	GLOBAL	_l_regular
+	GLOBAL	_test5
+	GLOBAL	_d_fastcall
+	GLOBAL	_test6
+	GLOBAL	_ll_fastcall
+	GLOBAL	_test7
+	GLOBAL	_is_fastcall
+	GLOBAL	_test1
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

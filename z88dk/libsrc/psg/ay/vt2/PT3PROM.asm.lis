@@ -1,0 +1,1370 @@
+/tmp/tmpXXrG8ZNw.asm:
+     1                          MODULE PT3PROM_asm
+     2                          LINE 0, "PT3PROM.asm"
+PT3PROM.asm:
+                                
+     1                          IF !__CPU_INTEL__ & !__CPU_GBZ80__ & !__CPU_RABBIT__ & !__CPU_Z180__
+     2                          ;Vortex Tracker II v1.0 PT3 player for ZX Spectrum
+     3                          ;ROM version (specially for Axor)
+     4                          ;(c)2004,2007 S.V.Bulba <vorobey@mail.khstu.ru>
+     5                          ;http://bulba.untergrund.net (http://bulba.at.kz)
+     6                          
+     7                          ;Release number
+     8                          ;DEFM Release = "MOR7"
+     9                          
+    10                          ;This file has been adapted to the z80asm assembler in z88dk and is based on the
+    11                          ;file PT3Play/ROM/PT3PROM.asm in http://bulba.untergrund.net/PTxTools.7z, which
+    12                          ;uses the SjASM assembler syntax. The code section can be executed from RAM or
+    13                          ;ROM, contains no self-modifying code, and can be assembled at any address.
+    14                          ;The data section contains the variables and self-modifying code and can be
+    15                          ;located at any address in RAM. The MUTE routine has been extended to also
+    16                          ;disable all channels.
+    17                          
+    18                          ;Features
+    19                          ;--------
+    20                          ;-Can run in ROM (self-modified code is not used).
+    21                          ;-Can be compiled at any address (i.e. no need rounding ORG
+    22                          ; address).
+    23                          ;-Variables (VARS) can be located at any address (not only after
+    24                          ;code block).
+    25                          ;-INIT subroutine detects module version and rightly generates
+    26                          ; both note and volume tables outside of code block (in VARS).
+    27                          ;-Two portamento (spc. command 3xxx) algorithms (depending of
+    28                          ; module version).
+    29                          ;-New 1.XX and 2.XX special command behaviour (only for PT v3.7
+    30                          ; and higher).
+    31                          ;-Any Tempo value are accepted (including Tempo=1 and Tempo=2).
+    32                          ;-Fully compatible with Ay_Emul PT3 player codes.
+    33                          ;-See also notes at the end of this source code.
+    34                          
+    35                          ;Warning!!! PLAY subroutine can crash if no module are loaded
+    36                          ;into RAM or INIT subroutine was not called before.
+    37                          
+    38                          ;Call MUTE or INIT one more time to mute sound after stopping
+    39                          ;playing
+    40                          
+    41                          SECTION code_psg
+    42                          ;	ORG $C000
+    43                          
+    44                          ;Test codes (commented)
+    45                          ;	CALL START
+    46                          ;	EI
+    47                          ;_LP:
+    48                          ;	HALT
+    49                          ;	CALL START+5
+    50                          ;	XOR A
+    51                          ;	IN A,($FE)
+    52                          ;	CPL
+    53                          ;	AND 15
+    54                          ;	JR Z,_LP
+    55                          ;	JR START+8
+    56                          
+    57                          DEFC TonA  = 0
+    58                          DEFC TonB  = 2
+    59                          DEFC TonC  = 4
+    60                          DEFC Noise = 6
+    61                          DEFC Mixer = 7
+    62                          DEFC AmplA = 8
+    63                          DEFC AmplB = 9
+    64                          DEFC AmplC = 10
+    65                          DEFC Env   = 11
+    66                          DEFC EnvTp = 13
+    67                          
+    68                          ;ChannelsVars
+    69                          ;	STRUCT	CHP
+    70                          ;reset group
+    71                          DEFC CHP_PsInOr = 0
+    72                          DEFC CHP_PsInSm = 1
+    73                          DEFC CHP_CrAmSl = 2
+    74                          DEFC CHP_CrNsSl = 3
+    75                          DEFC CHP_CrEnSl = 4
+    76                          DEFC CHP_TSlCnt = 5
+    77                          DEFC CHP_CrTnSl = 6
+    78                          DEFC CHP_TnAcc  = 8
+    79                          DEFC CHP_COnOff = 10
+    80                          ;reset group
+    81                          
+    82                          DEFC CHP_OnOffD = 11
+    83                          
+    84                          ;IX for PTDECOD here (+12)
+    85                          DEFC CHP_OffOnD = 12
+    86                          DEFC CHP_OrnPtr = 13
+    87                          DEFC CHP_SamPtr = 15
+    88                          DEFC CHP_NNtSkp = 17
+    89                          DEFC CHP_Note   = 18
+    90                          DEFC CHP_SlToNt = 19
+    91                          DEFC CHP_Env_En = 20
+    92                          DEFC CHP_Flags  = 21
+    93                           ;Enabled - 0,SimpleGliss - 2
+    94                          DEFC CHP_TnSlDl = 22
+    95                          DEFC CHP_TSlStp = 23
+    96                          DEFC CHP_TnDelt = 25
+    97                          DEFC CHP_NtSkCn = 27
+    98                          DEFC CHP_Volume = 28
+    99                          ;	ENDS
+   100                          DEFC CHP = 29
+   101                          
+   102                          ;Entry and other points
+   103                          ;START initialization
+   104                          ;START+3 initialization with module address in HL
+   105                          ;START+5 play one quark
+   106                          ;START+8 mute
+   107                          ;START+10 setup and status flags
+   108                          ;START+11 pointer to current position value in PT3 module;
+   109                          ;After INIT (START+11) points to Postion0-1 (optimization)
+   110                          
+   111                          PUBLIC asm_VT_START
+   112                          PUBLIC asm_VT_PLAY
+   113                          PUBLIC asm_VT_MUTE
+   114                          PUBLIC asm_VT_INIT
+   115                          PUBLIC asm_VT_AYREGS
+   116                          EXTERN asm_vt_hardware_out
+   117                          EXTERN asm_vt_hardware_out_A0
+   118                          asm_VT_START:
+   119                          
+   120                          START:
+   121                          	LD HL,MDLADDR
+   122                          asm_VT_INIT:
+   123                          	JR INIT
+   124                          asm_VT_PLAY:
+   125                          	JP PLAY
+   126                          asm_VT_MUTE:
+   127                          	JR MUTE
+   128                          
+   129                          ;Identifier
+   130                          	DEFM "=VTII PT3 Player r.7ROM="
+   131                          
+   132                          CHECKLP:
+   133                          	LD HL,SETUP
+   134                          	SET 7,(HL)
+   135                          	BIT 0,(HL)
+   136                          	RET Z
+   137                          	POP HL
+   138                          	LD HL,DelyCnt
+   139                          	INC (HL)
+   140                          	LD HL,ChanA+CHP_NtSkCn
+   141                          	INC (HL)
+   142                          MUTE:
+   143                          	LD A,$3F
+   144                          	LD (AYREGS+Mixer),A
+   145                          	XOR A
+   146                          	LD H,A
+   147                          	LD L,A
+   148                          	LD (AYREGS+AmplA),A
+   149                          	LD (AYREGS+AmplB),HL
+   150                          	JP asm_vt_hardware_out_A0
+   151                          
+   152                          INIT:
+   153                          ;HL - AddressOfModule
+   154                          
+   155                          	LD (MODADDR),HL
+   156                          	PUSH HL
+   157                          	LD DE,100
+   158                          	ADD HL,DE
+   159                          	LD A,(HL)
+   160                          	LD (Delay),A
+   161                          	PUSH HL
+   162                          	POP IX
+   163                          	ADD HL,DE
+   164                          	LD (CrPsPtr),HL
+   165                          	LD E,(IX+102-100)
+   166                          	ADD HL,DE
+   167                          	INC HL
+   168                          	LD (LPosPtr),HL
+   169                          	POP DE
+   170                          	LD L,(IX+103-100)
+   171                          	LD H,(IX+104-100)
+   172                          	ADD HL,DE
+   173                          	LD (PatsPtr),HL
+   174                          	LD HL,169
+   175                          	ADD HL,DE
+   176                          	LD (OrnPtrs),HL
+   177                          	LD HL,105
+   178                          	ADD HL,DE
+   179                          	LD (SamPtrs),HL
+   180                          	LD HL,SETUP
+   181                          	RES 7,(HL)
+   182                          
+   183                          ;note table data depacker
+   184                          	LD DE,T_PACK
+   185                          	LD BC,T1_+(2*49)-1
+   186                          TP_0:
+   187                          	LD A,(DE)
+   188                          	INC DE
+   189                          	CP 15*2
+   190                          	JR NC,TP_1
+   191                          	LD H,A
+   192                          	LD A,(DE)
+   193                          	LD L,A
+   194                          	INC DE
+   195                          	JR TP_2
+   196                          TP_1:
+   197                          	PUSH DE
+   198                          	LD D,0
+   199                          	LD E,A
+   200                          	ADD HL,DE
+   201                          	ADD HL,DE
+   202                          	POP DE
+   203                          TP_2:
+   204                          	LD A,H
+   205                          	LD (BC),A
+   206                          	DEC BC
+   207                          	LD A,L
+   208                          	LD (BC),A
+   209                          	DEC BC
+   210                          	SUB +($F8*2) % 256
+   211                          	JR NZ,TP_0
+   212                          
+   213                          	LD HL,VAR0START
+   214                          	LD (HL),A
+   215                          	LD DE,VAR0START+1
+   216                          	LD BC,VAR0END-VAR0START-1
+   217                          	LDIR
+   218                          	INC A
+   219                          	LD (DelyCnt),A
+   220                          	LD HL,$F001 ;H - CHP_Volume, L - CHP_NtSkCn
+   221                          	LD (ChanA+CHP_NtSkCn),HL
+   222                          	LD (ChanB+CHP_NtSkCn),HL
+   223                          	LD (ChanC+CHP_NtSkCn),HL
+   224                          
+   225                          	LD HL,EMPTYSAMORN
+   226                          	LD (AdInPtA),HL ;ptr to zero
+   227                          	LD (ChanA+CHP_OrnPtr),HL ;ornament 0 is "0,1,0"
+   228                          	LD (ChanB+CHP_OrnPtr),HL ;in all versions from
+   229                          	LD (ChanC+CHP_OrnPtr),HL ;3.xx to 3.6x and VTII
+   230                          
+   231                          	LD (ChanA+CHP_SamPtr),HL ;S1 There is no default
+   232                          	LD (ChanB+CHP_SamPtr),HL ;S2 sample in PT3, so, you
+   233                          	LD (ChanC+CHP_SamPtr),HL ;S3 can comment S1,2,3; see
+   234                          				    ;also EMPTYSAMORN comment
+   235                          
+   236                          	LD A,(IX+13-100) ;EXTRACT VERSION NUMBER
+   237                          	SUB $30
+   238                          	JR C,L20
+   239                          	CP 10
+   240                          	JR C,L21
+   241                          L20:
+   242                          	LD A,6
+   243                          L21:
+   244                          	LD (Version),A
+   245                          	PUSH AF
+   246                          	CP 4
+   247                          	LD A,(IX+99-100) ;TONE TABLE NUMBER
+   248                          	RLA
+   249                          	AND 7
+   250                          
+   251                          ;NoteTableCreator (c) Ivan Roshin
+   252                          ;A - NoteTableNumber*2+VersionForNoteTable
+   253                          ;(xx1b - 3.xx..3.4r, xx0b - 3.4x..3.6x..VTII1.0)
+   254                          
+   255                          	LD HL,NT_DATA
+   256                          	PUSH DE
+   257                          	LD D,B
+   258                          	ADD A,A
+   259                          	LD E,A
+   260                          	ADD HL,DE
+   261                          	LD E,(HL)
+   262                          	INC HL
+   263                          	SRL E
+   264                          	SBC A,A
+   265                          	AND $A7 ;$00 (NOP) or $A7 (AND A)
+   266                          	LD (L3),A
+   267                          	LD A,201 ;RET temporary
+   268                          	LD (L3+1),A ;temporary
+   269                          	EX DE,HL
+   270                          	POP BC ;BC=T1_
+   271                          	ADD HL,BC
+   272                          
+   273                          	LD A,(DE)
+   274                          
+   275                          	ADD A,+(T_ % 256)
+   276                          	LD C,A
+   277                          	ADC A,T_/256
+   278                          
+   279                          	SUB C
+   280                          	LD B,A
+   281                          	PUSH BC
+   282                          	LD DE,NT_
+   283                          	PUSH DE
+   284                          
+   285                          	LD B,12
+   286                          L1:
+   287                          	PUSH BC
+   288                          	LD C,(HL)
+   289                          	INC HL
+   290                          	PUSH HL
+   291                          	LD B,(HL)
+   292                          
+   293                          	PUSH DE
+   294                          	EX DE,HL
+   295                          	LD DE,23
+   296                          	LD IXH,8
+   297                          
+   298                          L2:
+   299                          	SRL B
+   300                          	RR C
+   301                          	CALL L3 ;temporary
+   302                          ;L3:
+   303                          ;	DB $19	;AND A or NOP
+   304                          	LD A,C
+   305                          	ADC A,D	;=ADC 0
+   306                          	LD (HL),A
+   307                          	INC HL
+   308                          	LD A,B
+   309                          	ADC A,D
+   310                          	LD (HL),A
+   311                          	ADD HL,DE
+   312                          	DEC IXH
+   313                          	JR NZ,L2
+   314                          
+   315                          	POP DE
+   316                          	INC DE
+   317                          	INC DE
+   318                          	POP HL
+   319                          	INC HL
+   320                          	POP BC
+   321                          	DJNZ L1
+   322                          
+   323                          	POP HL
+   324                          	POP DE
+   325                          
+   326                          	LD A,E
+   327                          	CP +(TCOLD_1) % 256
+   328                          	JR NZ,CORR_1
+   329                          	LD A,$FD
+   330                          	LD (NT_+$2E),A
+   331                          
+   332                          CORR_1:
+   333                          	LD A,(DE)
+   334                          	AND A
+   335                          	JR Z,TC_EXIT
+   336                          	RRA
+   337                          	PUSH AF
+   338                          	ADD A,A
+   339                          	LD C,A
+   340                          	ADD HL,BC
+   341                          	POP AF
+   342                          	JR NC,CORR_2
+   343                          	DEC (HL)
+   344                          	DEC (HL)
+   345                          CORR_2:
+   346                          	INC (HL)
+   347                          	AND A
+   348                          	SBC HL,BC
+   349                          	INC DE
+   350                          	JR CORR_1
+   351                          
+   352                          TC_EXIT:
+   353                          
+   354                          	POP AF
+   355                          
+   356                          ;VolTableCreator (c) Ivan Roshin
+   357                          ;A - VersionForVolumeTable (0..4 - 3.xx..3.4x;
+   358                          			   ;5.. - 3.5x..3.6x..VTII1.0)
+   359                          
+   360                          	CP 5
+   361                          	LD HL,$11
+   362                          	LD D,H
+   363                          	LD E,H
+   364                          	LD A,$17
+   365                          	JR NC,M1
+   366                          	DEC L
+   367                          	LD E,L
+   368                          	XOR A
+   369                          M1:
+   370                          	LD (M2),A
+   371                          
+   372                          	LD IX,VT_+16
+   373                          	LD C,$10
+   374                          
+   375                          INITV2:
+   376                          	PUSH HL
+   377                          
+   378                          	ADD HL,DE
+   379                          	EX DE,HL
+   380                          	SBC HL,HL
+   381                          
+   382                          INITV1:
+   383                          	LD A,L
+   384                          ;M2:
+   385                          ;	DB $7D
+   386                          	CALL M2 ;temporary
+   387                          	LD A,H
+   388                          	ADC A,0
+   389                          	LD (IX),A
+   390                          	INC IX
+   391                          	ADD HL,DE
+   392                          	INC C
+   393                          	LD A,C
+   394                          	AND 15
+   395                          	JR NZ,INITV1
+   396                          
+   397                          	POP HL
+   398                          	LD A,E
+   399                          	CP $77
+   400                          	JR NZ,M3
+   401                          	INC E
+   402                          M3:
+   403                          	LD A,C
+   404                          	AND A
+   405                          	JR NZ,INITV2
+   406                          
+   407                          	JP asm_vt_hardware_out_A0
+   408                          
+   409                          ;pattern decoder
+   410                          PD_OrSm:
+   411                          	LD (IX-12+CHP_Env_En),0
+   412                          	CALL SETORN
+   413                          	LD A,(BC)
+   414                          	INC BC
+   415                          	RRCA
+   416                          
+   417                          PD_SAM:
+   418                          	ADD A,A
+   419                          PD_SAM_:
+   420                          	LD E,A
+   421                          	LD D,0
+   422                          ;DEFC SamPtrs = ASMPC+1
+   423                          ;	LD HL,$2121
+   424                          	LD HL,(SamPtrs)
+   425                          	ADD HL,DE
+   426                          	LD E,(HL)
+   427                          	INC HL
+   428                          	LD D,(HL)
+   429                          ;DEFC MODADDR = ASMPC+1
+   430                          ;	LD HL,$2121
+   431                          	LD HL,(MODADDR)
+   432                          	ADD HL,DE
+   433                          	LD (IX-12+CHP_SamPtr),L
+   434                          	LD (IX-12+CHP_SamPtr+1),H
+   435                          	JR PD_LOOP
+   436                          
+   437                          PD_VOL:
+   438                          	RLCA
+   439                          	RLCA
+   440                          	RLCA
+   441                          	RLCA
+   442                          	LD (IX-12+CHP_Volume),A
+   443                          	JR PD_LP2
+   444                          
+   445                          PD_EOff:
+   446                          	LD (IX-12+CHP_Env_En),A
+   447                          	LD (IX-12+CHP_PsInOr),A
+   448                          	JR PD_LP2
+   449                          
+   450                          PD_SorE:
+   451                          	DEC A
+   452                          	JR NZ,PD_ENV
+   453                          	LD A,(BC)
+   454                          	INC BC
+   455                          	LD (IX-12+CHP_NNtSkp),A
+   456                          	JR PD_LP2
+   457                          
+   458                          PD_ENV:
+   459                          	CALL SETENV
+   460                          	JR PD_LP2
+   461                          
+   462                          PD_ORN:
+   463                          	CALL SETORN
+   464                          	JR PD_LOOP
+   465                          
+   466                          PD_ESAM:
+   467                          	LD (IX-12+CHP_Env_En),A
+   468                          	LD (IX-12+CHP_PsInOr),A
+   469                          	CALL NZ,SETENV
+   470                          	LD A,(BC)
+   471                          	INC BC
+   472                          	JR PD_SAM_
+   473                          
+   474                          PTDECOD:
+   475                          	LD A,(IX-12+CHP_Note)
+   476                          ;	LD (PrNote+1),A
+   477                          	LD (PrNote),A
+   478                          	LD L,(IX-12+CHP_CrTnSl)
+   479                          	LD H,(IX-12+CHP_CrTnSl+1)
+   480                          ;	LD (PrSlide+1),HL
+   481                          	LD (PrSlide),HL
+   482                          
+   483                          PD_LOOP:
+   484                          	LD DE,$2010
+   485                          PD_LP2:
+   486                          	LD A,(BC)
+   487                          	INC BC
+   488                          	ADD A,E
+   489                          	JR C,PD_OrSm
+   490                          	ADD A,D
+   491                          	JR Z,PD_FIN
+   492                          	JR C,PD_SAM
+   493                          	ADD A,E
+   494                          	JR Z,PD_REL
+   495                          	JR C,PD_VOL
+   496                          	ADD A,E
+   497                          	JR Z,PD_EOff
+   498                          	JR C,PD_SorE
+   499                          	ADD A,96
+   500                          	JR C,PD_NOTE
+   501                          	ADD A,E
+   502                          	JR C,PD_ORN
+   503                          	ADD A,D
+   504                          	JR C,PD_NOIS
+   505                          	ADD A,E
+   506                          	JR C,PD_ESAM
+   507                          	ADD A,A
+   508                          	LD E,A
+   509                          	LD HL,SPCCOMS+$FF20-$2000
+   510                          	ADD HL,DE
+   511                          	LD E,(HL)
+   512                          	INC HL
+   513                          	LD D,(HL)
+   514                          	PUSH DE
+   515                          	JR PD_LOOP
+   516                          
+   517                          PD_NOIS:
+   518                          	LD (Ns_Base),A
+   519                          	JR PD_LP2
+   520                          
+   521                          PD_REL:
+   522                          	RES 0,(IX-12+CHP_Flags)
+   523                          	JR PD_RES
+   524                          
+   525                          PD_NOTE:
+   526                          	LD (IX-12+CHP_Note),A
+   527                          	SET 0,(IX-12+CHP_Flags)
+   528                          	XOR A
+   529                          
+   530                          PD_RES:
+   531                          ;	LD (PDSP_+1),SP
+   532                          	LD (PDSP_),SP
+   533                          	LD SP,IX
+   534                          	LD H,A
+   535                          	LD L,A
+   536                          	PUSH HL
+   537                          	PUSH HL
+   538                          	PUSH HL
+   539                          	PUSH HL
+   540                          	PUSH HL
+   541                          	PUSH HL
+   542                          ;PDSP_:
+   543                          ;	LD SP,$3131
+   544                          	LD SP,(PDSP_)
+   545                          
+   546                          PD_FIN:
+   547                          	LD A,(IX-12+CHP_NNtSkp)
+   548                          	LD (IX-12+CHP_NtSkCn),A
+   549                          	RET
+   550                          
+   551                          C_PORTM:
+   552                          	RES 2,(IX-12+CHP_Flags)
+   553                          	LD A,(BC)
+   554                          	INC BC
+   555                          ;SKIP PRECALCULATED TONE DELTA (BECAUSE
+   556                          ;CANNOT BE RIGHT AFTER PT3 COMPILATION)
+   557                          	INC BC
+   558                          	INC BC
+   559                          	LD (IX-12+CHP_TnSlDl),A
+   560                          	LD (IX-12+CHP_TSlCnt),A
+   561                          	LD DE,NT_
+   562                          	LD A,(IX-12+CHP_Note)
+   563                          	LD (IX-12+CHP_SlToNt),A
+   564                          	ADD A,A
+   565                          	LD L,A
+   566                          	LD H,0
+   567                          	ADD HL,DE
+   568                          	LD A,(HL)
+   569                          	INC HL
+   570                          	LD H,(HL)
+   571                          	LD L,A
+   572                          	PUSH HL
+   573                          ;PrNote:
+   574                          ;	LD A,$3E
+   575                          	LD A,(PrNote)
+   576                          	LD (IX-12+CHP_Note),A
+   577                          	ADD A,A
+   578                          	LD L,A
+   579                          	LD H,0
+   580                          	ADD HL,DE
+   581                          	LD E,(HL)
+   582                          	INC HL
+   583                          	LD D,(HL)
+   584                          	POP HL
+   585                          	SBC HL,DE
+   586                          	LD (IX-12+CHP_TnDelt),L
+   587                          	LD (IX-12+CHP_TnDelt+1),H
+   588                          	LD E,(IX-12+CHP_CrTnSl)
+   589                          	LD D,(IX-12+CHP_CrTnSl+1)
+   590                          ;DEFC Version = ASMPC+1
+   591                          ;	LD A,$3E
+   592                          	LD A,(Version)
+   593                          	CP 6
+   594                          	JR C,OLDPRTM ;Old 3xxx for PT v3.5-
+   595                          ;PrSlide:
+   596                          ;	LD DE,$1111
+   597                          	LD DE,(PrSlide)
+   598                          	LD (IX-12+CHP_CrTnSl),E
+   599                          	LD (IX-12+CHP_CrTnSl+1),D
+   600                          OLDPRTM:
+   601                          	LD A,(BC) ;SIGNED TONE STEP
+   602                          	INC BC
+   603                          	EX AF,AF'
+   604                          	LD A,(BC)
+   605                          	INC BC
+   606                          	AND A
+   607                          	JR Z,NOSIG
+   608                          	EX DE,HL
+   609                          NOSIG:
+   610                          	SBC HL,DE
+   611                          	JP P,SET_STP
+   612                          	CPL
+   613                          	EX AF,AF'
+   614                          	NEG
+   615                          	EX AF,AF'
+   616                          SET_STP:
+   617                          	LD (IX-12+CHP_TSlStp+1),A
+   618                          	EX AF,AF'
+   619                          	LD (IX-12+CHP_TSlStp),A
+   620                          	LD (IX-12+CHP_COnOff),0
+   621                          	RET
+   622                          
+   623                          C_GLISS:
+   624                          	SET 2,(IX-12+CHP_Flags)
+   625                          	LD A,(BC)
+   626                          	INC BC
+   627                          	LD (IX-12+CHP_TnSlDl),A
+   628                          	AND A
+   629                          	JR NZ,GL36
+   630                          	LD A,(Version) ;AlCo PT3.7+
+   631                          	CP 7
+   632                          	SBC A,A
+   633                          	INC A
+   634                          GL36:
+   635                          	LD (IX-12+CHP_TSlCnt),A
+   636                          	LD A,(BC)
+   637                          	INC BC
+   638                          	EX AF,AF'
+   639                          	LD A,(BC)
+   640                          	INC BC
+   641                          	JR SET_STP
+   642                          
+   643                          C_SMPOS:
+   644                          	LD A,(BC)
+   645                          	INC BC
+   646                          	LD (IX-12+CHP_PsInSm),A
+   647                          	RET
+   648                          
+   649                          C_ORPOS:
+   650                          	LD A,(BC)
+   651                          	INC BC
+   652                          	LD (IX-12+CHP_PsInOr),A
+   653                          	RET
+   654                          
+   655                          C_VIBRT:
+   656                          	LD A,(BC)
+   657                          	INC BC
+   658                          	LD (IX-12+CHP_OnOffD),A
+   659                          	LD (IX-12+CHP_COnOff),A
+   660                          	LD A,(BC)
+   661                          	INC BC
+   662                          	LD (IX-12+CHP_OffOnD),A
+   663                          	XOR A
+   664                          	LD (IX-12+CHP_TSlCnt),A
+   665                          	LD (IX-12+CHP_CrTnSl),A
+   666                          	LD (IX-12+CHP_CrTnSl+1),A
+   667                          	RET
+   668                          
+   669                          C_ENGLS:
+   670                          	LD A,(BC)
+   671                          	INC BC
+   672                          	LD (Env_Del),A
+   673                          	LD (CurEDel),A
+   674                          	LD A,(BC)
+   675                          	INC BC
+   676                          	LD L,A
+   677                          	LD A,(BC)
+   678                          	INC BC
+   679                          	LD H,A
+   680                          	LD (ESldAdd),HL
+   681                          	RET
+   682                          
+   683                          C_DELAY:
+   684                          	LD A,(BC)
+   685                          	INC BC
+   686                          	LD (Delay),A
+   687                          	RET
+   688                          
+   689                          SETENV:
+   690                          	LD (IX-12+CHP_Env_En),E
+   691                          	LD (AYREGS+EnvTp),A
+   692                          	LD A,(BC)
+   693                          	INC BC
+   694                          	LD H,A
+   695                          	LD A,(BC)
+   696                          	INC BC
+   697                          	LD L,A
+   698                          	LD (EnvBase),HL
+   699                          	XOR A
+   700                          	LD (IX-12+CHP_PsInOr),A
+   701                          	LD (CurEDel),A
+   702                          	LD H,A
+   703                          	LD L,A
+   704                          	LD (CurESld),HL
+   705                          C_NOP:
+   706                          	RET
+   707                          
+   708                          SETORN:
+   709                          	ADD A,A
+   710                          	LD E,A
+   711                          	LD D,0
+   712                          	LD (IX-12+CHP_PsInOr),D
+   713                          ;DEFC OrnPtrs = ASMPC+1
+   714                          ;	LD HL,$2121
+   715                          	LD HL,(OrnPtrs)
+   716                          	ADD HL,DE
+   717                          	LD E,(HL)
+   718                          	INC HL
+   719                          	LD D,(HL)
+   720                          ;DEFC MDADDR2 = ASMPC+1
+   721                          ;	LD HL,$2121
+   722                          	LD HL,(MODADDR)
+   723                          	ADD HL,DE
+   724                          	LD (IX-12+CHP_OrnPtr),L
+   725                          	LD (IX-12+CHP_OrnPtr+1),H
+   726                          	RET
+   727                          
+   728                          ;ALL 16 ADDRESSES TO PROTECT FROM BROKEN PT3 MODULES
+   729                          SPCCOMS:
+   730                          	DEFW C_NOP
+   731                          	DEFW C_GLISS
+   732                          	DEFW C_PORTM
+   733                          	DEFW C_SMPOS
+   734                          	DEFW C_ORPOS
+   735                          	DEFW C_VIBRT
+   736                          	DEFW C_NOP
+   737                          	DEFW C_NOP
+   738                          	DEFW C_ENGLS
+   739                          	DEFW C_DELAY
+   740                          	DEFW C_NOP
+   741                          	DEFW C_NOP
+   742                          	DEFW C_NOP
+   743                          	DEFW C_NOP
+   744                          	DEFW C_NOP
+   745                          	DEFW C_NOP
+   746                          
+   747                          CHREGS:
+   748                          	XOR A
+   749                          	LD (Ampl),A
+   750                          	BIT 0,(IX+CHP_Flags)
+   751                          	PUSH HL
+   752                          	JP Z,CH_EXIT
+   753                          ;	LD (CSP_+1),SP
+   754                          	LD (CSP_),SP
+   755                          	LD L,(IX+CHP_OrnPtr)
+   756                          	LD H,(IX+CHP_OrnPtr+1)
+   757                          	LD SP,HL
+   758                          	POP DE
+   759                          	LD H,A
+   760                          	LD A,(IX+CHP_PsInOr)
+   761                          	LD L,A
+   762                          	ADD HL,SP
+   763                          	INC A
+   764                          	CP D
+   765                          	JR C,CH_ORPS
+   766                          	LD A,E
+   767                          CH_ORPS:
+   768                          	LD (IX+CHP_PsInOr),A
+   769                          	LD A,(IX+CHP_Note)
+   770                          	ADD A,(HL)
+   771                          	JP P,CH_NTP
+   772                          	XOR A
+   773                          CH_NTP:
+   774                          	CP 96
+   775                          	JR C,CH_NOK
+   776                          	LD A,95
+   777                          CH_NOK:
+   778                          	ADD A,A
+   779                          	EX AF,AF'
+   780                          	LD L,(IX+CHP_SamPtr)
+   781                          	LD H,(IX+CHP_SamPtr+1)
+   782                          	LD SP,HL
+   783                          	POP DE
+   784                          	LD H,0
+   785                          	LD A,(IX+CHP_PsInSm)
+   786                          	LD B,A
+   787                          	ADD A,A
+   788                          	ADD A,A
+   789                          	LD L,A
+   790                          	ADD HL,SP
+   791                          	LD SP,HL
+   792                          	LD A,B
+   793                          	INC A
+   794                          	CP D
+   795                          	JR C,CH_SMPS
+   796                          	LD A,E
+   797                          CH_SMPS:
+   798                          	LD (IX+CHP_PsInSm),A
+   799                          	POP BC
+   800                          	POP HL
+   801                          	LD E,(IX+CHP_TnAcc)
+   802                          	LD D,(IX+CHP_TnAcc+1)
+   803                          	ADD HL,DE
+   804                          	BIT 6,B
+   805                          	JR Z,CH_NOAC
+   806                          	LD (IX+CHP_TnAcc),L
+   807                          	LD (IX+CHP_TnAcc+1),H
+   808                          CH_NOAC:
+   809                          	EX DE,HL
+   810                          	EX AF,AF'
+   811                          	LD L,A
+   812                          	LD H,0
+   813                          	LD SP,NT_
+   814                          	ADD HL,SP
+   815                          	LD SP,HL
+   816                          	POP HL
+   817                          	ADD HL,DE
+   818                          	LD E,(IX+CHP_CrTnSl)
+   819                          	LD D,(IX+CHP_CrTnSl+1)
+   820                          	ADD HL,DE
+   821                          ;CSP_:
+   822                          ;	LD SP,$3131
+   823                          	LD SP,(CSP_)
+   824                          	EX (SP),HL
+   825                          	XOR A
+   826                          	OR (IX+CHP_TSlCnt)
+   827                          	JR Z,CH_AMP
+   828                          	DEC (IX+CHP_TSlCnt)
+   829                          	JR NZ,CH_AMP
+   830                          	LD A,(IX+CHP_TnSlDl)
+   831                          	LD (IX+CHP_TSlCnt),A
+   832                          	LD L,(IX+CHP_TSlStp)
+   833                          	LD H,(IX+CHP_TSlStp+1)
+   834                          	LD A,H
+   835                          	ADD HL,DE
+   836                          	LD (IX+CHP_CrTnSl),L
+   837                          	LD (IX+CHP_CrTnSl+1),H
+   838                          	BIT 2,(IX+CHP_Flags)
+   839                          	JR NZ,CH_AMP
+   840                          	LD E,(IX+CHP_TnDelt)
+   841                          	LD D,(IX+CHP_TnDelt+1)
+   842                          	AND A
+   843                          	JR Z,CH_STPP
+   844                          	EX DE,HL
+   845                          CH_STPP:
+   846                          	SBC HL,DE
+   847                          	JP M,CH_AMP
+   848                          	LD A,(IX+CHP_SlToNt)
+   849                          	LD (IX+CHP_Note),A
+   850                          	XOR A
+   851                          	LD (IX+CHP_TSlCnt),A
+   852                          	LD (IX+CHP_CrTnSl),A
+   853                          	LD (IX+CHP_CrTnSl+1),A
+   854                          CH_AMP:
+   855                          	LD A,(IX+CHP_CrAmSl)
+   856                          	BIT 7,C
+   857                          	JR Z,CH_NOAM
+   858                          	BIT 6,C
+   859                          	JR Z,CH_AMIN
+   860                          	CP 15
+   861                          	JR Z,CH_NOAM
+   862                          	INC A
+   863                          	JR CH_SVAM
+   864                          CH_AMIN:
+   865                          	CP -15
+   866                          	JR Z,CH_NOAM
+   867                          	DEC A
+   868                          CH_SVAM:
+   869                          	LD (IX+CHP_CrAmSl),A
+   870                          CH_NOAM:
+   871                          	LD L,A
+   872                          	LD A,B
+   873                          	AND 15
+   874                          	ADD A,L
+   875                          	JP P,CH_APOS
+   876                          	XOR A
+   877                          CH_APOS:
+   878                          	CP 16
+   879                          	JR C,CH_VOL
+   880                          	LD A,15
+   881                          CH_VOL:
+   882                          	OR (IX+CHP_Volume)
+   883                          	LD L,A
+   884                          	LD H,0
+   885                          	LD DE,VT_
+   886                          	ADD HL,DE
+   887                          	LD A,(HL)
+   888                          CH_ENV:
+   889                          	BIT 0,C
+   890                          	JR NZ,CH_NOEN
+   891                          	OR (IX+CHP_Env_En)
+   892                          CH_NOEN:
+   893                          	LD (Ampl),A
+   894                          	BIT 7,B
+   895                          	LD A,C
+   896                          	JR Z,NO_ENSL
+   897                          	RLA
+   898                          	RLA
+   899                          	SRA A
+   900                          	SRA A
+   901                          	SRA A
+   902                          	ADD A,(IX+CHP_CrEnSl) ;SEE COMMENT BELOW
+   903                          	BIT 5,B
+   904                          	JR Z,NO_ENAC
+   905                          	LD (IX+CHP_CrEnSl),A
+   906                          NO_ENAC:
+   907                          	LD HL,AddToEn
+   908                          	ADD A,(HL) ;BUG IN PT3 - NEED WORD HERE.
+   909                          		   ;FIX IT IN NEXT VERSION?
+   910                          	LD (HL),A
+   911                          	JR CH_MIX
+   912                          NO_ENSL:
+   913                          	RRA
+   914                          	ADD A,(IX+CHP_CrNsSl)
+   915                          	LD (AddToNs),A
+   916                          	BIT 5,B
+   917                          	JR Z,CH_MIX
+   918                          	LD (IX+CHP_CrNsSl),A
+   919                          CH_MIX:
+   920                          	LD A,B
+   921                          	RRA
+   922                          	AND $48
+   923                          CH_EXIT:
+   924                          	LD HL,AYREGS+Mixer
+   925                          	OR (HL)
+   926                          	RRCA
+   927                          	LD (HL),A
+   928                          	POP HL
+   929                          	XOR A
+   930                          	OR (IX+CHP_COnOff)
+   931                          	RET Z
+   932                          	DEC (IX+CHP_COnOff)
+   933                          	RET NZ
+   934                          	XOR (IX+CHP_Flags)
+   935                          	LD (IX+CHP_Flags),A
+   936                          	RRA
+   937                          	LD A,(IX+CHP_OnOffD)
+   938                          	JR C,CH_ONDL
+   939                          	LD A,(IX+CHP_OffOnD)
+   940                          CH_ONDL:
+   941                          	LD (IX+CHP_COnOff),A
+   942                          	RET
+   943                          
+   944                          PLAY:
+   945                          	XOR A
+   946                          	LD (AddToEn),A
+   947                          	LD (AYREGS+Mixer),A
+   948                          	DEC A
+   949                          	LD (AYREGS+EnvTp),A
+   950                          	LD HL,DelyCnt
+   951                          	DEC (HL)
+   952                          	JP NZ,PL2
+   953                          	LD HL,ChanA+CHP_NtSkCn
+   954                          	DEC (HL)
+   955                          	JR NZ,PL1B
+   956                          ;DEFC AdInPtA = ASMPC+1
+   957                          ;	LD BC,$0101
+   958                          	LD BC,(AdInPtA)
+   959                          	LD A,(BC)
+   960                          	AND A
+   961                          	JR NZ,PL1A
+   962                          	LD D,A
+   963                          	LD (Ns_Base),A
+   964                          	LD HL,(CrPsPtr)
+   965                          	INC HL
+   966                          	LD A,(HL)
+   967                          	INC A
+   968                          	JR NZ,PLNLP
+   969                          	CALL CHECKLP
+   970                          ;DEFC LPosPtr = ASMPC+1
+   971                          ;	LD HL,$2121
+   972                          	LD HL,(LPosPtr)
+   973                          	LD A,(HL)
+   974                          	INC A
+   975                          PLNLP:
+   976                          	LD (CrPsPtr),HL
+   977                          	DEC A
+   978                          	ADD A,A
+   979                          	LD E,A
+   980                          	RL D
+   981                          ;DEFC PatsPtr = ASMPC+1
+   982                          ;	LD HL,$2121
+   983                          	LD HL,(PatsPtr)
+   984                          	ADD HL,DE
+   985                          	LD DE,(MODADDR)
+   986                          ;	LD (PSP_+1),SP
+   987                          	LD (PSP_),SP
+   988                          	LD SP,HL
+   989                          	POP HL
+   990                          	ADD HL,DE
+   991                          	LD B,H
+   992                          	LD C,L
+   993                          	POP HL
+   994                          	ADD HL,DE
+   995                          	LD (AdInPtB),HL
+   996                          	POP HL
+   997                          	ADD HL,DE
+   998                          	LD (AdInPtC),HL
+   999                          ;PSP_:
+  1000                          ;	LD SP,$3131
+  1001                          	LD SP,(PSP_)
+  1002                          PL1A:
+  1003                          	LD IX,ChanA+12
+  1004                          	CALL PTDECOD
+  1005                          	LD (AdInPtA),BC
+  1006                          
+  1007                          PL1B:
+  1008                          	LD HL,ChanB+CHP_NtSkCn
+  1009                          	DEC (HL)
+  1010                          	JR NZ,PL1C
+  1011                          	LD IX,ChanB+12
+  1012                          ;DEFC AdInPtB = ASMPC+1
+  1013                          ;	LD BC,$0101
+  1014                          	LD BC,(AdInPtB)
+  1015                          	CALL PTDECOD
+  1016                          	LD (AdInPtB),BC
+  1017                          
+  1018                          PL1C:
+  1019                          	LD HL,ChanC+CHP_NtSkCn
+  1020                          	DEC (HL)
+  1021                          	JR NZ,PL1D
+  1022                          	LD IX,ChanC+12
+  1023                          ;DEFC AdInPtC = ASMPC+1
+  1024                          ;	LD BC,$0101
+  1025                          	LD BC,(AdInPtC)
+  1026                          	CALL PTDECOD
+  1027                          	LD (AdInPtC),BC
+  1028                          
+  1029                          ;DEFC Delay = ASMPC+1
+  1030                          PL1D:
+  1031                          ;	LD A,$3E
+  1032                          	LD A,(Delay)
+  1033                          	LD (DelyCnt),A
+  1034                          
+  1035                          PL2:
+  1036                          	LD IX,ChanA
+  1037                          	LD HL,(AYREGS+TonA)
+  1038                          	CALL CHREGS
+  1039                          	LD (AYREGS+TonA),HL
+  1040                          	LD A,(Ampl)
+  1041                          	LD (AYREGS+AmplA),A
+  1042                          	LD IX,ChanB
+  1043                          	LD HL,(AYREGS+TonB)
+  1044                          	CALL CHREGS
+  1045                          	LD (AYREGS+TonB),HL
+  1046                          	LD A,(Ampl)
+  1047                          	LD (AYREGS+AmplB),A
+  1048                          	LD IX,ChanC
+  1049                          	LD HL,(AYREGS+TonC)
+  1050                          	CALL CHREGS
+  1051                          ;	LD A,(Ampl) ;Ampl = AYREGS+AmplC
+  1052                          ;	LD (AYREGS+AmplC),A
+  1053                          	LD (AYREGS+TonC),HL
+  1054                          
+  1055                          	LD HL,(Ns_Base_AddToNs)
+  1056                          	LD A,H
+  1057                          	ADD A,L
+  1058                          	LD (AYREGS+Noise),A
+  1059                          
+  1060                          ;DEFC AddToEn = ASMPC+1
+  1061                          ;	LD A,$3E
+  1062                          	LD A,(AddToEn)
+  1063                          	LD E,A
+  1064                          	ADD A,A
+  1065                          	SBC A,A
+  1066                          	LD D,A
+  1067                          	LD HL,(EnvBase)
+  1068                          	ADD HL,DE
+  1069                          	LD DE,(CurESld)
+  1070                          	ADD HL,DE
+  1071                          	LD (AYREGS+Env),HL
+  1072                          
+  1073                          	XOR A
+  1074                          	LD HL,CurEDel
+  1075                          	OR (HL)
+  1076                          	JP Z,asm_vt_hardware_out_A0
+  1077                          	DEC (HL)
+  1078                          	JP NZ,asm_vt_hardware_out
+  1079                          ;DEFC Env_Del = ASMPC+1
+  1080                          ;	LD A,$3E
+  1081                          	LD A,(Env_Del)
+  1082                          	LD (HL),A
+  1083                          ;DEFC ESldAdd = ASMPC+1
+  1084                          ;	LD HL,$2121
+  1085                          	LD HL,(ESldAdd)
+  1086                          	ADD HL,DE
+  1087                          	LD (CurESld),HL
+  1088                          	JP asm_vt_hardware_out
+  1089                          
+  1090                          
+  1091                          NT_DATA:
+  1092                          	DEFB (T_NEW_0-T1_)*2
+  1093                          	DEFB TCNEW_0-T_
+  1094                          	DEFB (T_OLD_0-T1_)*2+1
+  1095                          	DEFB TCOLD_0-T_
+  1096                          	DEFB (T_NEW_1-T1_)*2+1
+  1097                          	DEFB TCNEW_1-T_
+  1098                          	DEFB (T_OLD_1-T1_)*2+1
+  1099                          	DEFB TCOLD_1-T_
+  1100                          	DEFB (T_NEW_2-T1_)*2
+  1101                          	DEFB TCNEW_2-T_
+  1102                          	DEFB (T_OLD_2-T1_)*2
+  1103                          	DEFB TCOLD_2-T_
+  1104                          	DEFB (T_NEW_3-T1_)*2
+  1105                          	DEFB TCNEW_3-T_
+  1106                          	DEFB (T_OLD_3-T1_)*2
+  1107                          	DEFB TCOLD_3-T_
+  1108                          
+  1109                          T_:
+  1110                          
+  1111                          TCOLD_0:
+  1112                          	DEFB $00+1,$04+1,$08+1,$0A+1,$0C+1,$0E+1,$12+1,$14+1
+  1113                          	DEFB $18+1,$24+1,$3C+1,0
+  1114                          TCOLD_1:
+  1115                          	DEFB $5C+1,0
+  1116                          TCOLD_2:
+  1117                          	DEFB $30+1,$36+1,$4C+1,$52+1,$5E+1,$70+1,$82,$8C,$9C
+  1118                          	DEFB $9E,$A0,$A6,$A8,$AA,$AC,$AE,$AE,0
+  1119                          TCNEW_3:
+  1120                          	DEFB $56+1
+  1121                          TCOLD_3:
+  1122                          	DEFB $1E+1,$22+1,$24+1,$28+1,$2C+1,$2E+1,$32+1,$BE+1,0
+  1123                          TCNEW_0:
+  1124                          	DEFB $1C+1,$20+1,$22+1,$26+1,$2A+1,$2C+1,$30+1,$54+1
+  1125                          	DEFB $BC+1,$BE+1,0
+  1126                          DEFC TCNEW_1 = TCOLD_1
+  1127                          TCNEW_2:
+  1128                          	DEFB $1A+1,$20+1,$24+1,$28+1,$2A+1,$3A+1,$4C+1,$5E+1
+  1129                          	DEFB $BA+1,$BC+1,$BE+1,0
+  1130                          
+  1131                          DEFC EMPTYSAMORN = ASMPC-1
+  1132                          	DEFB 1,0,$90 ;delete $90 if you don't need default sample
+  1133                          
+  1134                          ;first 12 values of tone tables (packed)
+  1135                          
+  1136                          T_PACK:
+  1137                          	DEFB ($06EC*2/256) % 256,($06EC*2) % 256
+  1138                          	DEFB $0755-$06EC
+  1139                          	DEFB $07C5-$0755
+  1140                          	DEFB $083B-$07C5
+  1141                          	DEFB $08B8-$083B
+  1142                          	DEFB $093D-$08B8
+  1143                          	DEFB $09CA-$093D
+  1144                          	DEFB $0A5F-$09CA
+  1145                          	DEFB $0AFC-$0A5F
+  1146                          	DEFB $0BA4-$0AFC
+  1147                          	DEFB $0C55-$0BA4
+  1148                          	DEFB $0D10-$0C55
+  1149                          	DEFB ($066D*2/256) % 256, ($066D*2) % 256
+  1150                          	DEFB $06CF-$066D
+  1151                          	DEFB $0737-$06CF
+  1152                          	DEFB $07A4-$0737
+  1153                          	DEFB $0819-$07A4
+  1154                          	DEFB $0894-$0819
+  1155                          	DEFB $0917-$0894
+  1156                          	DEFB $09A1-$0917
+  1157                          	DEFB $0A33-$09A1
+  1158                          	DEFB $0ACF-$0A33
+  1159                          	DEFB $0B73-$0ACF
+  1160                          	DEFB $0C22-$0B73
+  1161                          	DEFB $0CDA-$0C22
+  1162                          	DEFB ($0704*2/256) % 256, ($0704*2) % 256
+  1163                          	DEFB $076E-$0704
+  1164                          	DEFB $07E0-$076E
+  1165                          	DEFB $0858-$07E0
+  1166                          	DEFB $08D6-$0858
+  1167                          	DEFB $095C-$08D6
+  1168                          	DEFB $09EC-$095C
+  1169                          	DEFB $0A82-$09EC
+  1170                          	DEFB $0B22-$0A82
+  1171                          	DEFB $0BCC-$0B22
+  1172                          	DEFB $0C80-$0BCC
+  1173                          	DEFB $0D3E-$0C80
+  1174                          	DEFB ($07E0*2/256) % 256,($07E0*2) % 256
+  1175                          	DEFB $0858-$07E0
+  1176                          	DEFB $08E0-$0858
+  1177                          	DEFB $0960-$08E0
+  1178                          	DEFB $09F0-$0960
+  1179                          	DEFB $0A88-$09F0
+  1180                          	DEFB $0B28-$0A88
+  1181                          	DEFB $0BD8-$0B28
+  1182                          	DEFB $0C80-$0BD8
+  1183                          	DEFB $0D60-$0C80
+  1184                          	DEFB $0E10-$0D60
+  1185                          	DEFB $0EF8-$0E10
+  1186                          
+  1187                          SECTION data_psg
+  1188                          
+  1189                          ;vars from here can be stripped
+  1190                          ;you can move VARS to any other address
+  1191                          
+  1192                          VARS:
+  1193                          
+  1194                          ;vars in code and other self-modified code moved here
+  1195                          ;(for ROM and RAM separation)
+  1196                          SETUP:
+  1197                          	DEFB 0 ;set bit0 to 1, if you want to play without looping
+  1198                          	     ;bit7 is set each time, when loop point is passed
+  1199                          CrPsPtr:
+  1200                          	DEFW 0
+  1201                          AddToEn:
+  1202                          	DEFB 0
+  1203                          AdInPtA:
+  1204                          	DEFW 0
+  1205                          AdInPtB:
+  1206                          	DEFW 0
+  1207                          AdInPtC:
+  1208                          	DEFW 0
+  1209                          Env_Del:
+  1210                          	DEFB 0
+  1211                          MODADDR:
+  1212                          	DEFW 0
+  1213                          ESldAdd:
+  1214                          	DEFW 0
+  1215                          Delay:
+  1216                          	DEFB 0
+  1217                          PDSP_:
+  1218                          CSP_:
+  1219                          PSP_:
+  1220                          	DEFW 0
+  1221                          SamPtrs:
+  1222                          	DEFW 0
+  1223                          OrnPtrs:
+  1224                          	DEFW 0
+  1225                          PatsPtr:
+  1226                          	DEFW 0
+  1227                          LPosPtr:
+  1228                          	DEFW 0
+  1229                          L3:
+  1230                          M2:
+  1231                          PrSlide:
+  1232                          	DEFW 0
+  1233                          PrNote:
+  1234                          	DEFB 0
+  1235                          Version:
+  1236                          	DEFB 0
+  1237                          ;end of moved vars and self-modified code
+  1238                          
+  1239                          VAR0START: ;START of INITZERO area
+  1240                          
+  1241                          ChanA:
+  1242                          	DEFS CHP
+  1243                          ChanB:
+  1244                          	DEFS CHP
+  1245                          ChanC:
+  1246                          	DEFS CHP
+  1247                          
+  1248                          ;GlobalVars
+  1249                          DelyCnt:
+  1250                          	DEFB 0
+  1251                          CurESld:
+  1252                          	DEFW 0
+  1253                          CurEDel:
+  1254                          	DEFB 0
+  1255                          Ns_Base_AddToNs:
+  1256                          Ns_Base:
+  1257                          	DEFB 0
+  1258                          AddToNs:
+  1259                          	DEFB 0
+  1260                          
+  1261                          asm_VT_AYREGS:
+  1262                          AYREGS:
+  1263                          
+  1264                          VT_:
+  1265                          	DEFS 256 ;CreatedVolumeTableAddress
+  1266                          
+  1267                          DEFC EnvBase = VT_+14
+  1268                          
+  1269                          DEFC T1_ = VT_+16 ;Tone tables data depacked here
+  1270                          
+  1271                          DEFC T_OLD_1 = T1_
+  1272                          DEFC T_OLD_2 = T_OLD_1+24
+  1273                          DEFC T_OLD_3 = T_OLD_2+24
+  1274                          DEFC T_OLD_0 = T_OLD_3+2
+  1275                          DEFC T_NEW_0 = T_OLD_0
+  1276                          DEFC T_NEW_1 = T_OLD_1
+  1277                          DEFC T_NEW_2 = T_NEW_0+24
+  1278                          DEFC T_NEW_3 = T_OLD_3
+  1279                          
+  1280                          NT_:
+  1281                          	DEFS 192 ;CreatedNoteTableAddress
+  1282                          
+  1283                          ;local var
+  1284                          DEFC Ampl = AYREGS+AmplC
+  1285                          
+  1286                          DEFC VAR0END = VT_+16 ;INIT zeroes from VARS to VAR0END-1
+  1287                          
+  1288                          DEFC VARSEND = ASMPC
+  1289                          
+  1290                          DEFC MDLADDR = ASMPC
+  1291                          
+  1292                          ;Release 0 steps:
+  1293                          ;11.Sep.2004 - Note tables creator
+  1294                          ;12.Sep.2004 - Volume tables creator; INIT subroutine
+  1295                          ;13.Sep.2004 - Play counters, position counters
+  1296                          ;14.Sep.2004 - Patterns decoder subroutine
+  1297                          ;15.Sep.2004 - Resting (no code)
+  1298                          ;16.Sep.2004 - CHREGS subroutine; global debugging; 1st stable
+  1299                          ;version was born
+  1300                          ;17.Sep.2004 - Debugging and optimization. First release!
+  1301                          ;Release 1 steps:
+  1302                          ;20.Sep.2004 - local vars moved to code (selfmodified code
+  1303                          ;smaller and faster)
+  1304                          ;22.Sep.2004 - added mute sound entry at START+8; position
+  1305                          ;pointer moved to START+11; added setup and status byte at
+  1306                          ;START+10 noloop mode and loop passed flags added
+  1307                          ;Release 2 steps:
+  1308                          ;28.Sep.2004 - Optimization: code around CHREGS's volume and
+  1309                          ;vibrato faster now; zeroing PD_RES through stack; Ton and Ampl
+  1310                          ;moved from channel vars to global ones; first position selector
+  1311                          ;removed from INIT; optimization for packers(Ivan Roshin method)
+  1312                          ;Release 3 steps:
+  1313                          ;2.Oct.2004 - optimization in INIT and PD_LOOP (thanks to Ivan
+  1314                          ;Roshin)
+  1315                          ;4.Oct.2004 - load delay from (hl) in INIT (2 bytes shorter)
+  1316                          ;5.Oct.2004 - optimization in PD_LOOP (->PD_LP2)
+  1317                          ;7.Oct.2004 - swaping some commands for better packing
+  1318                          ;Release 4 steps:
+  1319                          ;9.Oct.2004 - optimization around LD HL,SPCCOMS (thanks to Ivan
+  1320                          ;Roshin); in PTDECOD swapped BC and DE to optimize C_PORTM;
+  1321                          ;removed sam and orn len and loop channel vars; CHREGS totally
+  1322                          ;optimized
+  1323                          ;Release 5 steps:
+  1324                          ;11.Oct.2004 - PD_OrSm and C_PORTM optimized; Ivan Roshin's
+  1325                          ;volume tables creator algorithm (51 bytes shorter than mine)
+  1326                          ;12.Oct.2004 - Ivan Roshin's note tables creator algorithm (74
+  1327                          ;bytes shorter than mine)
+  1328                          ;Release 6 steps:
+  1329                          ;14.Oct.2004 - loop and next position calculations moved to INIT
+  1330                          ;15.Oct.2004 - AdInPt moved to code
+  1331                          ;19.Oct.2004 - Env_Del moved to code
+  1332                          ;20.Oct.2004 - Version PUSH and POP (1 byte shorter, thanks to
+  1333                          ;Ivan Roshin)
+  1334                          ;22.Oct.2004 - Env_En moved from Flags' bit to byte (shorter and
+  1335                          ;faster code)
+  1336                          ;25.Oct.2004 - SETENV optimized
+  1337                          ;29.Oct.2004 - Optimized around AddToEn (SBC A,A, thanks to Ivan
+  1338                          ;Roshin)
+  1339                          ;3.Nov.2004 - Note tables data was compressed; with depacker it
+  1340                          ;is 9 bytes shorter than uncompressed (thanks to Ivan Roshin)
+  1341                          ;4.Nov.2004 - default sample and ornament both are fixed now
+  1342                          ;and placed into code block (6 bytes shorter)
+  1343                          ;7.Nov.2004 - LD A,(Ns_Base):LD L,A changed to LD HL,(Ns_Base)
+  1344                          ;(thanks to Dima Bystrov)
+  1345                          ;9.Nov.2004 - Ns_Base and AddToNs are merged to Ns_Base_AddToNs;
+  1346                          ;LD A,255 changed to DEC A (at start of PLAY); added ROUT_A0
+  1347                          ;12.Nov.2004 - NtSkCn&Volume are merged (8 bytes smaller init);
+  1348                          ;LD BC,T1_ changed to PUSH DE...POP BC in note table creator
+  1349                          ;19.Dec.2004 - NT_DATA reorganized (6 bytes shorter, thanks to
+  1350                          ;Ivan Roshin); C_PORTM and C_GLISS are merged via SET_STP (48
+  1351                          ;tacts slower, but 8 bytes smaller, thanks to Ivan Roshin)
+  1352                          ;15.Apr.2007 - all in-code variables and self-modified code
+  1353                          ;moved to VARS (specially for Axor), code can run in ROM now.
+  1354                          ;29.Apr.2007 - new 1.xx and 2.xx interpretation for PT 3.7+.
+  1355                          
+  1356                          ;Size:
+  1357                          ;Code block $664 bytes
+  1358                          ;Variables $23B bytes (can be stripped)
+  1359                          ;Size in RAM $664+$23B=$89F (2207) bytes
+  1360                          
+  1361                          ;Notes:
+  1362                          ;Pro Tracker 3.4r can not be detected by header, so PT3.4r tone
+  1363                          ;tables really used only for modules of 3.3 and older versions.
+  1364                          ENDIF
+  1365                          

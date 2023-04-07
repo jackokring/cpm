@@ -1,0 +1,571 @@
+/tmp/tmpXXVPcGSI.asm:
+     1                          MODULE draw_profile_asm
+     2                          LINE 0, "draw_profile.asm"
+draw_profile.asm:
+                                
+     1                          ;
+     2                          ;       Z88DK Graphics Functions
+     3                          ;
+     4                          ;       Draw a "gfx profile" metadata stream - Stefano Bodrato 16/10/2009
+     5                          ;
+     6                          ;		void draw_profile(int dx, int dy, int scale, unsigned char *metapic);
+     7                          ;
+     8                          ;	$Id: draw_profile.asm,v 1.10 2016-11-28 07:33:11 stefano Exp $
+     9                          ;
+    10                          
+    11                          
+    12                          IF !__CPU_GBZ80__ && !__CPU_INTEL__
+    13                              INCLUDE	"graphics/grafix.inc"
+    14                          
+    15                          
+    16                              SECTION	  code_graphics
+    17                              PUBLIC    draw_profile
+    18                              PUBLIC    _draw_profile
+    19                          
+    20                              EXTERN     stencil_init
+    21                              EXTERN     stencil_render
+    22                              EXTERN		stencil_add_point
+    23                              EXTERN		stencil_add_lineto
+    24                              EXTERN		stencil_add_side
+    25                              EXTERN		plot
+    26                              EXTERN		unplot
+    27                              EXTERN		draw
+    28                              EXTERN		undraw
+    29                              EXTERN		drawto
+    30                              EXTERN		undrawto
+    31                          
+    32                              EXTERN		l_mult
+    33                              EXTERN		l_div
+    34                          
+    35                              EXTERN		getmaxx
+    36                              EXTERN		getmaxy
+    37                              EXTERN		l_neg
+    38                          
+    39                          getbyte:
+    40                          	ld	hl,(_pic)
+    41                          	ld	a,(hl)
+    42                          	inc	hl
+    43                          	ld	(_pic),hl
+    44                          	ret
+    45                          
+    46                          getx:
+    47                          	call getmaxx
+    48                          	ld	a,h
+    49                          	ld	hl,(_vx)
+    50                          	and $fe
+    51                          	jp  z,getparm
+    52                          
+    53                          ;IF maxx > 320
+    54                          ;	add hl,hl	; double size for X in wide mode !
+    55                          ;ENDIF
+    56                          
+    57                          ;getparmx:		;cx=vx+percent*pic[x++]/50;  (double width)
+    58                          	push hl
+    59                          	ld	de,(_percent)
+    60                          	call	getbyte
+    61                          	ld	h,0
+    62                          	ld	l,a
+    63                          	call l_mult
+    64                          
+    65                          IF ((maxx/(maxy+1))>1)
+    66                          	ld	de,25	; 50/2
+    67                          ELSE
+    68                          	ld	de,50
+    69                          ENDIF
+    70                          	jr  perc_div
+    71                          
+    72                          
+    73                          
+    74                          
+    75                          gety:
+    76                          	ld	hl,(_vy)
+    77                          	call getparm
+    78                          	ret
+    79                          
+    80                          getparm:		;cx=vx+percent*pic[x++]/100;
+    81                          	push hl
+    82                          	ld	de,(_percent)
+    83                          	call	getbyte
+    84                          	ld	h,0
+    85                          	ld	l,a
+    86                          	call l_mult
+    87                          	ld	de,50	; 100/2
+    88                          perc_div:
+    89                          	ex	de,hl
+    90                          	call l_div
+    91                          	pop	de
+    92                          	add	hl,de
+    93                          ;	ld	a,$F0	; negative value ?
+    94                          ;	and	h
+    95                          ;	ret z
+    96                          ;	ld	hl,0
+    97                          	ret
+    98                          
+    99                          
+   100                          ; *************************
+   101                          ;    MAIN FUNCTION ENTRY
+   102                          ; *************************
+   103                          
+   104                          draw_profile:
+   105                          _draw_profile:
+   106                          	push	ix
+   107                          	ld	ix,2
+   108                          	add ix,sp
+   109                          	ld	l,(ix+2)
+   110                          	ld	h,(ix+3)
+   111                          	ld	(_pic),hl
+   112                          	ld	l,(ix+4)
+   113                          	;ld	h,0
+   114                          	ld	h,(ix+5)
+   115                          	srl h
+   116                          	rr l
+   117                          	ld	(_percent),hl
+   118                          	ld	l,(ix+6)
+   119                          IF (maxx > 256)
+   120                          	ld	h,(ix+7)
+   121                          ENDIF
+   122                          	ld	(_vy),hl
+   123                          	ld	l,(ix+8)
+   124                          IF (maxx > 256)
+   125                          	ld	h,(ix+9)
+   126                          ENDIF
+   127                          	ld	(_vx),hl
+   128                          
+   129                          IF (maxx > 256)
+   130                          	ld      hl,-maxy*4	; create space for stencil on stack
+   131                          ELSE
+   132                          	ld      hl,-maxy*2	; create space for stencil on stack
+   133                          ENDIF
+   134                          	add     hl,sp		; The stack usage depends on the display height.
+   135                          	ld      sp,hl
+   136                          	ld		(_stencil),hl
+   137                          
+   138                          picture_loop:
+   139                          	ld		a,(repcnt)
+   140                          	and		a
+   141                          	jr		z,norepeat
+   142                          	dec		a
+   143                          	ld		(repcnt),a
+   144                          	ld		a,(repcmd)
+   145                          	jr		noend
+   146                          norepeat:
+   147                          	call	getbyte
+   148                          	and	a		; CMD_END ?
+   149                          	jr		nz,noend
+   150                          	;******
+   151                          	; EXIT
+   152                          	;******
+   153                          IF (maxx > 256)
+   154                          	ld      hl,maxy*4	; release the stack space for _stencil
+   155                          ELSE
+   156                          	ld      hl,maxy*2	; release the stack space for _stencil
+   157                          ENDIF
+   158                          	add     hl,sp
+   159                          	ld      sp,hl
+   160                          	pop	ix
+   161                          	ret
+   162                          
+   163                          noend:
+   164                          	ld	e,a
+   165                          	and $0F		; 'dithering level'
+   166                          	ld  h,0
+   167                          	ld  l,a
+   168                          	ld	(_dith),hl
+   169                          	ld	a,e
+   170                          	and $F0		; command
+   171                          
+   172                          	ld	hl,(_stencil)
+   173                          
+   174                          ;#define CMD_AREA_INIT		0x80	/* no parms */
+   175                          ;#define CMD_AREA_INITB		0x81	/* activate border mode */
+   176                          ;#define REPEAT_COMMAND		0x82	/* times, command */
+   177                          
+   178                          	cp  $80		; CMD_AREA_INIT (no parameters)
+   179                          	jr	nz,noinit
+   180                          	push hl		; _stencil
+   181                          	ld	a,(_dith)
+   182                          	cp	2
+   183                          	jr	z,do_repeat
+   184                          	ld	hl,0
+   185                          	ld	(_areaptr),hl
+   186                          	and a			; no parameters ?
+   187                          	jr	z,just_init	; then, don't keep ptr for border
+   188                          	dec	a
+   189                          	jr	z,init_loop		;$81 ?
+   190                          	; else (82..) REPEAT_COMMAND
+   191                          do_repeat:
+   192                          	call getbyte
+   193                          	ld	(repcnt),a
+   194                          	call getbyte
+   195                          	ld	(repcmd),a
+   196                          	jp	go_end1
+   197                          init_loop:
+   198                          	ld	hl,(_pic)	; >0, so save current pic ptr
+   199                          	ld	(_areaptr),hl
+   200                          just_init:
+   201                          	pop	hl
+   202                          	push hl		; _stencil
+   203                          	call stencil_init
+   204                          	jp	go_end1
+   205                          noinit:
+   206                          
+   207                          	cp  $F0		; CMD_AREA_CLOSE (no parameters ?)
+   208                          	jr	nz,noclose
+   209                          ;----
+   210                          	call is_areamode
+   211                          	jr	z,noclsamode
+   212                          	push hl
+   213                          	ld	hl,(_areaptr)
+   214                          	ld	(_pic),hl	; update picture pointer to pass the area
+   215                          	ld	hl,0		; twice and draw the border
+   216                          	ld	(_areaptr),hl
+   217                          	pop hl
+   218                          noclsamode:
+   219                          ;----
+   220                          	push hl		; _stencil
+   221                          	ld	hl,(_dith)
+   222                          	ld	a,l
+   223                          	sub 12
+   224                          	jr	c,doclose
+   225                          	; if color > 11 we roughly leave a black border by shrinking
+   226                          	; the stencil boundaries, then we subtract 7 and fill with the
+   227                          	; resulting dithering level (12..15 -> 4..7)
+   228                          	ld	l,11	; black border
+   229                          	push hl
+   230                          	call stencil_render
+   231                          	pop	de
+   232                          	pop hl
+   233                          	ld	hl,(_stencil)	; 'render' can destroy the current parameter
+   234                          	push hl
+   235                          	ld	e,1		; left side border
+   236                          	call resize
+   237                          	ld	e,-1	; right side border
+   238                          	call resize
+   239                          	;pop hl
+   240                          	;push hl
+   241                          	;call vshrink	; upper side border
+   242                          	;;;ld	hl,_stencil+maxy
+   243                          	;ld	hl,_stencil
+   244                          	;ld	de,maxy
+   245                          	;add	hl,de
+   246                          	;call vshrink	; lower side border
+   247                          	ld	hl,(_dith)
+   248                          	ld	a,l
+   249                          	sub	7		; adjust dithering to mid values
+   250                          	ld	l,a
+   251                          doclose:
+   252                          	jp	dorender
+   253                          noclose:
+   254                          	push af
+   255                          
+   256                          ;----
+   257                          	call is_areamode
+   258                          	jr	z,noamode	; if in 'area mode', we are doing twice;
+   259                          	pop	af			; in the first pass, plot/line CMDs
+   260                          	or $80			; are changed to the equivalent area ones
+   261                          	push af
+   262                          noamode:
+   263                          ;----
+   264                          
+   265                          	pop	af
+   266                          	push af
+   267                          
+   268                          	cp	$30		; CMD_HLINETO (1 parameter)
+   269                          	jr	z,xparm
+   270                          	cp	$B0		; CMD_AREA_HLINETO (1 parameter)
+   271                          	jr	nz,noxparm
+   272                          xparm:
+   273                          	call getx
+   274                          	ld	(_cx),hl
+   275                          	jr	twoparms
+   276                          noxparm:
+   277                          
+   278                          	cp	$40		; CMD_VLINETO (1 parameter)
+   279                          	jr	z,yparm
+   280                          	cp	$C0		; CMD_AREA_VLINETO (1 parameter)
+   281                          	jr	nz,noyparm
+   282                          yparm:
+   283                          	call gety
+   284                          	ld	(_cy),hl
+   285                          	jr	twoparms
+   286                          noyparm:
+   287                          
+   288                          	cp  $50		; CMD_LINE (4 parameters ?)
+   289                          	jr	z,fourparms
+   290                          	cp  $D0		; CMD_AREA_LINE (4 parameters ?)
+   291                          fourparms:
+   292                          	push af		; keep zero flag
+   293                          	call getx
+   294                          	ld	(_cx),hl
+   295                          	call gety
+   296                          	ld	(_cy),hl
+   297                          	pop	af		; recover zero flag
+   298                          	jr	nz,twoparms
+   299                          	call getx
+   300                          	ld	(_cx1),hl
+   301                          	call gety
+   302                          	ld	(_cy1),hl
+   303                          twoparms:
+   304                          
+   305                          	pop	af
+   306                          
+   307                          	ld	hl,(_cx)
+   308                          	push hl
+   309                          	ld	hl,(_cy)
+   310                          	push hl
+   311                          
+   312                          	cp	$90	; CMD_AREA_PLOT (x,y)
+   313                          	jr	nz,noaplot
+   314                          	ld	hl,(_stencil)
+   315                          	push hl
+   316                          	call stencil_add_point
+   317                          	jr  go_end3
+   318                          noaplot:
+   319                          
+   320                          	cp	$A0	; CMD_AREA_LINETO (x,y)
+   321                          	jr	c,noaline
+   322                          	cp	$D0
+   323                          	jr	z,aline
+   324                          	jr	nc,noaline ; >= CMD_AREA_VLINETO
+   325                          	; AREA_LINETO stuff
+   326                          	ld	hl,(_stencil)
+   327                          	push hl
+   328                          	call stencil_add_lineto
+   329                          	jr	go_end3
+   330                          
+   331                          aline:
+   332                          	;cp $D0 ; CMD_AREA_LINE (x1,x2,y1,y2)
+   333                          	;jr	nz,noaline
+   334                          	ld	hl,(_cx1)
+   335                          	ld	(_cx),hl	; update also the first parameter couple...
+   336                          	push hl
+   337                          	ld	hl,(_cy1)
+   338                          	ld	(_cy),hl	; ..so VLINE and HLINE behave correctly
+   339                          	push hl
+   340                          	ld	hl,(_stencil)
+   341                          	push hl
+   342                          	call stencil_add_side
+   343                          	pop hl
+   344                          go_end4:
+   345                          	pop	hl
+   346                          go_end3:
+   347                          	pop	hl
+   348                          go_end2:
+   349                          	pop	hl
+   350                          go_end1:
+   351                          	pop	hl
+   352                          	jp	picture_loop
+   353                          noaline:
+   354                          
+   355                          	cp $10 ; CMD_PLOT (x,y,dither),
+   356                          	jr	nz,noplot
+   357                          	ld	hl,(_stencil)
+   358                          	ld	a,(_dith)
+   359                          	and	a			; when possible drawto/undrawto are faster
+   360                          	jr	nz,nopwhite
+   361                          	call unplot
+   362                          	jr	go_end2
+   363                          nopwhite:
+   364                          	sub 11
+   365                          	jr	nz,nopblack
+   366                          	call plot
+   367                          	jr	go_end2
+   368                          nopblack:
+   369                          	push hl
+   370                          	call stencil_init
+   371                          	call stencil_add_point
+   372                          plend:
+   373                          	pop de	; stencil ptr
+   374                          plend2:
+   375                          	pop hl
+   376                          	pop hl
+   377                          	push de	; stencil ptr
+   378                          	ld	hl,(_dith)
+   379                          	ld	a,l
+   380                          	sub 12			; If color > 11, then fatten a bit
+   381                          	jr	c,nothick	; the surface to be drawn
+   382                          
+   383                          	push hl
+   384                          	ld hl,(_stencil)	; adjust the right side
+   385                          IF (maxx > 256)
+   386                          	ld	de,maxy*2
+   387                          ELSE
+   388                          	ld	de,maxy
+   389                          ENDIF
+   390                          	add	hl,de
+   391                          	ld e,1				; 1 bit larger
+   392                          	call resize
+   393                          	pop hl
+   394                          	ld	a,l
+   395                          	sub 4	; adjust color (8..11)
+   396                          	ld	l,a
+   397                          nothick:
+   398                          dorender:
+   399                          	push hl
+   400                          	call stencil_render
+   401                          	pop	hl
+   402                          	pop hl
+   403                          	ld	hl,(_stencil)	; 'render' can destroy the current parameter
+   404                          	push hl
+   405                          	call stencil_init
+   406                          	jr go_end1
+   407                          
+   408                          noplot:
+   409                          
+   410                          	cp $20		; CMD_LINETO (x,y,dither),
+   411                          	jr c,go_end2
+   412                          	cp $50		; CMD_LINE
+   413                          	jr z,line
+   414                          	jr nc,go_end2
+   415                          	; LINETO stuff
+   416                          	ld hl,(_stencil)
+   417                          	ld a,(_dith)
+   418                          	and a				; when possible drawto/undrawto are faster
+   419                          	jr nz,nodtwhite
+   420                          	call undrawto
+   421                          	jr	go_end2
+   422                          nodtwhite:
+   423                          	sub	11
+   424                          	jr	nz,nodtblack
+   425                          	call drawto
+   426                          	jr	go_end2
+   427                          nodtblack:
+   428                          	push hl
+   429                          	call stencil_init
+   430                          	call stencil_add_lineto
+   431                          	jr plend
+   432                          
+   433                          line:
+   434                          	;cp $50 ; CMD_LINE (x,y,x2,y2,dither),
+   435                          	;jr	nz,go_end2
+   436                          	ld	hl,(_cx1)
+   437                          	ld	(_cx),hl	; update also the first parameter couple...
+   438                          	push hl
+   439                          	ld	hl,(_cy1)
+   440                          	ld	(_cy),hl	; ..so VLINE and HLINE behave correctly
+   441                          	push hl
+   442                          	ld	hl,(_stencil)
+   443                          	ld	a,(_dith)
+   444                          	and	a			; when possible draw/undraw are faster
+   445                          	jr	nz,nolwhite
+   446                          	call undraw
+   447                          	jp	go_end4
+   448                          nolwhite:
+   449                          	sub	11
+   450                          	jr	nz,nolblack
+   451                          	call draw
+   452                          	jp	go_end4
+   453                          nolblack:
+   454                          	push hl
+   455                          	call stencil_init
+   456                          	call stencil_add_side
+   457                          	pop de
+   458                          	pop	hl
+   459                          	pop hl
+   460                          	jp plend2
+   461                          
+   462                          ;
+   463                          ; Adjust right or left margin
+   464                          ; of a stencil object by 'e' dots
+   465                          ;
+   466                          
+   467                          resize:
+   468                          
+   469                          IF (maxx > 256)
+   470                          
+   471                          	;EXTERN  l_graphics_cmp
+   472                          	; TODO
+   473                          	ret
+   474                          
+   475                          ELSE
+   476                          
+   477                          	ld b,maxy-1
+   478                          rslp:
+   479                          	ld a,(hl)
+   480                          	and a
+   481                          	jr z,slimit
+   482                          	cp maxx-1
+   483                          	jr z,slimit
+   484                          	add e
+   485                          	ld (hl),a
+   486                          slimit:
+   487                          	inc hl
+   488                          	djnz rslp
+   489                          	ret
+   490                          
+   491                          ENDIF
+   492                          
+   493                          ; NZ if we have prepared a ptr for two-pass mode
+   494                          is_areamode:
+   495                          	push hl		; _stencil
+   496                          	ld	hl,_areaptr
+   497                          	ld	a,(hl)
+   498                          	inc	hl
+   499                          	cp	(hl)
+   500                          	pop	hl
+   501                          	ret
+   502                          ;
+   503                          ; Cut 1st and last line from a stencil object
+   504                          ;
+   505                          
+   506                          ;vshrink:
+   507                          ;	ld	b,maxy-1
+   508                          ;ltop:
+   509                          ;	ld	a,(hl)
+   510                          ;	and	a
+   511                          ;	jr	z,slim2
+   512                          ;	cp	maxx-1
+   513                          ;	jr	z,slim2
+   514                          ;	dec hl
+   515                          ;	ld	a,(hl)
+   516                          ;	inc	hl
+   517                          ;	ld	(hl),a
+   518                          ;	jr	bottom
+   519                          ;slim2:
+   520                          ;	ld	e,a
+   521                          ;	inc hl
+   522                          ;	djnz ltop
+   523                          ;	ret
+   524                          ;bottom:
+   525                          ;	ld	b,maxy-1
+   526                          ;lbottom:
+   527                          ;	inc	hl
+   528                          ;	ld	a,(hl)
+   529                          ;	and	a
+   530                          ;	jr	z,slim3
+   531                          ;	cp	maxx-1
+   532                          ;	jr	nz,slim4
+   533                          ;slim3:
+   534                          ;	dec	hl
+   535                          ;	ld	(hl),a
+   536                          ;	ret
+   537                          ;slim4:
+   538                          ;	inc	hl
+   539                          ;	djnz lbottom
+   540                          ;	ret
+   541                          
+   542                          	SECTION	bss_graphics
+   543                          
+   544                          _areaptr:	defw	0
+   545                          
+   546                          _percent:	defw	0
+   547                          _cmd:		defb	0
+   548                          _dith:		defw	0
+   549                          _vx:		defw	0
+   550                          _vy:		defw	0
+   551                          
+   552                          _cx:		defw	0
+   553                          _cy:		defw	0
+   554                          _cx1:		defw	0
+   555                          _cy1:		defw	0
+   556                          
+   557                          _pic:		defw	0
+   558                          
+   559                          repcmd:		defb	0
+   560                          repcnt:		defb	0
+   561                          
+   562                          ; moved into stack
+   563                          ;;_stencil:	defs	maxy*2
+   564                          _stencil:	defw	0
+   565                          ENDIF
+   566                          

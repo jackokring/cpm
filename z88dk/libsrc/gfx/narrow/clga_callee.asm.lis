@@ -1,0 +1,49 @@
+/tmp/tmpXXGjAzMx.asm:
+     1                          MODULE clga_callee_asm
+     2                          LINE 0, "clga_callee.asm"
+clga_callee.asm:
+                                
+     1                          ;Usage: clga(int tlx, int tly, int tlx2, int tly2)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  clga_callee
+     8                              PUBLIC  _clga_callee
+     9                          
+    10                              PUBLIC  asm_clga
+    11                          
+    12                              EXTERN  swapgfxbk
+    13                              EXTERN  __graphics_end
+    14                          
+    15                              EXTERN  cleararea
+    16                              INCLUDE "graphics/grafix.inc"
+    17                          
+    18                          
+    19                          .clga_callee
+    20                          ._clga_callee
+    21                              pop     af    ; ret addr
+    22                              pop     bc    ; y2
+    23                              pop     hl
+    24                              ld      b,l    ; x2
+    25                              pop     hl    ; y
+    26                              pop     de
+    27                              ld      h,e    ; x
+    28                              push    af    ; ret addr
+    29                          
+    30                          .asm_clga
+    31                              push    ix
+    32                          IF NEED_swapgfxbk = 1
+    33                              call    swapgfxbk
+    34                          ENDIF
+    35                              call    cleararea
+    36                          IF NEED_swapgfxbk
+    37                              jp      __graphics_end
+    38                          ELSE
+    39                              pop     ix
+    40                              ret
+    41                          ENDIF
+    42                          
+    43                          ENDIF
+    44                          

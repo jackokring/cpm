@@ -1,0 +1,72 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:38 2023
+
+
+	C_LINE	0,"01_cast_global_pointer.c"
+
+	MODULE	X01_cast_global_pointer_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"01_cast_global_pointer.c"
+	C_LINE	4,"01_cast_global_pointer.c"
+	SECTION	code_compiler
+
+; Function main flags 0x00000000 __stdc 
+; int main()
+	C_LINE	5,"01_cast_global_pointer.c::main::0::1"
+._main
+	SECTION	data_compiler
+._st_main_c
+	defw	0
+	SECTION	code_compiler
+	ld	hl,(_a)
+	push	hl
+	ld	hl,(_st_main_c)
+	pop	bc
+	ret
+
+
+	C_LINE	14,"01_cast_global_pointer.c::main::0::2"
+
+; Function test flags 0x00000200 __smallc 
+; int test(char * v)
+; parameter 'char * v' at sp+2 size(2)
+	C_LINE	15,"01_cast_global_pointer.c::test::0::2"
+._test
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,1	;const
+	push	hl
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._a	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_a
+	GLOBAL	_main
+	GLOBAL	_test
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

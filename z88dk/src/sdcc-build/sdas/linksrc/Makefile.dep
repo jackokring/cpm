@@ -1,0 +1,28 @@
+lk_readnl.o: lk_readnl.c lk_readnl.h
+lkaomf51.o: lkaomf51.c aslink.h sdld.h ../../sdccconf.h
+lkar.o: lkar.c aslink.h sdld.h ../../sdccconf.h lklibr.h lkrel.h lkar.h
+lkarea.o: lkarea.c aslink.h sdld.h ../../sdccconf.h
+lkdata.o: lkdata.c aslink.h sdld.h ../../sdccconf.h
+lkelf.o: lkelf.c asxxxx_config.h aslink.h sdld.h ../../sdccconf.h
+lkeval.o: lkeval.c aslink.h sdld.h ../../sdccconf.h
+lkhead.o: lkhead.c aslink.h sdld.h ../../sdccconf.h
+lklex.o: lklex.c aslink.h sdld.h ../../sdccconf.h
+lklib.o: lklib.c sdld.h lk_readnl.h aslink.h ../../sdccconf.h lklibr.h \
+ lkrel.h
+lklibr.o: lklibr.c aslink.h sdld.h ../../sdccconf.h lkrel.h lklibr.h
+lklist.o: lklist.c aslink.h sdld.h ../../sdccconf.h
+lkmain.o: lkmain.c aslink.h sdld.h ../../sdccconf.h
+lkmem.o: lkmem.c sdld.h aslink.h ../../sdccconf.h
+lknoice.o: lknoice.c aslink.h sdld.h ../../sdccconf.h
+lkout.o: lkout.c aslink.h sdld.h ../../sdccconf.h
+lkrel.o: lkrel.c lk_readnl.h aslink.h sdld.h ../../sdccconf.h lkrel.h
+lkrloc.o: lkrloc.c aslink.h sdld.h ../../sdccconf.h
+lkrloc3.o: lkrloc3.c aslink.h sdld.h ../../sdccconf.h
+lks19.o: lks19.c sdld.h aslink.h ../../sdccconf.h
+lksdcclib.o: lksdcclib.c sdld.h lk_readnl.h aslink.h ../../sdccconf.h \
+ lklibr.h lkrel.h
+lksym.o: lksym.c aslink.h sdld.h ../../sdccconf.h
+sdld.o: sdld.c sdld.h
+lksdcdb.o: lksdcdb.c aslink.h sdld.h ../../sdccconf.h
+lkbank.o: lkbank.c aslink.h sdld.h ../../sdccconf.h
+strcmpi.o: ../asxxsrc/strcmpi.c

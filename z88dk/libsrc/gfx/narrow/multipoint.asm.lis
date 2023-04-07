@@ -1,0 +1,49 @@
+/tmp/tmpXXiKDJA1.asm:
+     1                          MODULE multipoint_asm
+     2                          LINE 0, "multipoint.asm"
+multipoint.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Stefano Bodrato 19/7/2007
+     5                          ;
+     6                          ;
+     7                          ;     $Id: multipoint.asm $
+     8                          ;
+     9                          
+    10                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    11                          ;
+    12                          ; Pick a vertical or horizontal bit bar, up to 16 bits long
+    13                          ;
+    14                          ; Usage: multipoint(int hv, int length, int x, int y)
+    15                          ;
+    16                          
+    17                          ; CALLER LINKAGE FOR FUNCTION POINTERS
+    18                          
+    19                          
+    20                              SECTION code_graphics
+    21                              PUBLIC  multipoint
+    22                              PUBLIC  _multipoint
+    23                          
+    24                              EXTERN  asm_multipoint
+    25                          
+    26                          
+    27                          .multipoint
+    28                          ._multipoint
+    29                              pop     af    ; ret addr
+    30                              pop     hl    ; y
+    31                              pop     de    ; x
+    32                              ld      h,e
+    33                              pop     bc
+    34                              ld      b,c    ; length
+    35                              pop     de
+    36                              ld      c,e    ; h/v
+    37                              push    de
+    38                              push    bc    ; just to re-balance the stack
+    39                              push    bc
+    40                              push    hl
+    41                              push    af    ; ret addr
+    42                              jp asm_multipoint
+    43                          ENDIF
+    44                          

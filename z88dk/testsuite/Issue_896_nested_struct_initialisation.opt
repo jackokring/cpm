@@ -1,0 +1,108 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:58 2023
+
+
+	C_LINE	0,"Issue_896_nested_struct_initialisation.c"
+
+	MODULE	Issue_896_nested_struct_initialisation_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/compiler.h"
+	C_LINE	10,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	50,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	60,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	70,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	80,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	89,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	93,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	94,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	95,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	101,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	106,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	11,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	13,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	14,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	15,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	18,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	19,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	21,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	22,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	23,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	25,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	27,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	29,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	30,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	31,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	33,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	37,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	38,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	43,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	44,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	49,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	54,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	3,"Issue_896_nested_struct_initialisation.c"
+	C_LINE	5,"Issue_896_nested_struct_initialisation.c"
+	C_LINE	22,"Issue_896_nested_struct_initialisation.c"
+	SECTION	data_compiler
+._rtc
+	defw	1
+	defw	2
+	defw	3
+	SECTION	code_compiler
+	C_LINE	24,"Issue_896_nested_struct_initialisation.c"
+	C_LINE	41,"Issue_896_nested_struct_initialisation.c"
+	SECTION	data_compiler
+._rtc2
+	defw	1
+	defb	2
+	defb	3
+	defw	4
+	defw	5
+	SECTION	code_compiler
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_rtc
+	GLOBAL	_rtc2
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

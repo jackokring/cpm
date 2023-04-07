@@ -1,0 +1,33 @@
+/tmp/tmpXXMagmxt.asm:
+     1                          MODULE undrawb_asm
+     2                          LINE 0, "undrawb.asm"
+undrawb.asm:
+                                
+     1                          ; ----- void __CALLEE__ undrawb(int x, int y, int h, int v)
+     2                          ;
+     3                          ;    $Id: undrawb.asm $
+     4                          ;
+     5                          
+     6                          
+     7                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     8                              SECTION code_graphics
+     9                          
+    10                              PUBLIC  undrawb
+    11                              PUBLIC  _undrawb
+    12                          
+    13                              EXTERN  asm_undrawb
+    14                          
+    15                          
+    16                          .undrawb
+    17                          ._undrawb
+    18                              push    ix
+    19                              ld      ix,2
+    20                              add     ix,sp
+    21                              ld      c,(ix+2)
+    22                              ld      b,(ix+4)
+    23                              ld      l,(ix+6)
+    24                              ld      h,(ix+8)
+    25                              pop     ix
+    26                              jp      asm_undrawb
+    27                          ENDIF
+    28                          

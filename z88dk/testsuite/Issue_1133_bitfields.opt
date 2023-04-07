@@ -1,0 +1,311 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:43 2023
+
+
+	C_LINE	0,"Issue_1133_bitfields.c"
+
+	MODULE	Issue_1133_bitfields_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_1133_bitfields.c"
+	SECTION	data_compiler
+._x
+	defw	0x7ff
+	defb	0xf60
+	defw	i_1+0
+	SECTION	code_compiler
+	C_LINE	10,"Issue_1133_bitfields.c"
+
+; Function func1 flags 0x00000200 __smallc 
+; int func1()
+	C_LINE	10,"Issue_1133_bitfields.c::func1::0::0"
+._func1
+	push	bc
+	ld	hl,_x
+	ld	(hl),255
+	inc	hl
+	ld	a,(hl)
+	and	248
+	or	7
+	ld	(hl),a
+	ld	hl,_x+2
+	ld	de,2	;const
+	ex	de,hl
+	ld	a,l
+	rrca
+	rrca
+	rrca
+	and	224
+	ld	l,a
+	ld	a,(de)
+	and	31
+	or	l
+	ld	(de),a
+	ld	hl,_x+3
+	ld	a,(hl)
+	and	224
+	or	3
+	ld	(hl),a
+	ld	hl,6	;const
+	pop	bc
+	push	hl
+	ld	hl,_x
+	ld	e,(hl)
+	inc	hl
+	ld	a,(hl)
+	and	7
+	bit	2,a
+	jr	z,ASMPC+4
+	or	248
+	ld	h,a
+	ld	l,e
+	pop	bc
+	ret
+
+
+	C_LINE	20,"Issue_1133_bitfields.c::func1::0::1"
+
+; Function func1a flags 0x00000200 __smallc 
+; int func1a()
+	C_LINE	20,"Issue_1133_bitfields.c::func1a::0::1"
+._func1a
+	ld	hl,_x
+	ld	e,(hl)
+	inc	hl
+	ld	a,(hl)
+	and	7
+	bit	2,a
+	jr	z,ASMPC+4
+	or	248
+	ld	h,a
+	ld	l,e
+	ret
+
+
+	C_LINE	21,"Issue_1133_bitfields.c::func1a::0::2"
+
+; Function func1b flags 0x00000200 __smallc 
+; int func1b()
+	C_LINE	21,"Issue_1133_bitfields.c::func1b::0::2"
+._func1b
+	ld	hl,_x+2
+	ld	a,(hl)
+	rlca
+	rlca
+	rlca
+	and	7
+	ld	l,a
+	ld	h,0
+	ret
+
+
+	C_LINE	22,"Issue_1133_bitfields.c::func1b::0::3"
+
+; Function func1c flags 0x00000200 __smallc 
+; int func1c()
+	C_LINE	22,"Issue_1133_bitfields.c::func1c::0::3"
+._func1c
+	ld	hl,_x+3
+	ld	a,(hl)
+	and	31
+	ld	l,a
+	ld	h,0
+	ret
+
+
+	C_LINE	25,"Issue_1133_bitfields.c::func1c::0::4"
+	C_LINE	29,"Issue_1133_bitfields.c::func1c::0::4"
+
+; Function func2 flags 0x00000200 __smallc 
+; int func2()
+	C_LINE	29,"Issue_1133_bitfields.c::func2::0::4"
+._func2
+	ld	hl,_y
+	ld	(hl),1
+	ld	l,(hl)
+	ld	h,0
+	ret
+
+
+	C_LINE	32,"Issue_1133_bitfields.c::func2::0::5"
+
+; Function func2a flags 0x00000200 __smallc 
+; int func2a()
+	C_LINE	32,"Issue_1133_bitfields.c::func2a::0::5"
+._func2a
+	ld	hl,(_y)
+	ld	h,0
+	ret
+
+
+	C_LINE	33,"Issue_1133_bitfields.c::func2a::0::6"
+
+; Function func2b flags 0x00000200 __smallc 
+; int func2b()
+	C_LINE	33,"Issue_1133_bitfields.c::func2b::0::6"
+._func2b
+	ld	hl,_y+1
+	ld	a,(hl)
+	ld	l,a
+	rlca
+	sbc	a,a
+	ld	h,a
+	ret
+
+
+	C_LINE	35,"Issue_1133_bitfields.c::func2b::0::7"
+	SECTION	data_compiler
+._z
+	defw	0x8000
+	defs	2
+	SECTION	code_compiler
+	C_LINE	40,"Issue_1133_bitfields.c::func2b::0::7"
+
+; Function func3 flags 0x00000200 __smallc 
+; int func3()
+	C_LINE	40,"Issue_1133_bitfields.c::func3::0::7"
+._func3
+	ld	hl,3	;const
+	ld	(_z),hl
+	ld	hl,4	;const
+	ret
+
+
+	C_LINE	44,"Issue_1133_bitfields.c::func3::0::8"
+
+; Function func3a flags 0x00000200 __smallc 
+; int func3a()
+	C_LINE	44,"Issue_1133_bitfields.c::func3a::0::8"
+._func3a
+	ld	hl,_z
+	ld	a,(hl)
+	inc	hl
+	ld	h,(hl)
+	ld	l,a
+	ret
+
+
+	C_LINE	45,"Issue_1133_bitfields.c::func3a::0::9"
+
+; Function func3b flags 0x00000200 __smallc 
+; int func3b()
+	C_LINE	45,"Issue_1133_bitfields.c::func3b::0::9"
+._func3b
+	ld	hl,_z+2
+	ld	e,(hl)
+	inc	hl
+	ld	a,(hl)
+	bit	7,a
+	jr	z,ASMPC+4
+	ld	h,a
+	ld	l,e
+	ret
+
+
+	C_LINE	47,"Issue_1133_bitfields.c::func3b::0::10"
+	SECTION	data_compiler
+._t4
+	defb	0xe
+	SECTION	code_compiler
+	C_LINE	52,"Issue_1133_bitfields.c::func3b::0::10"
+
+; Function func4 flags 0x00000200 __smallc 
+; int func4()
+	C_LINE	52,"Issue_1133_bitfields.c::func4::0::10"
+._func4
+	ld	hl,_t4
+	ld	a,(hl)
+	and	252
+	or	2
+	ld	(hl),a
+	ld	hl,_t4
+	ld	a,(hl)
+	and	227
+	or	8
+	ld	(hl),a
+	ld	hl,1	;const
+	ret
+
+
+	C_LINE	58,"Issue_1133_bitfields.c::func4::0::11"
+
+; Function func4a flags 0x00000200 __smallc 
+; int func4a()
+	C_LINE	58,"Issue_1133_bitfields.c::func4a::0::11"
+._func4a
+	ld	hl,_t4
+	ld	a,(hl)
+	rrca
+	rrca
+	and	7
+	bit	2,a
+	jr	z,ASMPC+4
+	or	248
+	ld	l,a
+	rlca
+	sbc	a,a
+	ld	h,a
+	ret
+
+
+	C_LINE	59,"Issue_1133_bitfields.c::func4a::0::12"
+
+; Function func4b flags 0x00000200 __smallc 
+; int func4b()
+	C_LINE	59,"Issue_1133_bitfields.c::func4b::0::12"
+._func4b
+	ld	hl,_t4
+	ld	a,(hl)
+	and	3
+	ld	l,a
+	ld	h,0
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+	SECTION	rodata_compiler
+.i_1
+	defm	"hello"
+	defb	0
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._y	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_x
+	GLOBAL	_func1
+	GLOBAL	_func1a
+	GLOBAL	_func1b
+	GLOBAL	_func1c
+	GLOBAL	_y
+	GLOBAL	_func2
+	GLOBAL	_func2a
+	GLOBAL	_func2b
+	GLOBAL	_z
+	GLOBAL	_func3
+	GLOBAL	_func3a
+	GLOBAL	_func3b
+	GLOBAL	_t4
+	GLOBAL	_func4
+	GLOBAL	_func4a
+	GLOBAL	_func4b
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

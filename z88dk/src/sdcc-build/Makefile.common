@@ -1,0 +1,100 @@
+#
+#
+#
+
+# Version
+PACKAGE         = sdcc
+VERSION         = 4.2.0
+VERSIONHI       = 4
+VERSIONLO       = 2
+VERSIONP        = 0
+
+# Programs
+SHELL           = /bin/sh
+CC              = ccache gcc
+CPP             = ccache gcc -E
+CXX             = ccache g++ -std=gnu++11
+AR              = ar
+RANLIB          = ranlib
+INSTALL         = install
+YACC            = bison -y
+PYTHON          = /home/jackokring/www/venv/bin/python
+LEX             = flex
+AWK             = gawk
+STRIP           = strip
+MAKEDEP         = g++ -std=gnu++11 -MM
+prefix          = /usr/local
+exec_prefix     = ${prefix}
+bindir          = ${exec_prefix}/bin
+libdir          = ${exec_prefix}/lib
+datadir         = ${datarootdir}
+datarootdir     = ${prefix}/share
+includedir      = ${prefix}/include
+mandir          = ${datarootdir}/man
+man1dir         = $(mandir)/man1
+man2dir         = $(mandir)/man2
+infodir         = ${datarootdir}/info
+docdir          = ${datarootdir}/doc/${PACKAGE}
+DESTDIR         =
+
+include_dir_suffix = sdcc/include
+lib_dir_suffix     = sdcc/lib
+
+# Modules to enable/disable
+OPT_DISABLE_AVR         = 1
+OPT_DISABLE_DS390       = 1
+OPT_DISABLE_DS400       = 1
+OPT_DISABLE_HC08        = 1
+OPT_DISABLE_S08         = 1
+OPT_DISABLE_MCS51       = 1
+OPT_DISABLE_PIC14       = 1
+OPT_DISABLE_PIC16       = 1
+OPT_DISABLE_XA51        = @OPT_DISABLE_XA51@
+OPT_DISABLE_Z80         = 0
+OPT_DISABLE_Z180        = 0
+OPT_DISABLE_R2K         = 1
+OPT_DISABLE_R2KA        = 0
+OPT_DISABLE_R3KA        = 0
+OPT_DISABLE_SM83        = 0
+OPT_DISABLE_TLCS90      = 1
+OPT_DISABLE_Z80N        = 0
+OPT_DISABLE_STM8        = 1
+OPT_DISABLE_PDK13       = 1
+OPT_DISABLE_PDK14       = 1
+OPT_DISABLE_PDK15       = 1
+OPT_DISABLE_PDK16       = 1
+OPT_DISABLE_MOS6502     = 1
+OPT_DISABLE_MOS65C02    = 1
+
+OPT_ENABLE_DOC          = 0
+
+OPT_DISABLE_DEVICE_LIB  = 1
+OPT_DISABLE_PACKIHX     = 1
+OPT_DISABLE_SDBINUTILS  = 0
+OPT_DISABLE_SDCPP       = 0
+OPT_DISABLE_UCSIM       = 1
+OPT_DISABLE_NON_FREE    = 0
+
+SLIB                    = $(top_builddir)/support/util
+
+EXEEXT          = 
+transform       = s,x,x,
+
+# Flags
+
+DEFS           += $(subs -DHAVE_CONFIG_H,,-DHAVE_CONFIG_H)
+CPPFLAGS       +=  $(INCLUDEFLAGS) -I. -I$(top_builddir) -I$(srcdir)/$(SLIB) -I$(srcdir)
+CFLAGS         +=  -pipe -ggdb -g -O2 -Wall -Wno-parentheses
+CXXFLAGS       += -pipe -ggdb -g -O2
+LDFLAGS        += 
+
+EXTRALIBS      += 
+
+# Shared settings between all the sub Makefiles
+# Done here so that we don't have to start a Make from the top levelport
+# directory.
+
+# Library compilation options
+CLEANSPEC = *.lst *.asm *.sym *~ *.cdb *.dep *.rul
+
+OBJ = $(SOURCES:.c=.o) $(CXXSOURCES:.cc=.o)

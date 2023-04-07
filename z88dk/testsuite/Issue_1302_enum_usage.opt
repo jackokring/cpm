@@ -1,0 +1,40 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:45 2023
+
+
+	C_LINE	0,"Issue_1302_enum_usage.c"
+
+	MODULE	Issue_1302_enum_usage_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_1302_enum_usage.c"
+	C_LINE	8,"Issue_1302_enum_usage.c"
+	C_LINE	10,"Issue_1302_enum_usage.c"
+	C_LINE	16,"Issue_1302_enum_usage.c"
+; --- Start of Optimiser additions ---
+
+	SECTION	code_compiler
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func
+	GLOBAL	_func2
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

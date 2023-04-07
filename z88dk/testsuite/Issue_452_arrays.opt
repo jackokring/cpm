@@ -1,0 +1,197 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:50 2023
+
+
+	C_LINE	0,"Issue_452_arrays.c"
+
+	MODULE	Issue_452_arrays_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"Issue_452_arrays.c"
+	SECTION	code_compiler
+
+; Function func flags 0x00000200 __smallc 
+; int func(int * A)
+; parameter 'int * A' at sp+2 size(2)
+	C_LINE	3,"Issue_452_arrays.c::func::0::0"
+._func
+	ld	hl,0	;const
+	push	hl
+	ld	l,4
+	call	l_gintspsp	;
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	add	hl,hl
+	pop	de
+	add	hl,de
+	call	l_gint	;
+	pop	bc
+	ret
+
+
+	C_LINE	9,"Issue_452_arrays.c::func::0::1"
+
+; Function func1 flags 0x00000200 __smallc 
+; int func1()
+	C_LINE	10,"Issue_452_arrays.c::func1::0::1"
+._func1
+	ld	hl,65516	;const
+	add	hl,sp
+	ld	sp,hl
+	ld	hl,0	;const
+	push	hl
+	ld	l,2
+	add	hl,sp
+	pop	de
+	push	de
+	push	hl
+	ex	de,hl
+	add	hl,hl
+	pop	de
+	add	hl,de
+	call	l_gint	;
+	exx
+	ld	hl,22	;const
+	add	hl,sp
+	ld	sp,hl
+	exx
+	ret
+
+
+	C_LINE	16,"Issue_452_arrays.c::func1::0::2"
+
+; Function func2 flags 0x00000200 __smallc 
+; int func2()
+	C_LINE	17,"Issue_452_arrays.c::func2::0::2"
+._func2
+	SECTION	data_compiler
+._st_func2_A
+	defw	0
+	defs	18
+	SECTION	code_compiler
+	ld	de,0	;const
+	ld	hl,_st_func2_A
+	push	de
+	push	hl
+	ex	de,hl
+	add	hl,hl
+	pop	de
+	add	hl,de
+	call	l_gint	;
+	pop	bc
+	ret
+
+
+	C_LINE	23,"Issue_452_arrays.c::func2::0::3"
+
+; Function func3 flags 0x00000200 __smallc 
+; int func3()
+	C_LINE	24,"Issue_452_arrays.c::func3::0::3"
+._func3
+	ld	hl,65516	;const
+	add	hl,sp
+	ld	sp,hl
+	call	l_gint4sp	;
+	exx
+	ld	hl,20	;const
+	add	hl,sp
+	ld	sp,hl
+	exx
+	ret
+
+
+	C_LINE	29,"Issue_452_arrays.c::func3::0::4"
+
+; Function multi1 flags 0x00000200 __smallc 
+; int multi1()
+	C_LINE	30,"Issue_452_arrays.c::multi1::0::4"
+._multi1
+	ld	hl,65496	;const
+	add	hl,sp
+	ld	sp,hl
+	ld	hl,22	;const
+	add	hl,sp
+	call	l_gint	;
+	exx
+	ld	hl,40	;const
+	add	hl,sp
+	ld	sp,hl
+	exx
+	ret
+
+
+	C_LINE	36,"Issue_452_arrays.c::multi1::0::5"
+
+; Function multi2 flags 0x00000200 __smallc 
+; int multi2()
+	C_LINE	37,"Issue_452_arrays.c::multi2::0::5"
+._multi2
+	ld	hl,65496	;const
+	add	hl,sp
+	ld	sp,hl
+	ld	hl,0	;const
+	push	hl
+	push	hl
+	ld	hl,4	;const
+	add	hl,sp
+	push	hl
+	dec	hl
+	dec	hl
+	call	l_gint	;
+	ld	b,h
+	ld	c,l
+	add	hl,hl
+	add	hl,hl
+	add	hl,bc
+	add	hl,hl
+	add	hl,hl
+	pop	de
+	add	hl,de
+	pop	de
+	push	de
+	push	hl
+	ex	de,hl
+	add	hl,hl
+	pop	de
+	add	hl,de
+	call	l_gint	;
+	exx
+	ld	hl,44	;const
+	add	hl,sp
+	ld	sp,hl
+	exx
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func
+	GLOBAL	_func1
+	GLOBAL	_func2
+	GLOBAL	_func3
+	GLOBAL	_multi1
+	GLOBAL	_multi2
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

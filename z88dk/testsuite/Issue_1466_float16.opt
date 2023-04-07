@@ -1,0 +1,592 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:46 2023
+
+
+	C_LINE	0,"Issue_1466_float16.c"
+
+	MODULE	Issue_1466_float16_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	5,"Issue_1466_float16.c"
+	C_LINE	8,"Issue_1466_float16.c"
+	SECTION	code_compiler
+
+; Function func1 flags 0x00000200 __smallc 
+; _Float16 func1(_Float16 a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	8,"Issue_1466_float16.c::func1::0::0"
+._func1
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	call	l_f16_add
+	ret
+
+
+	C_LINE	12,"Issue_1466_float16.c::func1::0::1"
+
+; Function func1a_TypedConstants flags 0x00000200 __smallc 
+; _Float16 func1a_TypedConstants()
+	C_LINE	12,"Issue_1466_float16.c::func1a_TypedConstants::0::1"
+._func1a_TypedConstants
+	ld	hl,16967	;const
+	push	hl
+	ld	hl,16640	;const
+	push	hl
+	call	_func1
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	15,"Issue_1466_float16.c::func1a_TypedConstants::0::2"
+
+; Function func1a_OpenConstants flags 0x00000200 __smallc 
+; _Float16 func1a_OpenConstants()
+	C_LINE	15,"Issue_1466_float16.c::func1a_OpenConstants::0::2"
+._func1a_OpenConstants
+	ld	hl,16967	;const
+	push	hl
+	ld	hl,16640	;const
+	push	hl
+	call	_func1
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	20,"Issue_1466_float16.c::func1a_OpenConstants::0::3"
+
+; Function func2 flags 0x00000200 __smallc 
+; _Float16 func2(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	20,"Issue_1466_float16.c::func2::0::3"
+._func2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	push	hl
+	ld	hl,_doub_val
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_f48_f16tof
+	call	dmul
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	25,"Issue_1466_float16.c::func2::0::4"
+
+; Function func3a flags 0x00000200 __smallc 
+; _Float16 func3a(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	25,"Issue_1466_float16.c::func3a::0::4"
+._func3a
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,16640	;const
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	28,"Issue_1466_float16.c::func3a::0::5"
+
+; Function func3b flags 0x00000200 __smallc 
+; _Float16 func3b(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	28,"Issue_1466_float16.c::func3b::0::5"
+._func3b
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,16640	;const
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	31,"Issue_1466_float16.c::func3b::0::6"
+
+; Function func3c flags 0x00000200 __smallc 
+; _Float16 func3c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	31,"Issue_1466_float16.c::func3c::0::6"
+._func3c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,16896	;const
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	34,"Issue_1466_float16.c::func3c::0::7"
+
+; Function func3d flags 0x00000200 __smallc 
+; _Float16 func3d(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	34,"Issue_1466_float16.c::func3d::0::7"
+._func3d
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,16896	;const
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	38,"Issue_1466_float16.c::func3d::0::8"
+
+; Function func3e flags 0x00000200 __smallc 
+; _Float16 func3e(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	38,"Issue_1466_float16.c::func3e::0::8"
+._func3e
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	a,1
+	call	l_f16_ldexp
+	ret
+
+
+	C_LINE	42,"Issue_1466_float16.c::func3e::0::9"
+
+; Function func3f flags 0x00000200 __smallc 
+; _Float16 func3f(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	42,"Issue_1466_float16.c::func3f::0::9"
+._func3f
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	a,1
+	call	l_f16_ldexp
+	ret
+
+
+	C_LINE	45,"Issue_1466_float16.c::func3f::0::10"
+
+; Function func4c flags 0x00000200 __smallc 
+; _Float16 func4c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	45,"Issue_1466_float16.c::func4c::0::10"
+._func4c
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,16896	;const
+	push	bc
+	call	l_f16_div
+	ret
+
+
+	C_LINE	48,"Issue_1466_float16.c::func4c::0::11"
+
+; Function func4d flags 0x00000200 __smallc 
+; _Float16 func4d(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	48,"Issue_1466_float16.c::func4d::0::11"
+._func4d
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,13653	;const
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	51,"Issue_1466_float16.c::func4d::0::12"
+
+; Function func4e flags 0x00000200 __smallc 
+; _Float16 func4e(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	51,"Issue_1466_float16.c::func4e::0::12"
+._func4e
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	call	l_f16_invf
+	ret
+
+
+	C_LINE	56,"Issue_1466_float16.c::func4e::0::13"
+
+; Function func5a flags 0x00000200 __smallc 
+; _Float16 func5a(double a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'double a' at sp+4 size(6)
+	C_LINE	56,"Issue_1466_float16.c::func5a::0::13"
+._func5a
+	ld	hl,4	;const
+	add	hl,sp
+	call	dldpsh
+	call	l_gint8sp	;
+	call	l_f48_f16tof
+	call	dmul
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	60,"Issue_1466_float16.c::func5a::0::14"
+
+; Function func5b flags 0x00000200 __smallc 
+; _Float16 func5b(double a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'double a' at sp+4 size(6)
+	C_LINE	60,"Issue_1466_float16.c::func5b::0::14"
+._func5b
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,6	;const
+	add	hl,sp
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_f48_f16tof
+	call	dmul
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	64,"Issue_1466_float16.c::func5b::0::15"
+
+; Function func5c flags 0x00000200 __smallc 
+; _Float16 func5c(int a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter 'int a' at sp+8 size(2)
+	C_LINE	64,"Issue_1466_float16.c::func5c::0::15"
+._func5c
+	ld	hl,8	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_int2long_s_float
+	call	dmul
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	68,"Issue_1466_float16.c::func5c::0::16"
+
+; Function func5d flags 0x00000200 __smallc 
+; _Float16 func5d(int a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter 'int a' at sp+8 size(2)
+	C_LINE	68,"Issue_1466_float16.c::func5d::0::16"
+._func5d
+	ld	hl,2	;const
+	add	hl,sp
+	call	dldpsh
+	ld	hl,14	;const
+	add	hl,sp
+	call	l_gint	;
+	call	l_int2long_s_float
+	call	dmul
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	72,"Issue_1466_float16.c::func5d::0::17"
+
+; Function func5e flags 0x00000200 __smallc 
+; _Float16 func5e(int a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'int a' at sp+4 size(2)
+	C_LINE	72,"Issue_1466_float16.c::func5e::0::17"
+._func5e
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	call	l_f16_sint2f
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	76,"Issue_1466_float16.c::func5e::0::18"
+
+; Function func5f flags 0x00000200 __smallc 
+; _Float16 func5f(int a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'int a' at sp+4 size(2)
+	C_LINE	76,"Issue_1466_float16.c::func5f::0::18"
+._func5f
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	ex	(sp),hl
+	call	l_f16_sint2f
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	81,"Issue_1466_float16.c::func5f::0::19"
+
+; Function func6a flags 0x00000200 __smallc 
+; _Float16 func6a(double a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'double a' at sp+4 size(6)
+	C_LINE	81,"Issue_1466_float16.c::func6a::0::19"
+._func6a
+	ld	hl,4	;const
+	add	hl,sp
+	call	dldpsh
+	call	l_gint8sp	;
+	call	l_f48_f16tof
+	call	dadd
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	85,"Issue_1466_float16.c::func6a::0::20"
+
+; Function func6b flags 0x00000200 __smallc 
+; _Float16 func6b(double a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'double a' at sp+4 size(6)
+	C_LINE	85,"Issue_1466_float16.c::func6b::0::20"
+._func6b
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,6	;const
+	add	hl,sp
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_f48_f16tof
+	call	dadd
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	89,"Issue_1466_float16.c::func6b::0::21"
+
+; Function func6c flags 0x00000200 __smallc 
+; _Float16 func6c(int a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter 'int a' at sp+8 size(2)
+	C_LINE	89,"Issue_1466_float16.c::func6c::0::21"
+._func6c
+	ld	hl,8	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_int2long_s_float
+	call	dadd
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	93,"Issue_1466_float16.c::func6c::0::22"
+
+; Function func6d flags 0x00000200 __smallc 
+; _Float16 func6d(int a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter 'int a' at sp+8 size(2)
+	C_LINE	93,"Issue_1466_float16.c::func6d::0::22"
+._func6d
+	ld	hl,2	;const
+	add	hl,sp
+	call	dldpsh
+	ld	hl,14	;const
+	add	hl,sp
+	call	l_gint	;
+	call	l_int2long_s_float
+	call	dadd
+	call	l_f48_ftof16
+	ret
+
+
+	C_LINE	97,"Issue_1466_float16.c::func6d::0::23"
+
+; Function func6e flags 0x00000200 __smallc 
+; _Float16 func6e(int a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'int a' at sp+4 size(2)
+	C_LINE	97,"Issue_1466_float16.c::func6e::0::23"
+._func6e
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	call	l_f16_sint2f
+	call	l_f16_add
+	ret
+
+
+	C_LINE	101,"Issue_1466_float16.c::func6e::0::24"
+
+; Function func6f flags 0x00000200 __smallc 
+; _Float16 func6f(int a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'int a' at sp+4 size(2)
+	C_LINE	101,"Issue_1466_float16.c::func6f::0::24"
+._func6f
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	ex	(sp),hl
+	call	l_f16_sint2f
+	call	l_f16_add
+	ret
+
+
+	C_LINE	106,"Issue_1466_float16.c::func6f::0::25"
+
+; Function func7a flags 0x00000200 __smallc 
+; _Float16 func7a(long a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'long a' at sp+4 size(4)
+	C_LINE	106,"Issue_1466_float16.c::func7a::0::25"
+._func7a
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,6	;const
+	add	hl,sp
+	call	l_glong
+	call	l_f16_slong2f
+	call	l_f16_add
+	ret
+
+
+	C_LINE	110,"Issue_1466_float16.c::func7a::0::26"
+
+; Function func7b flags 0x00000200 __smallc 
+; _Float16 func7b(long a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'long a' at sp+4 size(4)
+	C_LINE	110,"Issue_1466_float16.c::func7b::0::26"
+._func7b
+	ld	hl,4	;const
+	add	hl,sp
+	call	l_glong2sp
+	call	l_gint6sp	;
+	pop	de
+	ex	(sp),hl
+	ex	de,hl
+	call	l_f16_slong2f
+	call	l_f16_add
+	ret
+
+
+	C_LINE	114,"Issue_1466_float16.c::func7b::0::27"
+
+; Function func7c flags 0x00000200 __smallc 
+; _Float16 func7c(long a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'long a' at sp+4 size(4)
+	C_LINE	114,"Issue_1466_float16.c::func7c::0::27"
+._func7c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,6	;const
+	add	hl,sp
+	call	l_glong
+	call	l_f16_slong2f
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	118,"Issue_1466_float16.c::func7c::0::28"
+
+; Function func7d flags 0x00000200 __smallc 
+; _Float16 func7d(long a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter 'long a' at sp+4 size(4)
+	C_LINE	118,"Issue_1466_float16.c::func7d::0::28"
+._func7d
+	ld	hl,4	;const
+	add	hl,sp
+	call	l_glong2sp
+	call	l_gint6sp	;
+	pop	de
+	ex	(sp),hl
+	ex	de,hl
+	call	l_f16_slong2f
+	call	l_f16_mul
+	ret
+
+
+	C_LINE	122,"Issue_1466_float16.c::func7d::0::29"
+
+; Function func8a flags 0x00000200 __smallc 
+; _Float16 func8a()
+	C_LINE	122,"Issue_1466_float16.c::func8a::0::29"
+._func8a
+	ld	hl,15360	;const
+	ret
+
+
+	C_LINE	126,"Issue_1466_float16.c::func8a::0::30"
+
+; Function func8b flags 0x00000200 __smallc 
+; _Float16 func8b()
+	C_LINE	126,"Issue_1466_float16.c::func8b::0::30"
+._func8b
+	ld	hl,15360	;const
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._doub_val	defs	6
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_doub_val
+	GLOBAL	_func1
+	GLOBAL	_func1a_TypedConstants
+	GLOBAL	_func1a_OpenConstants
+	GLOBAL	_func2
+	GLOBAL	_func3a
+	GLOBAL	_func3b
+	GLOBAL	_func3c
+	GLOBAL	_func3d
+	GLOBAL	_func3e
+	GLOBAL	_func3f
+	GLOBAL	_func4c
+	GLOBAL	_func4d
+	GLOBAL	_func4e
+	GLOBAL	_func5a
+	GLOBAL	_func5b
+	GLOBAL	_func5c
+	GLOBAL	_func5d
+	GLOBAL	_func5e
+	GLOBAL	_func5f
+	GLOBAL	_func6a
+	GLOBAL	_func6b
+	GLOBAL	_func6c
+	GLOBAL	_func6d
+	GLOBAL	_func6e
+	GLOBAL	_func6f
+	GLOBAL	_func7a
+	GLOBAL	_func7b
+	GLOBAL	_func7c
+	GLOBAL	_func7d
+	GLOBAL	_func8a
+	GLOBAL	_func8b
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

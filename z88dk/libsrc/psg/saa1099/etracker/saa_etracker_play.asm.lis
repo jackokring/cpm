@@ -1,0 +1,27 @@
+/tmp/tmpXX2wZ5Dp.asm:
+     1                          MODULE saa_etracker_play_asm
+     2                          LINE 0, "etracker/saa_etracker_play.asm"
+etracker/saa_etracker_play.asm:
+                                
+     1                          IF __CPU_Z80__ | __CPU_Z80N__
+     2                              SECTION code_clib
+     3                              PUBLIC  saa_etracker_play
+     4                              PUBLIC  _saa_etracker_play
+     5                              EXTERN  asm_etracker_play
+     6                          
+     7                          ; Etracker uses mainset, ix and af'
+     8                          ; Save the non-mainset registers for ease of integration
+     9                          saa_etracker_play:
+    10                          _saa_etracker_play:
+    11                              push    ix
+    12                              ex      af,af
+    13                              push    af
+    14                              ex      af,af
+    15                              call    asm_etracker_play
+    16                              ex      af,af
+    17                              pop     af
+    18                              ex      af,af
+    19                              pop     ix
+    20                              ret
+    21                          ENDIF
+    22                          

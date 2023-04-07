@@ -1,0 +1,146 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:42 2023
+
+
+	C_LINE	0,"Issue_1102_struct_trailing_comma.c"
+
+	MODULE	Issue_1102_struct_trailing_comma_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	4,"Issue_1102_struct_trailing_comma.c"
+	C_LINE	12,"Issue_1102_struct_trailing_comma.c"
+	SECTION	data_compiler
+._level_data
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	0
+
+	defm	"foo"
+	defb	0
+
+	defs	4
+	defm	"bar!"
+	defb	0
+
+	defs	3
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	0
+
+	defm	"foo"
+	defb	0
+
+	defs	4
+	defm	"bar!"
+	defb	0
+
+	defs	3
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	1
+
+	defm	""
+	defb	0
+
+	defm	"foo"
+	defb	0
+
+	defs	4
+	defm	"bar!"
+	defb	0
+
+	defs	3
+	SECTION	code_compiler
+	C_LINE	34,"Issue_1102_struct_trailing_comma.c"
+
+; Function main flags 0x00000000 __stdc 
+; int main()
+	C_LINE	36,"Issue_1102_struct_trailing_comma.c::main::0::1"
+._main
+	ld	hl,0	;const
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_level_data
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

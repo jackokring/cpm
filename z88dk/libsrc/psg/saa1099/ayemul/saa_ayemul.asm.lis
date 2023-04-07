@@ -1,0 +1,248 @@
+/tmp/tmpXXhlq5qr.asm:
+     1                          MODULE saa_ayemul_asm
+     2                          LINE 0, "ayemul/saa_ayemul.asm"
+ayemul/saa_ayemul.asm:
+                                
+     1                          
+     2                          IF __CPU_Z80__ | __CPU_Z80N__
+     3                              SECTION smc_clib
+     4                              PUBLIC  asm_saa_ay_play
+     5                          
+     6                              INCLUDE "ports.def"
+     7                          
+     8                          ;the outputs to the AY-3-8912’s registers are intercepted and
+     9                          ;are used as memory mapped i/o
+    10                          
+    11                          
+    12                          DEFVARS 0 {
+    13                              ayfine1     ds.b    1
+    14                              aycoarse1   ds.b    1
+    15                              ayfine2     ds.b    1
+    16                              aycoarse2   ds.b    1
+    17                              ayfine3     ds.b    1
+    18                              aycoarse3   ds.b    1
+    19                              aynoisepitch    ds.b    1
+    20                              aymixer     ds.b     1
+    21                              ayvol1      ds.b     1
+    22                              ayvol2      ds.b     1
+    23                              ayvol3      ds.b     1
+    24                              ayenvlen    ds.b     1
+    25                              ayenvlen2   ds.b     1
+    26                              ayenvshapre ds.b     1
+    27                          }
+    28                          
+    29                          
+    30                          
+    31                          ; Entry: ix = memory mapped ay registers
+    32                          asm_saa_ay_play:
+    33                              LD      l,(ix+ayfine1) ;ayfine1
+    34                              LD      A,(ix+aycoarse1) ;aycoarse1
+    35                              AND     15
+    36                              LD      h,a
+    37                              add     hl,hl
+    38                              ld      de,pitchconvert
+    39                              add     hl,de
+    40                              ld      a,(hl)
+    41                              ld      (saatone2),a
+    42                              inc     l
+    43                              ld      a,(hl)
+    44                              ld      (stoctave1+1),a
+    45                              ld      l,(ix+ayfine2)
+    46                              ld      a,(ix+aycoarse1)
+    47                              and     15
+    48                              ld      h,a
+    49                              add     hl,hl
+    50                              ld      de,pitchconvert
+    51                              add     hl,de
+    52                              ld      a,(hl)
+    53                              ld      (saatone3),a
+    54                              inc     hl
+    55                              ld      a,(hl)
+    56                              rlca
+    57                              rlca
+    58                              rlca
+    59                              rlca
+    60                          stoctave1:
+    61                              or      a
+    62                              LD      (saaoct32),A
+    63                          
+    64                              ld      l,(ix+ayfine3)
+    65                              ld      a,(ix+aycoarse3)
+    66                              and     15
+    67                              ld      h,a
+    68                              add     hl,hl
+    69                              ld      de,pitchconvert
+    70                              add     hl,de
+    71                              ld      a,(hl)
+    72                              ld      (saatone5),a
+    73                              inc     hl
+    74                              ld      a,(hl)
+    75                              rlca
+    76                              rlca
+    77                              rlca
+    78                              rlca
+    79                              ld      (saaoct54),a
+    80                          
+    81                              ld      l,(ix+aynoisepitch)
+    82                              ld      h,0
+    83                              ld      de,noiseconvert
+    84                              add     hl,de
+    85                              ld      a,(hl)
+    86                              ld      (saanoisefreq),a
+    87                          
+    88                              ld      a,(ix+aymixer)
+    89                              ld      de,0
+    90                              bit     0,a
+    91                              jr      nz,c2nsound
+    92                              set     2,d
+    93                          c2nsound:
+    94                              bit     3,a
+    95                              jr      nz,c2nnoise
+    96                              SET     2,E
+    97                          c2nnoise:
+    98                              BIT     1,A
+    99                              JR      NZ,c3nsound
+   100                              SET     3,D
+   101                          c3nsound:
+   102                              BIT     4,A
+   103                              JR      NZ,c3nnoise
+   104                              SET     3,E
+   105                          c3nnoise:
+   106                              BIT     2,A
+   107                              JR      NZ,c5nsound
+   108                              SET     5,D
+   109                          c5nsound:
+   110                              BIT     5,A
+   111                              JR      NZ,c5nnoise
+   112                              SET     5,E
+   113                          c5nnoise:
+   114                              LD      A,D
+   115                              LD      (saafreqen),A
+   116                              LD      A,E
+   117                              LD      (saanoiseen),A
+   118                          
+   119                              LD      a,(ix+ayvol1)
+   120                              rlca
+   121                              rlca
+   122                              rlca
+   123                              rlca
+   124                              or      (ix+ayvol1)
+   125                              ld      (saaamp2),a
+   126                          
+   127                              LD      a,(ix+ayvol2)
+   128                              rlca
+   129                              rlca
+   130                              rlca
+   131                              rlca
+   132                              or      (ix+ayvol2)
+   133                              ld      (saaamp3),a
+   134                          
+   135                              LD      a,(ix+ayvol3)
+   136                              rlca
+   137                              rlca
+   138                              rlca
+   139                              rlca
+   140                              or      (ix+ayvol3)
+   141                              ld      (saaamp5),a
+   142                          
+   143                          playit:
+   144                          
+   145                              LD      BC,port_sound_data
+   146                              LD      HL,saaouts
+   147                              OUTI
+   148                              OUTI
+   149                              OUTI
+   150                              OUTI
+   151                              OUTI
+   152                              OUTI
+   153                              OUTI
+   154                              OUTI
+   155                              OUTI
+   156                              OUTI
+   157                              OUTI
+   158                              OUTI
+   159                              OUTI
+   160                              OUTI
+   161                              OUTI
+   162                              OUTI
+   163                              OUTI
+   164                              OUTI
+   165                              OUTI
+   166                              OUTI
+   167                              OUTI
+   168                              OUTI
+   169                              OUTI
+   170                              OUTI
+   171                              RET
+   172                          
+   173                          amp0: EQU 0
+   174                          amp1: EQU 1
+   175                          amp2: EQU 2
+   176                          amp3: EQU 3
+   177                          amp4: EQU 4
+   178                          amp5: EQU 5
+   179                          
+   180                          tone0: EQU 8
+   181                          tone1: EQU 9
+   182                          tone2: EQU 10
+   183                          tone3: EQU 11
+   184                          tone4: EQU 12
+   185                          tone5: EQU 13
+   186                          
+   187                          oct10: EQU 16
+   188                          oct32: EQU 17
+   189                          oct54: EQU 18
+   190                          
+   191                          freqen: EQU 20
+   192                          noiseen: EQU 21
+   193                          noisefreq: EQU 22
+   194                          
+   195                          env0: EQU 24
+   196                          env1: EQU 25
+   197                          
+   198                          onoff: EQU 28
+   199                          
+   200                          
+   201                          
+   202                              SECTION data_psg
+   203                          
+   204                          ; SAA output registers
+   205                          saaouts:    DEFB tone2
+   206                          saatone2:   DEFB 0
+   207                                      DEFB amp2
+   208                          saaamp2:    DEFB 0
+   209                                      DEFB tone3
+   210                          saatone3:   DEFB 0
+   211                                      DEFB amp3
+   212                          saaamp3:    DEFB 0
+   213                                      DEFB oct32
+   214                          saaoct32:   DEFB 0
+   215                                      DEFB tone5
+   216                          saatone5:   DEFB 0
+   217                                      DEFB amp5
+   218                          saaamp5:    DEFB 0
+   219                                      DEFB oct54
+   220                          saaoct54:   DEFB 0
+   221                                      DEFB noisefreq
+   222                          saanoisefreq: DEFB 0
+   223                                      DEFB freqen
+   224                          saafreqen:  DEFB 0
+   225                                      DEFB noiseen
+   226                          saanoiseen: DEFB 0
+   227                                      DEFB onoff
+   228                                      DEFB 1
+   229                          
+   230                          
+   231                          SECTION rodata_psg
+   232                          noiseconvert:
+   233                              DEFB 0,0,0,0,0,0,17,17,17,17,17,17,17,17,17,17,34
+   234                              DEFB 34,34,34,34,34,34,34,34,34,34,34,34,34,34,34
+   235                          
+   236                          envconvert:
+   237                              DEFB 132,132,132,132,140,140,140,140
+   238                              DEFB 134,132,138,130,142,130,138,140
+   239                          
+   240                          pitchconvert:
+   241                              INCLUDE     "ayemul/pitchtable.inc"
+   242                          ENDIF
+   243                          

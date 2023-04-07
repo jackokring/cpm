@@ -1,0 +1,58 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:42 2023
+
+
+	C_LINE	0,"Issue_1062_array_init.c"
+
+	MODULE	Issue_1062_array_init_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_1062_array_init.c"
+	SECTION	data_compiler
+._font
+	defw	0
+	defw	1
+	defw	2
+	defw	3
+	SECTION	code_compiler
+	C_LINE	7,"Issue_1062_array_init.c"
+	SECTION	data_compiler
+._font2
+	defb	0
+	defb	1
+	defb	2
+	defb	3
+	SECTION	code_compiler
+	C_LINE	13,"Issue_1062_array_init.c"
+	SECTION	data_compiler
+._y
+	defb	1
+	defb	2
+	defb	3
+	SECTION	code_compiler
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_font
+	GLOBAL	_font2
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

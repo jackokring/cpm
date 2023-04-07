@@ -1,0 +1,30 @@
+sub_hl_bc.asm:
+     1                          ; Substitute for the 8085 dsub = 'sub hl, bc' instruction
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  86    86
+     4                          ; 8085  10    10
+     5                          ; gbz80 80    80
+     6                          ; r2ka  53    53
+     7                          ; z180  77    77
+     8                          ; z80   80    80
+     9                          ; z80n  80    80
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__sub_hl_bc
+    13                          
+    14                          __z80asm__sub_hl_bc:
+    15  0000  d5                        push    de
+    16  0001  57                        ld      d, a
+    17                          
+    18  0002  7d                        ld      a, l
+    19  0003  91                        sub     a, c
+    20  0004  6f                        ld      l, a
+    21                          
+    22  0005  7c                        ld      a, h
+    23  0006  98                        sbc     a, b
+    24  0007  67                        ld      h, a
+    25                          
+    26  0008  7a                        ld      a, d
+    27  0009  d1                        pop     de
+    28  000a  c9                        ret
+    29                          

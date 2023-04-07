@@ -1,0 +1,124 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:00 2023
+
+
+	C_LINE	0,"offsetof.c"
+
+	MODULE	offsetof_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stddef.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	50,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	60,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	70,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	80,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	89,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	93,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	94,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	95,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	101,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	106,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	8,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stddef.h"
+	C_LINE	12,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stddef.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stddef.h"
+	C_LINE	3,"offsetof.c"
+	C_LINE	5,"offsetof.c"
+	C_LINE	10,"offsetof.c"
+	C_LINE	12,"offsetof.c"
+	C_LINE	15,"offsetof.c"
+	SECTION	data_compiler
+._offs_x
+	defb	80,0,0,0
+	SECTION	code_compiler
+	C_LINE	16,"offsetof.c"
+	SECTION	data_compiler
+._offs_x2
+	defb	80,0,0,0
+	SECTION	code_compiler
+	C_LINE	19,"offsetof.c"
+	SECTION	data_compiler
+._offs_xt
+	defw	80
+	SECTION	code_compiler
+	C_LINE	21,"offsetof.c"
+	SECTION	data_compiler
+._offs_data
+	defw	80
+	SECTION	code_compiler
+	C_LINE	23,"offsetof.c"
+	SECTION	data_compiler
+._size_x
+	defw	140
+	SECTION	code_compiler
+	C_LINE	24,"offsetof.c"
+	SECTION	data_compiler
+._size_x_tn
+	defw	60
+	SECTION	code_compiler
+	C_LINE	26,"offsetof.c"
+
+; Function func flags 0x00000200 __smallc 
+; void func()
+	C_LINE	27,"offsetof.c::func::0::0"
+._func
+	ld	hl,80	;const
+	ld	de,0
+	push	de
+	push	hl
+	ld	hl,80	;const
+	ld	de,0
+	push	de
+	push	hl
+	ld	hl,80	;const
+	push	hl
+	push	hl
+	ld	hl,12	;const
+	add	hl,sp
+	ld	sp,hl
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._data	defs	140
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_offs_x
+	GLOBAL	_offs_x2
+	GLOBAL	_offs_xt
+	GLOBAL	_offs_data
+	GLOBAL	_size_x
+	GLOBAL	_size_x_tn
+	GLOBAL	_func
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

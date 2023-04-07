@@ -1,0 +1,28 @@
+/tmp/tmpXXt7yKCV.asm:
+     1                          MODULE point_asm
+     2                          LINE 0, "point.asm"
+point.asm:
+                                
+     1                          ; ----- int  point(int x, int y)
+     2                          ;Result is true/false
+     3                          
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  point
+     7                              PUBLIC  _point
+     8                          
+     9                              EXTERN  asm_point
+    10                          
+    11                          .point
+    12                          ._point
+    13                          
+    14  0000  c1                    pop     bc    ; ret addr
+    15  0001  e1                    pop     hl    ; y
+    16  0002  d1                    pop     de
+    17  0003  d5                    push    de
+    18  0004  e5                    push    hl
+    19  0005  63                    ld      h,e    ; x
+    20  0006  c5                    push    bc    ; ret addr
+    21  0007  c30000                jp      asm_point
+    22                          
+    23                          

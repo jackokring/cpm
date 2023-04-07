@@ -1,0 +1,27 @@
+/tmp/tmpXXPypomw.asm:
+     1                          MODULE pen_up_asm
+     2                          LINE 0, "pen_up.asm"
+pen_up.asm:
+                                
+     1                          ;
+     2                          ;      Turtle graphics library
+     3                          ;      Stefano - 11/2017
+     4                          ;
+     5                          ;      $Id: pen_up.asm $
+     6                          ;
+     7                          
+     8                                 SECTION   code_graphics
+     9                                 PUBLIC    pen_up
+    10                                 PUBLIC    _pen_up
+    11                          
+    12                                 EXTERN __pen
+    13                          
+    14                          
+    15                          .pen_up
+    16                          ._pen_up
+    17  0000  210000            	ld	hl,__pen
+    18  0003  3e7f              	ld	a,127
+    19  0005  a6                	and	(hl)
+    20  0006  77                	ld	(hl),a
+    21  0007  c9                	ret
+    22                          

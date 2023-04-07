@@ -1,0 +1,11 @@
+/* Generated file, DO NOT Edit!  */
+/* To Make changes to rules edit */
+/* <port>/peeph.def instead.     */
+"\n"
+"replace restart {\n"
+"	xor	a, a\n"
+"	ld	%1 (%2), a\n"
+"} by {\n"
+"	ld	%1 (%2), #0\n"
+"	; peephole 178 direct load zero constant to memory addressed by index register\n"
+"} if notUsed('a'), canAssign(%1 %2 '#0')\n"

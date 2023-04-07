@@ -1,0 +1,55 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:00 2023
+
+
+	C_LINE	0,"paramsoffset.c"
+
+	MODULE	paramsoffset_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"paramsoffset.c"
+	C_LINE	6,"paramsoffset.c"
+	SECTION	code_compiler
+
+; Function func flags 0x00000200 __smallc __z88dk_params_offset(10) 
+; long func(long val, int id)
+; parameter 'int id' at sp+12 size(2)
+; parameter 'long val' at sp+14 size(4)
+	C_LINE	7,"paramsoffset.c::func::0::0"
+._func
+	ld	hl,14	;const
+	add	hl,sp
+	call	l_glong2sp
+	ld	hl,16	;const
+	add	hl,sp
+	call	l_gint	;
+	call	l_int2long_s
+	call	l_long_sub
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

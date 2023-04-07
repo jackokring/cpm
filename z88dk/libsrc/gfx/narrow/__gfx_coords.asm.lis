@@ -1,0 +1,13 @@
+/tmp/tmpXXNwcsH5.asm:
+     1                          MODULE __gfx_coords_asm
+     2                          LINE 0, "__gfx_coords.asm"
+__gfx_coords.asm:
+                                
+     1                          
+     2                          
+     3                              SECTION    bss_graphics
+     4                              PUBLIC    __gfx_coords
+     5                          
+     6                          
+     7  0000  0000              __gfx_coords:    defw    0
+     8                          

@@ -1,0 +1,97 @@
+/tmp/tmpXX5XwbcZ.asm:
+     1                          MODULE multipoint_callee_asm
+     2                          LINE 0, "multipoint_callee.asm"
+multipoint_callee.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Stefano Bodrato 19/7/2007
+     5                          ;
+     6                          ;
+     7                          ;     $Id: multipoint_callee.asm $
+     8                          ;
+     9                          
+    10                          
+    11                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    12                          ; CALLER LINKAGE FOR FUNCTION POINTERS
+    13                          ; ----- bool  multipoint(int hv, int length, int x, int y)
+    14                          
+    15                          ;Usage:
+    16                          ;pick a vertical or horizontal bit bar, up to 16 bits long
+    17                          
+    18                          
+    19                              SECTION code_graphics
+    20                              PUBLIC    multipoint_callee
+    21                              PUBLIC    _multipoint_callee
+    22                              PUBLIC    asm_multipoint
+    23                          
+    24                              EXTERN    pointxy
+    25                              EXTERN    swapgfxbk
+    26                              EXTERN    swapgfxbk1
+    27                              INCLUDE "graphics/grafix.inc"
+    28                          
+    29                          
+    30                          .multipoint_callee
+    31                          ._multipoint_callee
+    32                          
+    33                              pop     af    ; ret addr
+    34                              pop     hl    ; y
+    35                              pop     de    ; x
+    36                              ld      h,e
+    37                              pop     bc
+    38                              ld      b,c    ; length
+    39                              pop     de
+    40                              ld      c,e    ; h/v
+    41                              push    af    ; ret addr
+    42                          .asm_multipoint
+    43                              push    ix
+    44                          IF NEED_swapgfxbk = 1
+    45                              call    swapgfxbk
+    46                          ENDIF
+    47                              ld      de,0
+    48                              rr      c
+    49                              jr      nc,horizontal
+    50                          .vertical
+    51                              sla     e
+    52                              rl      d
+    53                              push    de
+    54                              push    hl
+    55                              push    bc
+    56                              call    pointxy
+    57                              pop     bc
+    58                              pop     hl
+    59                              pop     de
+    60                              jr      z,jv
+    61                              inc     de
+    62                          .jv
+    63                              inc     l
+    64                              djnz    vertical
+    65                              jr      exit
+    66                          .horizontal
+    67                              sla     e
+    68                              rl      d
+    69                              push    de
+    70                              push    hl
+    71                              push    bc
+    72                              call    pointxy
+    73                              pop     bc
+    74                              pop     hl
+    75                              pop     de
+    76                              jr      z,jh
+    77                              inc     de
+    78                          .jh
+    79                              inc     h
+    80                              djnz    horizontal
+    81                          .exit
+    82                          IF NEED_swapgfxbk = 1
+    83                              call    swapgfxbk1
+    84                          ENDIF
+    85                              pop     ix
+    86                              ld      h,d
+    87                              ld      l,e
+    88                              ret
+    89                          
+    90                          
+    91                          ENDIF
+    92                          

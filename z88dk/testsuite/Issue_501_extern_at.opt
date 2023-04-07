@@ -1,0 +1,80 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:53 2023
+
+
+	C_LINE	0,"Issue_501_extern_at.c"
+
+	MODULE	Issue_501_extern_at_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_501_extern_at.c"
+	SECTION	data_compiler
+.___extern_c
+	defb	1
+	SECTION	code_compiler
+	SECTION	code_crt_init
+	ld	a,(___extern_c)
+	ld	(_c),a
+	C_LINE	5,"Issue_501_extern_at.c"
+	C_LINE	7,"Issue_501_extern_at.c"
+	SECTION	data_compiler
+.___extern_d
+	defw	22
+	SECTION	code_compiler
+	SECTION	code_crt_init
+	ld	hl,(___extern_d)
+	ld	(_d),hl
+	C_LINE	9,"Issue_501_extern_at.c"
+	SECTION	data_compiler
+.___extern_e
+	defw	8192
+	SECTION	code_compiler
+	SECTION	code_crt_init
+	ld	hl,(___extern_e)
+	ld	(_e),hl
+	C_LINE	11,"Issue_501_extern_at.c"
+	SECTION	data_compiler
+.___extern_buf
+	defm	"Hello there"
+	defb	0
+
+	SECTION	code_compiler
+	SECTION	code_crt_init
+	ld	hl,___extern_buf
+	ld	de,_buf
+	ld	bc,12
+	ldir
+; --- Start of Optimiser additions ---
+
+	SECTION	code_compiler
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_c
+	defc	_c	= 16384
+	GLOBAL	_b
+	defc	_b	= 28672
+	GLOBAL	_d
+	defc	_d	= 32768
+	GLOBAL	_e
+	defc	_e	= 12288
+	defc	_buf	= 1280
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

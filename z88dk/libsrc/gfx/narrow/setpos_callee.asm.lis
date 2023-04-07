@@ -1,0 +1,27 @@
+/tmp/tmpXXX3L7TH.asm:
+     1                          MODULE setpos_callee_asm
+     2                          LINE 0, "setpos_callee.asm"
+setpos_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ setpos(int x2, int y2)
+     2                          
+     3                              SECTION code_graphics
+     4                          
+     5                              PUBLIC  setpos_callee
+     6                              PUBLIC  _setpos_callee
+     7                              PUBLIC  asm_setpos
+     8                          
+     9                              EXTERN  setxy
+    10                          
+    11                          
+    12                          .setpos_callee
+    13                          ._setpos_callee
+    14  0000  c1                    pop     bc    ; ret addr
+    15  0001  e1                    pop     hl
+    16  0002  d1                    pop     de
+    17  0003  c5                    push    bc    ; ret addr
+    18                          
+    19                          .asm_setpos
+    20  0004  63                    ld      h,e
+    21  0005  c30000                jp      setxy
+    22                          

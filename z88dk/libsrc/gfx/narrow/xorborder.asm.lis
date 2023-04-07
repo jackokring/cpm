@@ -1,0 +1,43 @@
+/tmp/tmpXX3lVfan.asm:
+     1                          MODULE xorborder_asm
+     2                          LINE 0, "xorborder.asm"
+xorborder.asm:
+                                
+     1                          
+     2                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     3                              SECTION code_graphics
+     4                          
+     5                              PUBLIC  xorborder
+     6                              PUBLIC  _xorborder
+     7                          
+     8                              EXTERN  asm_xorborder
+     9                          
+    10                          ;
+    11                          ;    $Id: xorborder.asm $
+    12                          ;
+    13                          
+    14                          ; ***********************************************************************
+    15                          ;
+    16                          ; XORs a dotted box.  Useful for GUIs.
+    17                          ; Generic version
+    18                          ;
+    19                          ; Stefano Bodrato - March 2002
+    20                          ;
+    21                          ;
+    22                          ; IN:    HL    = (x,y)
+    23                          ;    BC    = (width,heigth)
+    24                          ;
+    25                          
+    26                          .xorborder
+    27                          ._xorborder
+    28                              push    ix
+    29                              ld      ix,2
+    30                              add     ix,sp
+    31                              ld      c,(ix+2)
+    32                              ld      b,(ix+4)
+    33                              ld      l,(ix+6)
+    34                              ld      h,(ix+8)
+    35                              pop     ix
+    36                              jp      asm_xorborder
+    37                          ENDIF
+    38                          

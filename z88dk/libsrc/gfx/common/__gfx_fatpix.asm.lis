@@ -1,0 +1,12 @@
+/tmp/tmpXXqZVYGD.asm:
+     1                          MODULE __gfx_fatpix_asm
+     2                          LINE 0, "__gfx_fatpix.asm"
+__gfx_fatpix.asm:
+                                
+     1                          
+     2                          
+     3                          SECTION bss_graphics
+     4                          PUBLIC __gfx_fatpix
+     5                          
+     6  0000  00                __gfx_fatpix:	defb	0
+     7                          

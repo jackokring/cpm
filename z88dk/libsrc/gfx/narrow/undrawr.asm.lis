@@ -1,0 +1,28 @@
+/tmp/tmpXXerzETs.asm:
+     1                          MODULE undrawr_asm
+     2                          LINE 0, "undrawr.asm"
+undrawr.asm:
+                                
+     1                          ; CALLER LINKAGE FOR FUNCTION POINTERS
+     2                          ; ----- void  undrawr(int x2, int y2)
+     3                          
+     4                          
+     5                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     6                              SECTION code_graphics
+     7                          
+     8                              PUBLIC  undrawr
+     9                              PUBLIC  _undrawr
+    10                          
+    11                              EXTERN  asm_undrawr
+    12                          
+    13                          .undrawr
+    14                          ._undrawr
+    15                              pop     af    ; ret addr
+    16                              pop     de    ; y
+    17                              pop     hl    ; x
+    18                              push    hl
+    19                              push    de
+    20                              push    af    ; ret addr
+    21                              jp      asm_undrawr
+    22                          ENDIF
+    23                          

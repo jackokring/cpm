@@ -1,0 +1,47 @@
+/tmp/tmpXXtLgVTv.asm:
+     1                          MODULE xorplot_callee_asm
+     2                          LINE 0, "xorplot_callee.asm"
+xorplot_callee.asm:
+                                
+     1                          ; ----- void  xorplot(int x, int y)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  xorplot_callee
+     8                              PUBLIC  _xorplot_callee
+     9                              PUBLIC  asm_xorplot
+    10                          
+    11                              EXTERN  swapgfxbk
+    12                              EXTERN  __graphics_end
+    13                          
+    14                              EXTERN  xorpixel
+    15                              INCLUDE "graphics/grafix.inc"
+    16                          
+    17                          
+    18                          
+    19                          .xorplot_callee
+    20                          ._xorplot_callee
+    21                              pop     af    ; ret addr
+    22                              pop     hl    ; y
+    23                              pop     de    ; x
+    24                              ld      h,e
+    25                              push    af    ; ret addr
+    26                          
+    27                          .asm_xorplot
+    28                              push    ix
+    29                          IF NEED_swapgfxbk = 1
+    30                              call    swapgfxbk
+    31                          ENDIF
+    32                              call    xorpixel
+    33                          IF NEED_swapgfxbk
+    34                              jp      __graphics_end
+    35                          ELSE
+    36                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    37                              pop    ix
+    38                            ENDIF
+    39                              ret
+    40                          ENDIF
+    41                          ENDIF
+    42                          

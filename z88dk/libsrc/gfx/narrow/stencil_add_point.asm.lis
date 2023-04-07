@@ -1,0 +1,57 @@
+/tmp/tmpXXypIy2D.asm:
+     1                          MODULE stencil_add_point_asm
+     2                          LINE 0, "stencil_add_point.asm"
+stencil_add_point.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Written around the Interlogic Standard Library
+     5                          ;
+     6                          ;    Put a pixel in the stencil vectors
+     7                          ;
+     8                          ;     Stefano Bodrato - 08/10/2009
+     9                          ;
+    10                          ;
+    11                          ;    $Id: stencil_add_point.asm,v 1.5 2016-04-22 20:29:51 dom Exp $
+    12                          ;
+    13                          
+    14                          ;; void stencil_add_point(int x, int y, unsigned char *stencil)
+    15                          
+    16                          
+    17                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    18                              SECTION   code_graphics
+    19                                  PUBLIC    stencil_add_point
+    20                                  PUBLIC    _stencil_add_point
+    21                          
+    22                                  EXTERN    line
+    23                                  EXTERN    stencil_add_pixel
+    24                          
+    25                                  ;EXTERN    swapgfxbk
+    26                                  ;EXTERN    swapgfxbk1
+    27                          
+    28                                  EXTERN    stencil_ptr
+    29                          
+    30                          .stencil_add_point
+    31                          ._stencil_add_point
+    32                              push    ix
+    33                              ld    ix,2
+    34                              add    ix,sp
+    35                          
+    36                              ld    l,(ix+2)    ;pointer to stencil
+    37                              ld    h,(ix+3)
+    38                              ld    (stencil_ptr),hl
+    39                          
+    40                              ;ld    l,(ix+4)    ;pointer to leftmost vector
+    41                              ;ld    h,(ix+5)
+    42                              ;ld    (gfx_area),hl
+    43                          
+    44                              ld    l,(ix+4)    ;y0
+    45                              ld    h,(ix+6)    ;x0
+    46                          
+    47                              pop    ix
+    48                              jp    stencil_add_pixel
+    49                          
+    50                          
+    51                          ENDIF
+    52                          

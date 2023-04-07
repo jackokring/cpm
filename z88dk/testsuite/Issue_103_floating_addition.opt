@@ -1,0 +1,952 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:41 2023
+
+
+	C_LINE	0,"Issue_103_floating_addition.c"
+
+	MODULE	Issue_103_floating_addition_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/compiler.h"
+	C_LINE	4,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	50,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	60,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	70,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	80,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	89,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	93,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	94,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	95,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	101,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	106,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	11,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	13,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	14,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	15,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	18,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	19,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	21,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	22,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	23,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	25,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	27,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	29,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	30,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	31,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	33,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	37,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	38,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	43,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	44,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	49,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	54,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	5,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	37,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	38,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	39,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	42,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	44,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	53,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	54,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	57,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	76,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	98,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	99,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	100,"/home/jackokring/cpm/z88dk/lib/config//../..//include/fcntl.h"
+	C_LINE	78,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	141,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	160,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	165,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	166,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	175,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	178,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	182,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	183,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	184,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	185,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	186,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	187,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	191,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	192,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	194,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	225,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	227,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	228,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	230,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	231,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	232,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	235,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	236,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	237,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	238,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	253,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	254,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	257,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	260,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	261,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	268,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	271,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	272,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	273,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	274,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	275,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	276,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	282,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	289,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	290,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	291,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	292,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	293,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	303,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	308,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	313,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	316,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	319,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	322,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	324,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	327,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	329,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	330,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	332,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	334,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	338,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	340,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	344,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	347,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	356,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	358,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	361,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	363,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	365,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdio.h"
+	C_LINE	1,"Issue_103_floating_addition.c"
+	C_LINE	3,"Issue_103_floating_addition.c"
+	SECTION	code_compiler
+
+; Function add_int flags 0x00000200 __smallc 
+; double add_int()
+	C_LINE	4,"Issue_103_floating_addition.c::add_int::0::0"
+._add_int
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dadd
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	10,"Issue_103_floating_addition.c::add_int::0::1"
+
+; Function add_int_longform flags 0x00000200 __smallc 
+; double add_int_longform()
+	C_LINE	11,"Issue_103_floating_addition.c::add_int_longform::0::1"
+._add_int_longform
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dadd
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	17,"Issue_103_floating_addition.c::add_int_longform::0::2"
+
+; Function add_int_longform2 flags 0x00000200 __smallc 
+; double add_int_longform2()
+	C_LINE	18,"Issue_103_floating_addition.c::add_int_longform2::0::2"
+._add_int_longform2
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dadd
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	25,"Issue_103_floating_addition.c::add_int_longform2::0::3"
+
+; Function add_double flags 0x00000200 __smallc 
+; double add_double()
+	C_LINE	26,"Issue_103_floating_addition.c::add_double::0::3"
+._add_double
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dadd
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	32,"Issue_103_floating_addition.c::add_double::0::4"
+
+; Function sub_int flags 0x00000200 __smallc 
+; double sub_int()
+	C_LINE	33,"Issue_103_floating_addition.c::sub_int::0::4"
+._sub_int
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dsub
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	39,"Issue_103_floating_addition.c::sub_int::0::5"
+
+; Function sub_int_longform flags 0x00000200 __smallc 
+; double sub_int_longform()
+	C_LINE	40,"Issue_103_floating_addition.c::sub_int_longform::0::5"
+._sub_int_longform
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dsub
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	46,"Issue_103_floating_addition.c::sub_int_longform::0::6"
+
+; Function sub_int_longform2 flags 0x00000200 __smallc 
+; double sub_int_longform2()
+	C_LINE	47,"Issue_103_floating_addition.c::sub_int_longform2::0::6"
+._sub_int_longform2
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dswap
+	call	dsub
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	53,"Issue_103_floating_addition.c::sub_int_longform2::0::7"
+
+; Function sub_double flags 0x00000200 __smallc 
+; double sub_double()
+	C_LINE	54,"Issue_103_floating_addition.c::sub_double::0::7"
+._sub_double
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dsub
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	60,"Issue_103_floating_addition.c::sub_double::0::8"
+
+; Function mult_int flags 0x00000200 __smallc 
+; double mult_int()
+	C_LINE	61,"Issue_103_floating_addition.c::mult_int::0::8"
+._mult_int
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dmul
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	66,"Issue_103_floating_addition.c::mult_int::0::9"
+
+; Function mult_double flags 0x00000200 __smallc 
+; double mult_double()
+	C_LINE	67,"Issue_103_floating_addition.c::mult_double::0::9"
+._mult_double
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dmul
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	72,"Issue_103_floating_addition.c::mult_double::0::10"
+
+; Function mult_double_longform flags 0x00000200 __smallc 
+; double mult_double_longform()
+	C_LINE	73,"Issue_103_floating_addition.c::mult_double_longform::0::10"
+._mult_double_longform
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dload
+	ld	a,1
+	call	l_f48_ldexp
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	78,"Issue_103_floating_addition.c::mult_double_longform::0::11"
+
+; Function mult_double_longform2 flags 0x00000200 __smallc 
+; double mult_double_longform2()
+	C_LINE	79,"Issue_103_floating_addition.c::mult_double_longform2::0::11"
+._mult_double_longform2
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dload
+	ld	a,1
+	call	l_f48_ldexp
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	87,"Issue_103_floating_addition.c::mult_double_longform2::0::12"
+
+; Function div_int flags 0x00000200 __smallc 
+; double div_int()
+	C_LINE	88,"Issue_103_floating_addition.c::div_int::0::12"
+._div_int
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dload
+	ld	a,-1
+	call	l_f48_ldexp
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	94,"Issue_103_floating_addition.c::div_int::0::13"
+
+; Function div_double flags 0x00000200 __smallc 
+; double div_double()
+	C_LINE	95,"Issue_103_floating_addition.c::div_double::0::13"
+._div_double
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dload
+	ld	a,-1
+	call	l_f48_ldexp
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	100,"Issue_103_floating_addition.c::div_double::0::14"
+
+; Function div_double_longform flags 0x00000200 __smallc 
+; double div_double_longform()
+	C_LINE	101,"Issue_103_floating_addition.c::div_double_longform::0::14"
+._div_double_longform
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dload
+	ld	a,-1
+	call	l_f48_ldexp
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	106,"Issue_103_floating_addition.c::div_double_longform::0::15"
+
+; Function div_double_longform2 flags 0x00000200 __smallc 
+; double div_double_longform2()
+	C_LINE	107,"Issue_103_floating_addition.c::div_double_longform2::0::15"
+._div_double_longform2
+	ld	hl,2	;const
+	call	l_int2long_u_float
+	call	dpush
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	dldpsh
+	ld	hl,1	;const
+	call	l_int2long_u_float
+	call	dswap
+	call	ddiv
+	pop	hl
+	call	dstore
+	ld	hl,0	;const
+	add	hl,sp
+	call	dload
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	116,"Issue_103_floating_addition.c::div_double_longform2::0::16"
+
+; Function main flags 0x00000000 __stdc 
+; int main()
+	C_LINE	117,"Issue_103_floating_addition.c::main::0::17"
+._main
+	ld	hl,i_1+0
+	push	hl
+	call	_add_int
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+12
+	ex	(sp),hl
+	call	_add_int_longform
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+33
+	ex	(sp),hl
+	call	_add_int_longform2
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+55
+	ex	(sp),hl
+	call	_add_double
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+70
+	ex	(sp),hl
+	call	_sub_int
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+82
+	ex	(sp),hl
+	call	_sub_int_longform
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+103
+	ex	(sp),hl
+	call	_sub_double
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+118
+	ex	(sp),hl
+	call	_sub_int_longform2
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+140
+	ex	(sp),hl
+	call	_mult_int
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+153
+	ex	(sp),hl
+	call	_mult_double
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+169
+	ex	(sp),hl
+	call	_mult_double_longform
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+194
+	ex	(sp),hl
+	call	_mult_double_longform2
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+220
+	ex	(sp),hl
+	call	_div_int
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+232
+	ex	(sp),hl
+	call	_div_double
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+247
+	ex	(sp),hl
+	call	_div_double_longform
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	hl,i_1+271
+	ex	(sp),hl
+	call	_div_double_longform2
+	call	dpush
+	ld	a,4
+	call	printf
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+	SECTION	rodata_compiler
+.i_1
+	defm	"add_int %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"add_int_longform %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"add_int_longform2 %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"add_double %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"sub_int %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"sub_int_longform %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"sub_double %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"sub_int_longform2 %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"mult_int %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"mult_double %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"mult_double_longform %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"mult_double_longform2 %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"div_int %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"div_double %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"div_double_longform %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"div_double_longform2 %f"
+	defb	10
+
+	defm	""
+	defb	0
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	open
+	GLOBAL	creat
+	GLOBAL	close
+	GLOBAL	read
+	GLOBAL	write
+	GLOBAL	lseek
+	GLOBAL	readbyte
+	GLOBAL	writebyte
+	GLOBAL	getcwd
+	GLOBAL	chdir
+	GLOBAL	getwd
+	GLOBAL	rmdir
+	GLOBAL	__RND_BLOCKSIZE
+	GLOBAL	rnd_loadblock
+	GLOBAL	rnd_saveblock
+	GLOBAL	rnd_erase
+	GLOBAL	__FOPEN_MAX
+	GLOBAL	__sgoioblk
+	GLOBAL	__sgoioblk_end
+	GLOBAL	fopen_zsock
+	GLOBAL	fileno
+	GLOBAL	fopen
+	GLOBAL	freopen
+	GLOBAL	fdopen
+	GLOBAL	_freopen1
+	GLOBAL	fmemopen
+	GLOBAL	funopen
+	GLOBAL	fclose
+	GLOBAL	fflush
+	GLOBAL	closeall
+	GLOBAL	fgets
+	GLOBAL	fputs
+	GLOBAL	fputc
+	GLOBAL	fputs_callee
+	GLOBAL	fputc_callee
+	GLOBAL	fgetc
+	GLOBAL	ungetc
+	GLOBAL	feof
+	GLOBAL	ferror
+	GLOBAL	puts
+	GLOBAL	ftell
+	GLOBAL	fgetpos
+	GLOBAL	fseek
+	GLOBAL	fread
+	GLOBAL	fwrite
+	GLOBAL	gets
+	GLOBAL	printf
+	GLOBAL	fprintf
+	GLOBAL	sprintf
+	GLOBAL	snprintf
+	GLOBAL	vfprintf
+	GLOBAL	vsnprintf
+	GLOBAL	printn
+	GLOBAL	scanf
+	GLOBAL	fscanf
+	GLOBAL	sscanf
+	GLOBAL	vfscanf
+	GLOBAL	vsscanf
+	GLOBAL	getarg
+	GLOBAL	fchkstd
+	GLOBAL	fgetc_cons
+	GLOBAL	fgetc_cons_inkey
+	GLOBAL	fputc_cons
+	GLOBAL	fgets_cons
+	GLOBAL	puts_cons
+	GLOBAL	fabandon
+	GLOBAL	fdtell
+	GLOBAL	fdgetpos
+	GLOBAL	rename
+	GLOBAL	remove
+	GLOBAL	getk
+	GLOBAL	getk_inkey
+	GLOBAL	printk
+	GLOBAL	perror
+	GLOBAL	set_fputc_cons
+	GLOBAL	fputc_cons_native
+	GLOBAL	fputc_cons_generic
+	GLOBAL	fputc_cons_ansi
+	GLOBAL	_add_int
+	GLOBAL	_add_int_longform
+	GLOBAL	_add_int_longform2
+	GLOBAL	_add_double
+	GLOBAL	_sub_int
+	GLOBAL	_sub_int_longform
+	GLOBAL	_sub_int_longform2
+	GLOBAL	_sub_double
+	GLOBAL	_mult_int
+	GLOBAL	_mult_double
+	GLOBAL	_mult_double_longform
+	GLOBAL	_mult_double_longform2
+	GLOBAL	_div_int
+	GLOBAL	_div_double
+	GLOBAL	_div_double_longform
+	GLOBAL	_div_double_longform2
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

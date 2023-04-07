@@ -1,0 +1,54 @@
+/tmp/tmpXXH5qvwf.asm:
+     1                          MODULE psg_init_asm
+     2                          LINE 0, "psg_init.asm"
+psg_init.asm:
+                                
+     1                          ;
+     2                          ;	SN76489 (a.k.a. SN76494,SN76496,TMS9919,SN94624) sound routines
+     3                          ;	by Stefano Bodrato, 2018
+     4                          ;
+     5                          ;	int psg_init();
+     6                          ;
+     7                          ;	Play a sound by PSG
+     8                          ;
+     9                          ;
+    10                          ;	$Id: psg_init.asm $
+    11                          ;
+    12                          
+    13                          IF !__CPU_INTEL__ & !__CPU_RABBIT__ & !__CPU_GBZ80__
+    14                                  SECTION code_clib
+    15                          	PUBLIC	psg_init
+    16                          	PUBLIC	_psg_init
+    17                          
+    18                          	INCLUDE	"sn76489.inc"
+    19                          
+    20                          psg_init:
+    21                          _psg_init:
+    22                          
+    23                          	LD	BC,psgport
+    24                          	LD	A,$9F
+    25                          	OUT	(C),A
+    26                          IF PSGLatchPort
+    27                              in a,(PSGLatchPort)
+    28                          ENDIF
+    29                          	LD	A,$BF
+    30                          IF PSGLatchPort
+    31                              in a,(PSGLatchPort)
+    32                          ENDIF
+    33                          	OUT	(C),A
+    34                          IF PSGLatchPort
+    35                              in a,(PSGLatchPort)
+    36                          ENDIF
+    37                          	LD	A,$DF
+    38                          	OUT	(C),A
+    39                          IF PSGLatchPort
+    40                              in a,(PSGLatchPort)
+    41                          ENDIF
+    42                              LD	A,$FF
+    43                              OUT	(C),A
+    44                          IF PSGLatchPort
+    45                              in a,(PSGLatchPort)
+    46                          ENDIF
+    47                          	RET
+    48                          ENDIF
+    49                          

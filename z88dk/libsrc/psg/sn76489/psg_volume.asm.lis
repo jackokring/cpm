@@ -1,0 +1,61 @@
+/tmp/tmpXX0E8UAb.asm:
+     1                          MODULE psg_volume_asm
+     2                          LINE 0, "psg_volume.asm"
+psg_volume.asm:
+                                
+     1                          	SECTION code_clib
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_RABBIT__ & !__CPU_GBZ80__
+     4                          	PUBLIC	set_sound_volume
+     5                          	PUBLIC	_set_sound_volume
+     6                          	PUBLIC	psg_volume
+     7                          	PUBLIC	_psg_volume
+     8                          
+     9                          ;	$Id: psg_volume.asm $
+    10                          
+    11                          ;==============================================================
+    12                          ; void set_sound_volume(int channel, int volume)
+    13                          ;==============================================================
+    14                          ; Sets the sound volume for a given channel
+    15                          ;==============================================================
+    16                          
+    17                          	INCLUDE	"sn76489.inc"
+    18                          
+    19                          .set_sound_volume
+    20                          ._set_sound_volume
+    21                          .psg_volume
+    22                          ._psg_volume
+    23                          
+    24                          	ld	hl, 2
+    25                          	add	hl, sp
+    26                          	ld	e, (hl)		; E = Volume
+    27                          	inc	hl
+    28                          	inc 	hl
+    29                          	ld	c, (hl)		; C = Channel
+    30                          
+    31                          	ld	a, e
+    32                          	cpl			; The volume is actually an atenuation
+    33                          	and	a, $0F
+    34                          	ld	b, a		; Only the 4 lower bits are significant
+    35                          
+    36                          	ld	a, c
+    37                          	rrc	a
+    38                          	rrc	a
+    39                          	rrc	a
+    40                          	and	a, $60		; Puts the channel number in bits 5 and 6
+    41                          
+    42                          	or	a, $90
+    43                          	or	a, b		; Prepares the first byte of the command
+    44                          IF HAVE16bitbus
+    45                              ld      bc,psgport
+    46                              out     (c),a
+    47                          ELSE
+    48                              out	(psgport), a	; Sends it
+    49                          IF PSGLatchPort
+    50                              in a,(PSGLatchPort)
+    51                          ENDIF
+    52                          ENDIF
+    53                          
+    54                          	ret
+    55                          ENDIF
+    56                          

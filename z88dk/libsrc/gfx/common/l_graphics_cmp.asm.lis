@@ -1,0 +1,28 @@
+/tmp/tmpXXl6rRNz.asm:
+     1                          MODULE l_graphics_cmp_asm
+     2                          LINE 0, "l_graphics_cmp.asm"
+l_graphics_cmp.asm:
+                                
+     1                          
+     2                          ; This is identical to l_cmp,
+     3                          ; but we need to have a moveable copy to deal with the video pages
+     4                          
+     5                          	SECTION    code_graphics
+     6                          
+     7                          	PUBLIC	l_graphics_cmp
+     8                          
+     9                          ; signed compare of DE and HL
+    10                          ;   carry is sign of difference [set => DE < HL]
+    11                          ;   zero is zero/non-zero
+    12                          .l_graphics_cmp
+    13  0000  7c                	ld	a,h
+    14  0001  c680              	add	$80
+    15  0003  47                	ld	b,a
+    16  0004  7a                	ld	a,d
+    17  0005  c680              	add	$80
+    18  0007  b8                	cp	b
+    19  0008  c0                	ret	nz
+    20  0009  7b                	ld	a,e
+    21  000a  bd                	cp	l
+    22  000b  c9                	ret
+    23                          

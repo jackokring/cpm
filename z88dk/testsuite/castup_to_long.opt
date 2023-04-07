@@ -1,0 +1,94 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:38 2023
+
+
+	C_LINE	0,"castup_to_long.c"
+
+	MODULE	castup_to_long_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"castup_to_long.c"
+	C_LINE	3,"castup_to_long.c"
+	C_LINE	4,"castup_to_long.c"
+	C_LINE	5,"castup_to_long.c"
+	C_LINE	6,"castup_to_long.c"
+	C_LINE	7,"castup_to_long.c"
+	C_LINE	9,"castup_to_long.c"
+	C_LINE	12,"castup_to_long.c"
+	C_LINE	14,"castup_to_long.c"
+	C_LINE	16,"castup_to_long.c"
+	SECTION	code_compiler
+
+; Function branch flags 0x00000208 __smallc __z88dk_fastcall 
+; void branch(unsigned char b)
+; parameter 'unsigned char b' at sp+2 size(1)
+	C_LINE	17,"castup_to_long.c::branch::0::0"
+._branch
+	push	hl
+	ld	a,l
+	and	a
+	jp	nz,i_2	;
+	ld	hl,(_pc)
+	ld	de,(_pc+2)
+	push	de
+	push	hl
+	ld	hl,(_pc)
+	ld	de,(_pc+2)
+	call	_effective
+	call	l_ghtonsint
+	call	l_int2long_s
+	call	l_long_add
+	ld	(_pc),hl
+	ld	(_pc+2),de
+	jp	i_3	;EOS
+.i_2
+	ld	hl,(_pc)
+	ld	de,(_pc+2)
+	push	de
+	push	hl
+	ld	hl,4	;const
+	add	hl,sp
+	ld	l,(hl)
+	ld	a,l
+	rla
+	sbc	a
+	ld	h,a
+	ld	d,a
+	ld	e,a
+	call	l_long_add
+	ld	(_pc),hl
+	ld	(_pc+2),de
+.i_3
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._pc	defs	4
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	intrinsic_swap_endian_16
+	GLOBAL	_pc
+	GLOBAL	_effective
+	GLOBAL	_branch
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

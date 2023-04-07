@@ -1,0 +1,97 @@
+/tmp/tmpXXhNHF6K.asm:
+     1                          MODULE dither_pattern_asm
+     2                          LINE 0, "dither_pattern.asm"
+dither_pattern.asm:
+                                
+     1                          ;
+     2                          ;	Dither patterns, ordered by increasing intensity (0..11)
+     3                          ;	Functions expects intensity in A and Y coordinate in C
+     4                          ;
+     5                          ;	On exit A will hold the current value for pattern
+     6                          ;
+     7                          ;	Stefano Bodrato, 18/3/2009
+     8                          ;
+     9                          ;	$Id: dither_pattern.asm $
+    10                          ;
+    11                          
+    12                          	SECTION  code_graphics
+    13                          	PUBLIC	dither_pattern
+    14                          
+    15                          .dither_pattern
+    16  0000  a7                    and	a
+    17  0001  c8                    ret	z
+    18                          
+    19  0002  fe00                  cp	11
+    20  0004  da0000                jr	c,nomax
+    21  0007  3e00                  ld	a,255
+    22  0009  c9                    ret
+    23                          .nomax
+    24  000a  17                    rla
+    25  000b  17                    rla
+    26  000c  e600                  and	@11111100
+    27  000e  6f                    ld	l,a
+    28  000f  79                    ld	a,c	; Y
+    29  0010  e600                  and	3
+    30  0012  b5                    or	l
+    31  0013  6f                    ld	l,a
+    32  0014  2600                  ld	h,0
+    33  0016  110000                ld	de,_dithpat-4
+    34  0019  19                    add	hl,de
+    35  001a  7e                    ld	a,(hl)
+    36  001b  c9                    ret
+    37                          
+    38                          
+    39                          	SECTION	rodata_graphics
+    40                          _dithpat:
+    41                          
+    42  0000  02                	defb	@00000010	; 1
+    43  0001  00                	defb	@00000000
+    44  0002  20                	defb	@00100000
+    45  0003  00                	defb	@00000000
+    46                          
+    47  0004  02                	defb	@00000010	; 2
+    48  0005  80                	defb	@10000000
+    49  0006  20                	defb	@00100000
+    50  0007  08                	defb	@00001000
+    51                          
+    52  0008  14                	defb	@00010100	; 3
+    53  0009  41                	defb	@01000001
+    54  000a  14                	defb	@00010100
+    55  000b  41                	defb	@01000001
+    56                          
+    57  000c  14                	defb	@00010100	; 4
+    58  000d  41                	defb	@01000001
+    59  000e  94                	defb	@10010100
+    60  000f  49                	defb	@01001001
+    61                          
+    62  0010  45                	defb	@01000101	; 5
+    63  0011  a8                	defb	@10101000
+    64  0012  15                	defb	@00010101
+    65  0013  aa                	defb	@10101010
+    66                          
+    67  0014  55                	defb	@01010101	; 6
+    68  0015  aa                	defb	@10101010
+    69  0016  55                	defb	@01010101
+    70  0017  aa                	defb	@10101010
+    71                          
+    72  0018  cc                	defb	@11001100	; 7
+    73  0019  33                	defb	@00110011
+    74  001a  cc                	defb	@11001100
+    75  001b  33                	defb	@00110011
+    76                          
+    77  001c  dd                	defb	@11011101	; 8
+    78  001d  aa                	defb	@10101010
+    79  001e  77                	defb	@01110111
+    80  001f  aa                	defb	@10101010
+    81                          
+    82  0020  dd                	defb	@11011101	; 9
+    83  0021  77                	defb	@01110111
+    84  0022  dd                	defb	@11011101
+    85  0023  77                	defb	@01110111
+    86                          
+    87  0024  fd                	defb	@11111101	; 10
+    88  0025  7f                	defb	@01111111
+    89  0026  df                	defb	@11011111
+    90  0027  f7                	defb	@11110111
+    91                          
+    92                          

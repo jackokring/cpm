@@ -1,0 +1,286 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:58 2023
+
+
+	C_LINE	0,"Issue_98_check_int.c"
+
+	MODULE	Issue_98_check_int_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_98_check_int.c"
+	C_LINE	3,"Issue_98_check_int.c"
+	SECTION	code_compiler
+
+; Function mul flags 0x00000200 __smallc 
+; int mul(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	4,"Issue_98_check_int.c::mul::0::0"
+._mul
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	add	hl,hl
+	ret
+
+
+	C_LINE	8,"Issue_98_check_int.c::mul::0::1"
+
+; Function mul2 flags 0x00000200 __smallc 
+; int mul2(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	9,"Issue_98_check_int.c::mul2::0::1"
+._mul2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	add	hl,hl
+	ret
+
+
+	C_LINE	12,"Issue_98_check_int.c::mul2::0::2"
+
+; Function mul3 flags 0x00000200 __smallc 
+; int mul3(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	13,"Issue_98_check_int.c::mul3::0::2"
+._mul3
+	ld	hl,(_g)
+	push	hl
+	call	l_gint4sp	;
+	pop	de
+	call	l_mult
+	ret
+
+
+	C_LINE	16,"Issue_98_check_int.c::mul3::0::3"
+
+; Function mul3_2 flags 0x00000200 __smallc 
+; int mul3_2(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	17,"Issue_98_check_int.c::mul3_2::0::3"
+._mul3_2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ex	de,hl
+	ld	hl,(_g)
+	call	l_mult
+	ret
+
+
+	C_LINE	21,"Issue_98_check_int.c::mul3_2::0::4"
+
+; Function div flags 0x00000200 __smallc 
+; int div(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	22,"Issue_98_check_int.c::div::0::4"
+._div
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	de,2
+	call	l_div
+	ret
+
+
+	C_LINE	25,"Issue_98_check_int.c::div::0::5"
+
+; Function div2 flags 0x00000200 __smallc 
+; int div2(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	26,"Issue_98_check_int.c::div2::0::5"
+._div2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	bit	7,h
+	jr	z,i_2
+	inc	hl
+.i_2
+	sra	h
+	rr	l
+	ret
+
+
+	C_LINE	29,"Issue_98_check_int.c::div2::0::6"
+
+; Function div3 flags 0x00000200 __smallc 
+; int div3(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	30,"Issue_98_check_int.c::div3::0::6"
+._div3
+	ld	hl,(_g)
+	push	hl
+	call	l_gint4sp	;
+	pop	de
+	call	l_div
+	ret
+
+
+	C_LINE	34,"Issue_98_check_int.c::div3::0::7"
+
+; Function add flags 0x00000200 __smallc 
+; int add(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	35,"Issue_98_check_int.c::add::0::7"
+._add
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	inc	hl
+	inc	hl
+	ret
+
+
+	C_LINE	38,"Issue_98_check_int.c::add::0::8"
+
+; Function add2 flags 0x00000200 __smallc 
+; int add2(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	39,"Issue_98_check_int.c::add2::0::8"
+._add2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	inc	hl
+	inc	hl
+	ret
+
+
+	C_LINE	43,"Issue_98_check_int.c::add2::0::9"
+
+; Function sub flags 0x00000200 __smallc 
+; int sub(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	44,"Issue_98_check_int.c::sub::0::9"
+._sub
+	pop	bc
+	pop	de
+	push	de
+	push	bc
+	ld	hl,2
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	47,"Issue_98_check_int.c::sub::0::10"
+
+; Function sub_1 flags 0x00000200 __smallc 
+; int sub_1(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	48,"Issue_98_check_int.c::sub_1::0::10"
+._sub_1
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	d,h
+	ld	e,l
+	call	l_mult
+	ld	de,2
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	51,"Issue_98_check_int.c::sub_1::0::11"
+
+; Function sub2 flags 0x00000200 __smallc 
+; int sub2(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	52,"Issue_98_check_int.c::sub2::0::11"
+._sub2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	dec	hl
+	dec	hl
+	ret
+
+
+	C_LINE	55,"Issue_98_check_int.c::sub2::0::12"
+
+; Function sub2_1 flags 0x00000200 __smallc 
+; int sub2_1(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	56,"Issue_98_check_int.c::sub2_1::0::12"
+._sub2_1
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	d,h
+	ld	e,l
+	call	l_mult
+	dec	hl
+	dec	hl
+	ret
+
+
+	C_LINE	59,"Issue_98_check_int.c::sub2_1::0::13"
+
+; Function sub3 flags 0x00000200 __smallc 
+; int sub3(int l)
+; parameter 'int l' at sp+2 size(2)
+	C_LINE	60,"Issue_98_check_int.c::sub3::0::13"
+._sub3
+	ld	hl,(_g)
+	push	hl
+	call	l_gint4sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._g	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_g
+	GLOBAL	_mul
+	GLOBAL	_mul2
+	GLOBAL	_mul3
+	GLOBAL	_mul3_2
+	GLOBAL	_div
+	GLOBAL	_div2
+	GLOBAL	_div3
+	GLOBAL	_add
+	GLOBAL	_add2
+	GLOBAL	_sub
+	GLOBAL	_sub_1
+	GLOBAL	_sub2
+	GLOBAL	_sub2_1
+	GLOBAL	_sub3
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

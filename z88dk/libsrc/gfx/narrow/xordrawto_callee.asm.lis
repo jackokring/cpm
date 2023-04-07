@@ -1,0 +1,56 @@
+/tmp/tmpXXc3hTQy.asm:
+     1                          MODULE xordrawto_callee_asm
+     2                          LINE 0, "xordrawto_callee.asm"
+xordrawto_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ xordrawto(int x2, int y2)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  xordrawto_callee
+     7                              PUBLIC  _xordrawto_callee
+     8                          
+     9                              PUBLIC  asm_xordrawto
+    10                          
+    11                              EXTERN    swapgfxbk
+    12                              EXTERN    __graphics_end
+    13                          
+    14                              EXTERN    Line
+    15                              EXTERN    respixel
+    16                          
+    17                              EXTERN    __gfx_coords
+    18                          
+    19                          
+    20                          .xordrawto_callee
+    21                          ._xordrawto_callee
+    22                              pop     af    ; ret addr
+    23                              pop     de    ; y2
+    24                              pop     hl
+    25                              ld      d,l    ; x2
+    26                              push    af    ; ret addr
+    27                          
+    28                          .asm_xordrawto
+    29                              ld      hl,(__gfx_coords)
+    30                              push    ix
+    31                          IF NEED_swapgfxbk = 1
+    32                              call    swapgfxbk
+    33                          ENDIF
+    34                              push    hl
+    35                              push    de
+    36                              call    respixel
+    37                              pop     de
+    38                              pop     hl
+    39                              ld      ix,respixel
+    40                              call    Line
+    41                          IF NEED_swapgfxbk
+    42                              jp      __graphics_end
+    43                          ELSE
+    44                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    45                              pop     ix
+    46                            ENDIF
+    47                              ret
+    48                          ENDIF
+    49                          
+    50                          ENDIF
+    51                          

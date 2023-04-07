@@ -1,0 +1,44 @@
+/tmp/tmpXXCSlYk0.asm:
+     1                          MODULE plot_callee_asm
+     2                          LINE 0, "plot_callee.asm"
+plot_callee.asm:
+                                
+     1                          ; ----- void  plot_callee(int x, int y)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                          
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  plot_callee
+     8                              PUBLIC  _plot_callee
+     9                              PUBLIC  asm_plot
+    10                          
+    11                              EXTERN  swapgfxbk
+    12                              EXTERN  __graphics_end
+    13                          
+    14                              EXTERN  plotpixel
+    15                              INCLUDE "graphics/grafix.inc"
+    16                          
+    17                          .plot_callee
+    18                          ._plot_callee
+    19                              pop     af    ; ret addr
+    20                              pop     hl    ; y
+    21                              pop     de    ; x
+    22                              ld      h,e
+    23                              push    af    ; ret addr
+    24                          .asm_plot
+    25                              push    ix
+    26                          IF NEED_swapgfxbk = 1
+    27                              call    swapgfxbk
+    28                          ENDIF
+    29                              call    plotpixel
+    30                          IF NEED_swapgfxbk
+    31                              jp      __graphics_end
+    32                          ELSE
+    33                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    34                              pop     ix
+    35                            ENDIF
+    36                              ret
+    37                          ENDIF
+    38                          ENDIF
+    39                          

@@ -1,0 +1,42 @@
+rr_bc.asm:
+     1                          ; Emulate 'rr bc' instruction, only carry is affected
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  90    90
+     4                          ; 8085  88    88
+     5                          ; gbz80 16    16
+     6                          ; r2ka   8     8
+     7                          ; z180  14    14
+     8                          ; z80   16    16
+     9                          ; z80n  16    16
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__rr_bc
+    13                          
+    14                          __z80asm__rr_bc:
+    15                          
+    16                            IF    __CPU_INTEL__
+    17                                  push    af
+    18                          
+    19                                  ld      a, b
+    20                                  rra
+    21                                  ld      b, a
+    22                          
+    23                                  ld      a, c
+    24                                  rra
+    25                                  ld      c, a
+    26                          
+    27                                  jr      nc, carry0
+    28                                  pop     af
+    29                                  scf
+    30                                  ret
+    31                          carry0:
+    32                                  pop     af
+    33                                  and     a
+    34                                  ret
+    35                            ELSE
+    36  0000  cb18                      rr      b
+    37  0002  cb19                      rr      c
+    38  0004  c9                        ret
+    39                            ENDIF
+    40                          
+    41                          

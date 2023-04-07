@@ -1,0 +1,861 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:47 2023
+
+
+	C_LINE	0,"Issue_1466_float16_compare.c"
+
+	MODULE	Issue_1466_float16_compare_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_1466_float16_compare.c"
+	SECTION	code_compiler
+
+; Function Yes flags 0x00000200 __smallc 
+; void Yes()
+	C_LINE	3,"Issue_1466_float16_compare.c::Yes::0::0"
+._Yes
+	ret
+
+
+	C_LINE	4,"Issue_1466_float16_compare.c::Yes::0::1"
+
+; Function No flags 0x00000200 __smallc 
+; void No()
+	C_LINE	4,"Issue_1466_float16_compare.c::No::0::1"
+._No
+	ret
+
+
+	C_LINE	6,"Issue_1466_float16_compare.c::No::0::2"
+
+; Function eq_int_c flags 0x00000200 __smallc 
+; void eq_int_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	6,"Issue_1466_float16_compare.c::eq_int_c::0::2"
+._eq_int_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_2	;
+	call	_Yes
+	ret
+.i_2
+	call	_No
+.i_3
+	ret
+
+
+	C_LINE	10,"Issue_1466_float16_compare.c::eq_int_c::0::3"
+
+; Function eq_long_c flags 0x00000200 __smallc 
+; void eq_long_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	10,"Issue_1466_float16_compare.c::eq_long_c::0::3"
+._eq_long_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_4	;
+	call	_Yes
+	ret
+.i_4
+	call	_No
+.i_5
+	ret
+
+
+	C_LINE	14,"Issue_1466_float16_compare.c::eq_long_c::0::4"
+
+; Function eq_double_c flags 0x00000200 __smallc 
+; void eq_double_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	14,"Issue_1466_float16_compare.c::eq_double_c::0::4"
+._eq_double_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_6	;
+	call	_Yes
+	ret
+.i_6
+	call	_No
+.i_7
+	ret
+
+
+	C_LINE	18,"Issue_1466_float16_compare.c::eq_double_c::0::5"
+
+; Function eq_float16_c flags 0x00000200 __smallc 
+; void eq_float16_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	18,"Issue_1466_float16_compare.c::eq_float16_c::0::5"
+._eq_float16_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_8	;
+	call	_Yes
+	ret
+.i_8
+	call	_No
+.i_9
+	ret
+
+
+	C_LINE	22,"Issue_1466_float16_compare.c::eq_float16_c::0::6"
+
+; Function eq_int_cr flags 0x00000200 __smallc 
+; void eq_int_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	22,"Issue_1466_float16_compare.c::eq_int_cr::0::6"
+._eq_int_cr
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_10	;
+	call	_Yes
+	ret
+.i_10
+	call	_No
+.i_11
+	ret
+
+
+	C_LINE	26,"Issue_1466_float16_compare.c::eq_int_cr::0::7"
+
+; Function eq_long_cr flags 0x00000200 __smallc 
+; void eq_long_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	26,"Issue_1466_float16_compare.c::eq_long_cr::0::7"
+._eq_long_cr
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_12	;
+	call	_Yes
+	ret
+.i_12
+	call	_No
+.i_13
+	ret
+
+
+	C_LINE	30,"Issue_1466_float16_compare.c::eq_long_cr::0::8"
+
+; Function eq_double_cr flags 0x00000200 __smallc 
+; void eq_double_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	30,"Issue_1466_float16_compare.c::eq_double_cr::0::8"
+._eq_double_cr
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_14	;
+	call	_Yes
+	ret
+.i_14
+	call	_No
+.i_15
+	ret
+
+
+	C_LINE	34,"Issue_1466_float16_compare.c::eq_double_cr::0::9"
+
+; Function eq_float16_cr flags 0x00000200 __smallc 
+; void eq_float16_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	34,"Issue_1466_float16_compare.c::eq_float16_cr::0::9"
+._eq_float16_cr
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_16	;
+	call	_Yes
+	ret
+.i_16
+	call	_No
+.i_17
+	ret
+
+
+	C_LINE	42,"Issue_1466_float16_compare.c::eq_float16_cr::0::10"
+
+; Function eq_int flags 0x00000200 __smallc 
+; void eq_int(_Float16 a, int b)
+; parameter 'int b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	42,"Issue_1466_float16_compare.c::eq_int::0::10"
+._eq_int
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	call	l_f16_sint2f
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_18	;
+	call	_Yes
+	ret
+.i_18
+	call	_No
+.i_19
+	ret
+
+
+	C_LINE	46,"Issue_1466_float16_compare.c::eq_int::0::11"
+
+; Function eq_long flags 0x00000200 __smallc 
+; void eq_long(_Float16 a, long b)
+; parameter 'long b' at sp+2 size(4)
+; parameter '_Float16 a' at sp+6 size(2)
+	C_LINE	46,"Issue_1466_float16_compare.c::eq_long::0::11"
+._eq_long
+	ld	hl,6	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	call	l_glong
+	call	l_f16_slong2f
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_20	;
+	call	_Yes
+	ret
+.i_20
+	call	_No
+.i_21
+	ret
+
+
+	C_LINE	50,"Issue_1466_float16_compare.c::eq_long::0::12"
+
+; Function eq_double flags 0x00000200 __smallc 
+; void eq_double(_Float16 a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter '_Float16 a' at sp+8 size(2)
+	C_LINE	50,"Issue_1466_float16_compare.c::eq_double::0::12"
+._eq_double
+	ld	hl,8	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_f48_f16tof
+	call	deq
+	ld	a,h
+	or	l
+	jp	z,i_22	;
+	call	_Yes
+	ret
+.i_22
+	call	_No
+.i_23
+	ret
+
+
+	C_LINE	54,"Issue_1466_float16_compare.c::eq_double::0::13"
+
+; Function eq_float16 flags 0x00000200 __smallc 
+; void eq_float16(_Float16 a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	54,"Issue_1466_float16_compare.c::eq_float16::0::13"
+._eq_float16
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_24	;
+	call	_Yes
+	ret
+.i_24
+	call	_No
+.i_25
+	ret
+
+
+	C_LINE	58,"Issue_1466_float16_compare.c::eq_float16::0::14"
+
+; Function eq_int_r flags 0x00000200 __smallc 
+; void eq_int_r(_Float16 a, int b)
+; parameter 'int b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	58,"Issue_1466_float16_compare.c::eq_int_r::0::14"
+._eq_int_r
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	ex	(sp),hl
+	call	l_f16_sint2f
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_26	;
+	call	_Yes
+	ret
+.i_26
+	call	_No
+.i_27
+	ret
+
+
+	C_LINE	62,"Issue_1466_float16_compare.c::eq_int_r::0::15"
+
+; Function eq_long_r flags 0x00000200 __smallc 
+; void eq_long_r(_Float16 a, long b)
+; parameter 'long b' at sp+2 size(4)
+; parameter '_Float16 a' at sp+6 size(2)
+	C_LINE	62,"Issue_1466_float16_compare.c::eq_long_r::0::15"
+._eq_long_r
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_glong2sp
+	ld	hl,10	;const
+	add	hl,sp
+	call	l_gint	;
+	pop	de
+	ex	(sp),hl
+	ex	de,hl
+	call	l_f16_slong2f
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_28	;
+	call	_Yes
+	ret
+.i_28
+	call	_No
+.i_29
+	ret
+
+
+	C_LINE	66,"Issue_1466_float16_compare.c::eq_long_r::0::16"
+
+; Function eq_double_r flags 0x00000200 __smallc 
+; void eq_double_r(_Float16 a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter '_Float16 a' at sp+8 size(2)
+	C_LINE	66,"Issue_1466_float16_compare.c::eq_double_r::0::16"
+._eq_double_r
+	ld	hl,2	;const
+	add	hl,sp
+	call	dldpsh
+	ld	hl,14	;const
+	add	hl,sp
+	call	l_gint	;
+	call	l_f48_f16tof
+	call	deq
+	ld	a,h
+	or	l
+	jp	z,i_30	;
+	call	_Yes
+	ret
+.i_30
+	call	_No
+.i_31
+	ret
+
+
+	C_LINE	70,"Issue_1466_float16_compare.c::eq_double_r::0::17"
+
+; Function eq_float16_r flags 0x00000200 __smallc 
+; void eq_float16_r(_Float16 a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	70,"Issue_1466_float16_compare.c::eq_float16_r::0::17"
+._eq_float16_r
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	call	l_f16_eq
+	ld	a,h
+	or	l
+	jp	z,i_32	;
+	call	_Yes
+	ret
+.i_32
+	call	_No
+.i_33
+	ret
+
+
+	C_LINE	77,"Issue_1466_float16_compare.c::eq_float16_r::0::18"
+
+; Function lt_int_c flags 0x00000200 __smallc 
+; void lt_int_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	77,"Issue_1466_float16_compare.c::lt_int_c::0::18"
+._lt_int_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_34	;
+	call	_Yes
+	ret
+.i_34
+	call	_No
+.i_35
+	ret
+
+
+	C_LINE	81,"Issue_1466_float16_compare.c::lt_int_c::0::19"
+
+; Function lt_long_c flags 0x00000200 __smallc 
+; void lt_long_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	81,"Issue_1466_float16_compare.c::lt_long_c::0::19"
+._lt_long_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_36	;
+	call	_Yes
+	ret
+.i_36
+	call	_No
+.i_37
+	ret
+
+
+	C_LINE	85,"Issue_1466_float16_compare.c::lt_long_c::0::20"
+
+; Function lt_double_c flags 0x00000200 __smallc 
+; void lt_double_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	85,"Issue_1466_float16_compare.c::lt_double_c::0::20"
+._lt_double_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_38	;
+	call	_Yes
+	ret
+.i_38
+	call	_No
+.i_39
+	ret
+
+
+	C_LINE	89,"Issue_1466_float16_compare.c::lt_double_c::0::21"
+
+; Function lt_float16_c flags 0x00000200 __smallc 
+; void lt_float16_c(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	89,"Issue_1466_float16_compare.c::lt_float16_c::0::21"
+._lt_float16_c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	ld	hl,15360	;const
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_40	;
+	call	_Yes
+	ret
+.i_40
+	call	_No
+.i_41
+	ret
+
+
+	C_LINE	93,"Issue_1466_float16_compare.c::lt_float16_c::0::22"
+
+; Function lt_int_cr flags 0x00000200 __smallc 
+; void lt_int_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	93,"Issue_1466_float16_compare.c::lt_int_cr::0::22"
+._lt_int_cr
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,15360	;const
+	push	bc
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_42	;
+	call	_Yes
+	ret
+.i_42
+	call	_No
+.i_43
+	ret
+
+
+	C_LINE	97,"Issue_1466_float16_compare.c::lt_int_cr::0::23"
+
+; Function lt_long_cr flags 0x00000200 __smallc 
+; void lt_long_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	97,"Issue_1466_float16_compare.c::lt_long_cr::0::23"
+._lt_long_cr
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,15360	;const
+	push	bc
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_44	;
+	call	_Yes
+	ret
+.i_44
+	call	_No
+.i_45
+	ret
+
+
+	C_LINE	101,"Issue_1466_float16_compare.c::lt_long_cr::0::24"
+
+; Function lt_double_cr flags 0x00000200 __smallc 
+; void lt_double_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	101,"Issue_1466_float16_compare.c::lt_double_cr::0::24"
+._lt_double_cr
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,15360	;const
+	push	bc
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_46	;
+	call	_Yes
+	ret
+.i_46
+	call	_No
+.i_47
+	ret
+
+
+	C_LINE	105,"Issue_1466_float16_compare.c::lt_double_cr::0::25"
+
+; Function lt_float16_cr flags 0x00000200 __smallc 
+; void lt_float16_cr(_Float16 a)
+; parameter '_Float16 a' at sp+2 size(2)
+	C_LINE	105,"Issue_1466_float16_compare.c::lt_float16_cr::0::25"
+._lt_float16_cr
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_gint
+	ld	bc,15360	;const
+	push	bc
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_48	;
+	call	_Yes
+	ret
+.i_48
+	call	_No
+.i_49
+	ret
+
+
+	C_LINE	113,"Issue_1466_float16_compare.c::lt_float16_cr::0::26"
+
+; Function lt_int flags 0x00000200 __smallc 
+; void lt_int(_Float16 a, int b)
+; parameter 'int b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	113,"Issue_1466_float16_compare.c::lt_int::0::26"
+._lt_int
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	call	l_f16_sint2f
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_50	;
+	call	_Yes
+	ret
+.i_50
+	call	_No
+.i_51
+	ret
+
+
+	C_LINE	117,"Issue_1466_float16_compare.c::lt_int::0::27"
+
+; Function lt_long flags 0x00000200 __smallc 
+; void lt_long(_Float16 a, long b)
+; parameter 'long b' at sp+2 size(4)
+; parameter '_Float16 a' at sp+6 size(2)
+	C_LINE	117,"Issue_1466_float16_compare.c::lt_long::0::27"
+._lt_long
+	ld	hl,6	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	call	l_glong
+	call	l_f16_slong2f
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_52	;
+	call	_Yes
+	ret
+.i_52
+	call	_No
+.i_53
+	ret
+
+
+	C_LINE	121,"Issue_1466_float16_compare.c::lt_long::0::28"
+
+; Function lt_double flags 0x00000200 __smallc 
+; void lt_double(_Float16 a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter '_Float16 a' at sp+8 size(2)
+	C_LINE	121,"Issue_1466_float16_compare.c::lt_double::0::28"
+._lt_double
+	ld	hl,8	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	call	dload
+	call	dpush2
+	pop	hl
+	call	l_f48_f16tof
+	call	dswap
+	call	dlt
+	ld	a,h
+	or	l
+	jp	z,i_54	;
+	call	_Yes
+	ret
+.i_54
+	call	_No
+.i_55
+	ret
+
+
+	C_LINE	125,"Issue_1466_float16_compare.c::lt_double::0::29"
+
+; Function lt_float16 flags 0x00000200 __smallc 
+; void lt_float16(_Float16 a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	125,"Issue_1466_float16_compare.c::lt_float16::0::29"
+._lt_float16
+	ld	hl,4	;const
+	call	l_gintspsp	;
+	call	l_gint4sp	;
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_56	;
+	call	_Yes
+	ret
+.i_56
+	call	_No
+.i_57
+	ret
+
+
+	C_LINE	129,"Issue_1466_float16_compare.c::lt_float16::0::30"
+
+; Function lt_int_r flags 0x00000200 __smallc 
+; void lt_int_r(_Float16 a, int b)
+; parameter 'int b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	129,"Issue_1466_float16_compare.c::lt_int_r::0::30"
+._lt_int_r
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	ex	(sp),hl
+	call	l_f16_sint2f
+	ex	(sp),hl
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_58	;
+	call	_Yes
+	ret
+.i_58
+	call	_No
+.i_59
+	ret
+
+
+	C_LINE	133,"Issue_1466_float16_compare.c::lt_int_r::0::31"
+
+; Function lt_long_r flags 0x00000200 __smallc 
+; void lt_long_r(_Float16 a, long b)
+; parameter 'long b' at sp+2 size(4)
+; parameter '_Float16 a' at sp+6 size(2)
+	C_LINE	133,"Issue_1466_float16_compare.c::lt_long_r::0::31"
+._lt_long_r
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_glong2sp
+	ld	hl,10	;const
+	add	hl,sp
+	call	l_gint	;
+	pop	de
+	ex	(sp),hl
+	ex	de,hl
+	call	l_f16_slong2f
+	ex	(sp),hl
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_60	;
+	call	_Yes
+	ret
+.i_60
+	call	_No
+.i_61
+	ret
+
+
+	C_LINE	137,"Issue_1466_float16_compare.c::lt_long_r::0::32"
+
+; Function lt_double_r flags 0x00000200 __smallc 
+; void lt_double_r(_Float16 a, double b)
+; parameter 'double b' at sp+2 size(6)
+; parameter '_Float16 a' at sp+8 size(2)
+	C_LINE	137,"Issue_1466_float16_compare.c::lt_double_r::0::32"
+._lt_double_r
+	ld	hl,2	;const
+	add	hl,sp
+	call	dldpsh
+	ld	hl,14	;const
+	add	hl,sp
+	call	l_gint	;
+	call	l_f48_f16tof
+	call	dlt
+	ld	a,h
+	or	l
+	jp	z,i_62	;
+	call	_Yes
+	ret
+.i_62
+	call	_No
+.i_63
+	ret
+
+
+	C_LINE	141,"Issue_1466_float16_compare.c::lt_double_r::0::33"
+
+; Function lt_float16_r flags 0x00000200 __smallc 
+; void lt_float16_r(_Float16 a, _Float16 b)
+; parameter '_Float16 b' at sp+2 size(2)
+; parameter '_Float16 a' at sp+4 size(2)
+	C_LINE	141,"Issue_1466_float16_compare.c::lt_float16_r::0::33"
+._lt_float16_r
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	call	l_f16_lt
+	ld	a,h
+	or	l
+	jp	z,i_64	;
+	call	_Yes
+	ret
+.i_64
+	call	_No
+.i_65
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_Yes
+	GLOBAL	_No
+	GLOBAL	_eq_int_c
+	GLOBAL	_eq_long_c
+	GLOBAL	_eq_double_c
+	GLOBAL	_eq_float16_c
+	GLOBAL	_eq_int_cr
+	GLOBAL	_eq_long_cr
+	GLOBAL	_eq_double_cr
+	GLOBAL	_eq_float16_cr
+	GLOBAL	_eq_int
+	GLOBAL	_eq_long
+	GLOBAL	_eq_double
+	GLOBAL	_eq_float16
+	GLOBAL	_eq_int_r
+	GLOBAL	_eq_long_r
+	GLOBAL	_eq_double_r
+	GLOBAL	_eq_float16_r
+	GLOBAL	_lt_int_c
+	GLOBAL	_lt_long_c
+	GLOBAL	_lt_double_c
+	GLOBAL	_lt_float16_c
+	GLOBAL	_lt_int_cr
+	GLOBAL	_lt_long_cr
+	GLOBAL	_lt_double_cr
+	GLOBAL	_lt_float16_cr
+	GLOBAL	_lt_int
+	GLOBAL	_lt_long
+	GLOBAL	_lt_double
+	GLOBAL	_lt_float16
+	GLOBAL	_lt_int_r
+	GLOBAL	_lt_long_r
+	GLOBAL	_lt_double_r
+	GLOBAL	_lt_float16_r
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

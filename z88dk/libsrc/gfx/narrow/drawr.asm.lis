@@ -1,0 +1,28 @@
+/tmp/tmpXXZAQfqi.asm:
+     1                          MODULE drawr_asm
+     2                          LINE 0, "drawr.asm"
+drawr.asm:
+                                
+     1                          ; ----- void  drawr(int x, int y)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  drawr
+     8                              PUBLIC  _drawr
+     9                          
+    10                              EXTERN  asm_drawr
+    11                          
+    12                          
+    13                          .drawr
+    14                          ._drawr
+    15                              pop     af    ; ret addr
+    16                              pop     de    ; y
+    17                              pop     hl    ; x
+    18                              push    hl
+    19                              push    de
+    20                              push    af    ; ret addr
+    21                              jp      asm_drawr
+    22                          ENDIF
+    23                          

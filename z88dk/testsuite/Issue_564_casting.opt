@@ -1,0 +1,122 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:55 2023
+
+
+	C_LINE	0,"Issue_564_casting.c"
+
+	MODULE	Issue_564_casting_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"Issue_564_casting.c"
+	C_LINE	8,"Issue_564_casting.c"
+	C_LINE	12,"Issue_564_casting.c"
+	C_LINE	15,"Issue_564_casting.c"
+	SECTION	code_compiler
+
+; Function func3 flags 0x00000200 __smallc 
+; long func3(struct 0__anonstruct_8_1 Item* item)
+; parameter 'struct 0__anonstruct_8_1 Item* item' at sp+2 size(2)
+	C_LINE	16,"Issue_564_casting.c::func3::0::0"
+._func3
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	call	l_gint	;
+	call	l_int2long_s
+	ret
+
+
+	C_LINE	20,"Issue_564_casting.c::func3::0::1"
+
+; Function func2 flags 0x00000200 __smallc 
+; void func2(int val)
+; parameter 'int val' at sp+2 size(2)
+	C_LINE	21,"Issue_564_casting.c::func2::0::1"
+._func2
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	call	l_gint2	;
+	push	hl
+	call	_value
+	pop	bc
+	ret
+
+
+	C_LINE	25,"Issue_564_casting.c::func2::0::2"
+
+; Function func flags 0x00000200 __smallc 
+; void func(struct 0__anonstruct_8_1 Item* itemptr)
+; parameter 'struct 0__anonstruct_8_1 Item* itemptr' at sp+2 size(2)
+	C_LINE	26,"Issue_564_casting.c::func::0::2"
+._func
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	call	l_gint2	;
+	push	hl
+	call	_value
+	pop	bc
+	ret
+
+
+	C_LINE	31,"Issue_564_casting.c::func::0::3"
+	C_LINE	33,"Issue_564_casting.c::func::0::3"
+
+; Function func4 flags 0x00000200 __smallc 
+; void func4()
+	C_LINE	34,"Issue_564_casting.c::func4::0::3"
+._func4
+	ld	hl,(_item+2)
+	push	hl
+	call	_value
+	pop	bc
+	ret
+
+
+	C_LINE	38,"Issue_564_casting.c::func4::0::4"
+
+; Function func5 flags 0x00000200 __smallc 
+; long func5()
+	C_LINE	39,"Issue_564_casting.c::func5::0::4"
+._func5
+	ld	hl,(_item)
+	call	l_int2long_s
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._item	defs	6
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_value
+	GLOBAL	_func3
+	GLOBAL	_func2
+	GLOBAL	_func
+	GLOBAL	_item
+	GLOBAL	_func4
+	GLOBAL	_func5
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

@@ -1,0 +1,14 @@
+/tmp/tmpXXEJvs7Q.asm:
+     1                          MODULE putsprite2_asm
+     2                          LINE 0, "putsprite2.asm"
+putsprite2.asm:
+                                
+     1                          
+     2                          
+     3                          	PUBLIC putsprite
+     4                          	PUBLIC _putsprite
+     5                                  EXTERN __generic_putsprite
+     6                          
+     7                          	defc putsprite = __generic_putsprite
+     8                          	defc _putsprite = putsprite
+     9                          

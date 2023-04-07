@@ -1,0 +1,175 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:48 2023
+
+
+	C_LINE	0,"Issue_1662_static_ptrs.c"
+
+	MODULE	Issue_1662_static_ptrs_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_1662_static_ptrs.c"
+	C_LINE	7,"Issue_1662_static_ptrs.c"
+	C_LINE	8,"Issue_1662_static_ptrs.c"
+	C_LINE	9,"Issue_1662_static_ptrs.c"
+	C_LINE	10,"Issue_1662_static_ptrs.c"
+	C_LINE	13,"Issue_1662_static_ptrs.c"
+	SECTION	code_compiler
+
+; Function iinc flags 0x00000200 __smallc 
+; int iinc()
+	C_LINE	13,"Issue_1662_static_ptrs.c::iinc::0::0"
+._iinc
+	ld	hl,(_pint)
+	inc	hl
+	inc	hl
+	ld	(_pint),hl
+	dec	hl
+	dec	hl
+	call	l_gint	;
+	ret
+
+
+	C_LINE	17,"Issue_1662_static_ptrs.c::iinc::0::1"
+
+; Function linc flags 0x00000200 __smallc 
+; long linc()
+	C_LINE	17,"Issue_1662_static_ptrs.c::linc::0::1"
+._linc
+	ld	hl,(_plong)
+	ld	bc,4
+	add	hl,bc
+	ld	(_plong),hl
+	ld	bc,-4
+	add	hl,bc
+	call	l_glong
+	ret
+
+
+	C_LINE	21,"Issue_1662_static_ptrs.c::linc::0::2"
+
+; Function llinc flags 0x00000200 __smallc 
+; long long llinc()
+; longlong stuffed pointer at sp+2 size(2)
+	C_LINE	21,"Issue_1662_static_ptrs.c::llinc::0::2"
+._llinc
+	ld	hl,(_plonglong)
+	ld	bc,8
+	add	hl,bc
+	ld	(_plonglong),hl
+	ld	bc,-8
+	add	hl,bc
+	call	l_i64_load
+	pop	de
+	pop	hl
+	push	hl
+	push	de
+	call	l_i64_copy
+	ret
+
+
+	C_LINE	25,"Issue_1662_static_ptrs.c::llinc::0::3"
+
+; Function stinc flags 0x00000200 __smallc 
+; struct x * stinc()
+	C_LINE	25,"Issue_1662_static_ptrs.c::stinc::0::3"
+._stinc
+	ld	hl,(_pstr)
+	ld	bc,10
+	add	hl,bc
+	ld	(_pstr),hl
+	ld	bc,-10
+	add	hl,bc
+	ret
+
+
+	C_LINE	29,"Issue_1662_static_ptrs.c::stinc::0::4"
+
+; Function idec flags 0x00000200 __smallc 
+; int idec()
+	C_LINE	29,"Issue_1662_static_ptrs.c::idec::0::4"
+._idec
+	ld	hl,(_pint)
+	dec	hl
+	dec	hl
+	ld	(_pint),hl
+	call	l_gint2	;
+	ret
+
+
+	C_LINE	34,"Issue_1662_static_ptrs.c::idec::0::5"
+
+; Function ldec flags 0x00000200 __smallc 
+; long ldec()
+	C_LINE	34,"Issue_1662_static_ptrs.c::ldec::0::5"
+._ldec
+	ld	hl,(_plong)
+	ld	bc,-4
+	add	hl,bc
+	ld	(_plong),hl
+	ld	bc,4
+	add	hl,bc
+	call	l_glong
+	ret
+
+
+	C_LINE	38,"Issue_1662_static_ptrs.c::ldec::0::6"
+
+; Function lldec flags 0x00000200 __smallc 
+; long long lldec()
+; longlong stuffed pointer at sp+2 size(2)
+	C_LINE	38,"Issue_1662_static_ptrs.c::lldec::0::6"
+._lldec
+	ld	hl,(_plonglong)
+	ld	bc,-8
+	add	hl,bc
+	ld	(_plonglong),hl
+	ld	bc,8
+	add	hl,bc
+	call	l_i64_load
+	pop	de
+	pop	hl
+	push	hl
+	push	de
+	call	l_i64_copy
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._pint	defs	2
+._plong	defs	2
+._plonglong	defs	2
+._pstr	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_pint
+	GLOBAL	_plong
+	GLOBAL	_plonglong
+	GLOBAL	_pstr
+	GLOBAL	_iinc
+	GLOBAL	_linc
+	GLOBAL	_llinc
+	GLOBAL	_stinc
+	GLOBAL	_idec
+	GLOBAL	_ldec
+	GLOBAL	_lldec
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

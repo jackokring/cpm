@@ -1,0 +1,57 @@
+/tmp/tmpXXyxR0EA.asm:
+     1                          MODULE stencil_add_side_asm
+     2                          LINE 0, "stencil_add_side.asm"
+stencil_add_side.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Written around the Interlogic Standard Library
+     5                          ;
+     6                          ;    Compute the line coordinates and put into a vector
+     7                          ;    Basic concept by Rafael de Oliveira Jannone (calculate_side)
+     8                          ;
+     9                          ;     Stefano Bodrato - 13/3/2009
+    10                          ;
+    11                          ;
+    12                          ;    $Id: stencil_add_side.asm,v 1.7 2016-04-22 20:29:52 dom Exp $
+    13                          ;
+    14                          
+    15                          ;; void stencil_add_side(int x1, int y1, int x2, int y2, unsigned char *stencil)
+    16                          
+    17                          
+    18                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    19                              SECTION    code_graphics
+    20                                  PUBLIC    stencil_add_side
+    21                                  PUBLIC    _stencil_add_side
+    22                          
+    23                                  EXTERN    Line
+    24                                  EXTERN    stencil_add_pixel
+    25                                  ;EXTERN    swapgfxbk
+    26                                  ;EXTERN    swapgfxbk1
+    27                              ;EXTERN    __graphics_end
+    28                                  EXTERN    stencil_ptr
+    29                          
+    30                          .stencil_add_side
+    31                          ._stencil_add_side
+    32                              push    ix
+    33                              ld    ix,2
+    34                              add    ix,sp
+    35                          
+    36                              ld    l,(ix+2)    ;pointer to stencil
+    37                              ld    h,(ix+3)
+    38                              ld    (stencil_ptr),hl
+    39                          
+    40                              ld    l,(ix+8)    ;y0
+    41                              ld    h,(ix+10)    ;x0
+    42                              ld    e,(ix+4)    ;y1
+    43                              ld    d,(ix+6)    ;x1
+    44                          
+    45                              ;call    swapgfxbk
+    46                                  ld    ix,stencil_add_pixel
+    47                                  call    Line
+    48                                  ;jp    __graphics_end
+    49                              pop ix
+    50                              ret
+    51                          ENDIF
+    52                          

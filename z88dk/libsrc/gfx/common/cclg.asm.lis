@@ -1,0 +1,27 @@
+/tmp/tmpXXEBdvZU.asm:
+     1                          MODULE cclg_asm
+     2                          LINE 0, "cclg.asm"
+cclg.asm:
+                                
+     1                          ;
+     2                          ;      Colour graphics routines
+     3                          ;
+     4                          ;      cls ()  -- clear screen
+     5                          ;
+     6                          ;      Stefano Bodrato - 2018
+     7                          ;
+     8                          ;
+     9                          ;      $Id: cclg.asm $
+    10                          ;
+    11                          
+    12                              	SECTION	code_graphics
+    13                              	PUBLIC    cclg
+    14                                  PUBLIC    _cclg
+    15                          
+    16                          	EXTERN	clg
+    17                          
+    18                          .cclg
+    19                          ._cclg
+    20                          
+    21  0000  c30000            	jp clg
+    22                          

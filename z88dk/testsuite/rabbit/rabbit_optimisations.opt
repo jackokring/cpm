@@ -1,0 +1,292 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:02 2023
+
+
+	C_LINE	0,"rabbit/rabbit_optimisations.c"
+
+	MODULE	rabbit_rabbit_optimisations_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"rabbit/rabbit_optimisations.c"
+	SECTION	code_compiler
+
+; Function getviapointer flags 0x00000200 __smallc 
+; int getviapointer(int * x)
+; parameter 'int * x' at sp+2 size(2)
+	C_LINE	4,"rabbit/rabbit_optimisations.c::getviapointer::0::0"
+._getviapointer
+	ld	hl,(sp+2)
+	ld	hl,(hl+0)
+	ret
+
+
+	C_LINE	8,"rabbit/rabbit_optimisations.c::getviapointer::0::1"
+
+; Function mult flags 0x00000200 __smallc 
+; int mult()
+	C_LINE	9,"rabbit/rabbit_optimisations.c::mult::0::1"
+._mult
+	add	sp,-4
+	ld	hl,(sp+2)
+	push	hl
+	ld	hl,(sp+2)
+	pop	de
+	call	l_mult
+	add	sp,4
+	ret
+
+
+	C_LINE	15,"rabbit/rabbit_optimisations.c::mult::0::2"
+
+; Function negate flags 0x00000200 __smallc 
+; int negate(int a)
+; parameter 'int a' at sp+2 size(2)
+	C_LINE	16,"rabbit/rabbit_optimisations.c::negate::0::2"
+._negate
+	ld	hl,(sp+2)
+	call	l_neg
+	ret
+
+
+	C_LINE	20,"rabbit/rabbit_optimisations.c::negate::0::3"
+
+; Function or flags 0x00000200 __smallc 
+; int or(int a, int b)
+; parameter 'int b' at sp+2 size(2)
+; parameter 'int a' at sp+4 size(2)
+	C_LINE	21,"rabbit/rabbit_optimisations.c::or::0::3"
+._or
+	ld	hl,(sp+4)
+	ex	de,hl
+	ld	hl,(sp+2)
+	or	hl,de
+	push	hl
+	ld	hl,(sp+6)
+	ld	a,l
+	or	255
+	ld	l,a
+	ld	(sp+0),hl
+	ld	hl,(sp+6)
+	ld	de,511
+	or	hl,de
+	add	sp,2
+	ret
+
+
+	C_LINE	28,"rabbit/rabbit_optimisations.c::or::0::4"
+
+; Function and flags 0x00000200 __smallc 
+; int and(int a, int b)
+; parameter 'int b' at sp+2 size(2)
+; parameter 'int a' at sp+4 size(2)
+	C_LINE	29,"rabbit/rabbit_optimisations.c::and::0::4"
+._and
+	ld	hl,(sp+4)
+	ex	de,hl
+	ld	hl,(sp+2)
+	and	hl,de
+	push	hl
+	ld	hl,(sp+6)
+	ld	h,0
+	ld	(sp+0),hl
+	ld	hl,(sp+6)
+	ld	de,511
+	and	hl,de
+	add	sp,2
+	ret
+
+
+	C_LINE	36,"rabbit/rabbit_optimisations.c::and::0::5"
+
+; Function rshift flags 0x00000200 __smallc 
+; int rshift(unsigned int a)
+; parameter 'unsigned int a' at sp+2 size(2)
+	C_LINE	37,"rabbit/rabbit_optimisations.c::rshift::0::5"
+._rshift
+	ld	hl,(sp+2)
+	and	a
+	rr	hl
+	ret
+
+
+	C_LINE	40,"rabbit/rabbit_optimisations.c::rshift::0::6"
+
+; Function lshift flags 0x00000200 __smallc 
+; int lshift(unsigned int a)
+; parameter 'unsigned int a' at sp+2 size(2)
+	C_LINE	41,"rabbit/rabbit_optimisations.c::lshift::0::6"
+._lshift
+	ld	hl,(sp+2)
+	add	hl,hl
+	ret
+
+
+	C_LINE	45,"rabbit/rabbit_optimisations.c::lshift::0::7"
+
+; Function lshift_long flags 0x00000200 __smallc 
+; int lshift_long(unsigned long l)
+; parameter 'unsigned long l' at sp+2 size(4)
+	C_LINE	46,"rabbit/rabbit_optimisations.c::lshift_long::0::7"
+._lshift_long
+	ld	hl,(sp+4)
+	ex	de,hl
+	ld	hl,(sp+2)
+	add	hl,hl
+	rl	de
+	push	de
+	push	hl
+	bool	hl
+	rr	hl
+	add	hl,sp
+	push	hl
+	ld	hl,(sp+10)
+	ex	de,hl
+	ld	hl,(sp+8)
+	add	hl,hl
+	rl	de
+	add	hl,hl
+	rl	de
+	pop	bc
+	call	l_plong
+	bool	hl
+	rr	hl
+	add	hl,sp
+	push	hl
+	ld	hl,(sp+10)
+	ex	de,hl
+	ld	hl,(sp+8)
+	ld	a,3
+	call	l_long_aslo
+	pop	bc
+	call	l_plong
+	bool	hl
+	rr	hl
+	add	sp,4
+	ret
+
+
+	C_LINE	53,"rabbit/rabbit_optimisations.c::lshift_long::0::8"
+
+; Function addition flags 0x00000200 __smallc 
+; int addition(int a)
+; parameter 'int a' at sp+2 size(2)
+	C_LINE	54,"rabbit/rabbit_optimisations.c::addition::0::8"
+._addition
+	ld	hl,(sp+2)
+	ld	bc,10
+	add	hl,bc
+	push	hl
+	call	_mult
+	ld	hl,(sp+0)
+	add	sp,2
+	ret
+
+
+	C_LINE	62,"rabbit/rabbit_optimisations.c::addition::0::9"
+
+; Function subtract flags 0x00000200 __smallc 
+; int subtract(int a)
+; parameter 'int a' at sp+2 size(2)
+	C_LINE	63,"rabbit/rabbit_optimisations.c::subtract::0::9"
+._subtract
+	ld	hl,(sp+2)
+	ld	bc,-10
+	add	hl,bc
+	push	hl
+	call	_mult
+	ld	hl,(sp+0)
+	add	sp,2
+	ret
+
+
+	C_LINE	72,"rabbit/rabbit_optimisations.c::subtract::0::10"
+
+; Function longops flags 0x00000200 __smallc 
+; long longops(long l)
+; parameter 'long l' at sp+2 size(4)
+	C_LINE	73,"rabbit/rabbit_optimisations.c::longops::0::10"
+._longops
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	call	l_glong
+	call	l_inclong
+	pop	bc
+	call	l_plong
+	call	l_declong
+	ret
+
+
+	C_LINE	77,"rabbit/rabbit_optimisations.c::longops::0::11"
+
+; Function longadd flags 0x00000200 __smallc 
+; long longadd(long l)
+; parameter 'long l' at sp+2 size(4)
+	C_LINE	78,"rabbit/rabbit_optimisations.c::longadd::0::11"
+._longadd
+	ld	hl,(sp+4)
+	ex	de,hl
+	ld	hl,(sp+2)
+	ld	bc,10
+	add	hl,bc
+	jr	nc,ASMPC+3
+	inc	de
+	ret
+
+
+	C_LINE	83,"rabbit/rabbit_optimisations.c::longadd::0::12"
+	C_LINE	85,"rabbit/rabbit_optimisations.c::longadd::0::12"
+
+; Function pushinstr flags 0x00000200 __smallc 
+; long pushinstr()
+	C_LINE	86,"rabbit/rabbit_optimisations.c::pushinstr::0::12"
+._pushinstr
+	ld	hl,1	;const
+	push	hl
+	ld	l,2
+	push	hl
+	ld	hl,3	;const
+	push	hl
+	call	_anotherfunc
+	add	sp,6
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_getviapointer
+	GLOBAL	_mult
+	GLOBAL	_negate
+	GLOBAL	_or
+	GLOBAL	_and
+	GLOBAL	_rshift
+	GLOBAL	_lshift
+	GLOBAL	_lshift_long
+	GLOBAL	_addition
+	GLOBAL	_subtract
+	GLOBAL	_longops
+	GLOBAL	_longadd
+	GLOBAL	_anotherfunc
+	GLOBAL	_pushinstr
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

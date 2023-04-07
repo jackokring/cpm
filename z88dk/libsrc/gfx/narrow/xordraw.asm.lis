@@ -1,0 +1,29 @@
+/tmp/tmpXX6BUvjG.asm:
+     1                          MODULE xordraw_asm
+     2                          LINE 0, "xordraw.asm"
+xordraw.asm:
+                                
+     1                          ; ----- void  xordraw(int x, int y, int x2, int y2)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  xordraw
+     8                              PUBLIC  _xordraw
+     9                          
+    10                              EXTERN  asm_xordraw
+    11                          .xordraw
+    12                          ._xordraw
+    13                              push    ix
+    14                              ld      ix,2
+    15                              add     ix,sp
+    16                              ld      l,(ix+6)    ;y0
+    17                              ld      h,(ix+8)    ;x0
+    18                              ld      e,(ix+2)    ;y1
+    19                              ld      d,(ix+4)    ;x1
+    20                              pop     ix
+    21                              jp      asm_xordraw
+    22                          
+    23                          ENDIF
+    24                          

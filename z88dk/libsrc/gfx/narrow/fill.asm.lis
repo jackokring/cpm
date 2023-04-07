@@ -1,0 +1,49 @@
+/tmp/tmpXX8gYzHh.asm:
+     1                          MODULE fill_asm
+     2                          LINE 0, "fill.asm"
+fill.asm:
+                                
+     1                          ;
+     2                          ;     Z88DK Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Fill stub - Stefano Bodrato 11/6/2000
+     5                          ;
+     6                          ;
+     7                          ;    $Id: fill.asm,v 1.5 2016-04-13 21:09:09 dom Exp $
+     8                          ;
+     9                          
+    10                          
+    11                          ;Usage: fill(struct *pixel)
+    12                          
+    13                          
+    14                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    15                              SECTION    code_graphics
+    16                              PUBLIC    fill
+    17                              PUBLIC    _fill
+    18                          
+    19                              EXTERN    do_fill
+    20                              EXTERN    swapgfxbk
+    21                              EXTERN     __graphics_end
+    22                              INCLUDE "graphics/grafix.inc"
+    23                          
+    24                          .fill
+    25                          ._fill
+    26                              push    ix
+    27                              ld    ix,2
+    28                              add    ix,sp
+    29                              ld    d,(ix+2)    ;y
+    30                              ld    e,(ix+4)    ;x
+    31                          IF NEED_swapgfxbk = 1
+    32                              call    swapgfxbk
+    33                          ENDIF
+    34                              call    do_fill
+    35                           IF NEED_swapgfxbk
+    36                              jp      __graphics_end
+    37                           ELSE
+    38                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    39                              pop     ix
+    40                            ENDIF
+    41                              ret
+    42                           ENDIF
+    43                          ENDIF
+    44                          

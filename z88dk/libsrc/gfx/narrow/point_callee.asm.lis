@@ -1,0 +1,53 @@
+/tmp/tmpXXDzhbWR.asm:
+     1                          MODULE point_callee_asm
+     2                          LINE 0, "point_callee.asm"
+point_callee.asm:
+                                
+     1                          ; ----- int point_callee(int x, int y)
+     2                          ;Result is true/false
+     3                          
+     4                          
+     5                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     6                          
+     7                          
+     8                              SECTION code_graphics
+     9                          
+    10                              PUBLIC  point_callee
+    11                              PUBLIC  _point_callee
+    12                              PUBLIC  asm_point
+    13                          
+    14                              EXTERN  swapgfxbk
+    15                              EXTERN  swapgfxbk1
+    16                          
+    17                              EXTERN  pointxy
+    18                              INCLUDE "graphics/grafix.inc"
+    19                          
+    20                          
+    21                          .point_callee
+    22                          ._point_callee
+    23                          
+    24                              pop     af    ; ret addr
+    25                              pop     hl    ; y
+    26                              pop     de
+    27                              ld      h,e    ; x
+    28                              push    af    ; ret addr
+    29                          
+    30                          .asm_point
+    31                              push    ix
+    32                          IF NEED_swapgfxbk = 1
+    33                              call    swapgfxbk
+    34                          ENDIF
+    35                              call    pointxy
+    36                          
+    37                              push    af
+    38                          IF NEED_swapgfxbk = 1
+    39                              call    swapgfxbk1
+    40                          ENDIF
+    41                              pop     af
+    42                              pop     ix
+    43                              ld      hl,1
+    44                              ret     nz     ;pixel set
+    45                              dec     hl
+    46                              ret
+    47                          ENDIF
+    48                          

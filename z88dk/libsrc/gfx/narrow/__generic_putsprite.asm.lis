@@ -1,0 +1,294 @@
+/tmp/tmpXXKXqXrd.asm:
+     1                          MODULE __generic_putsprite_asm
+     2                          LINE 0, "__generic_putsprite.asm"
+__generic_putsprite.asm:
+                                
+     1                          ;
+     2                          ; Sprite Rendering Routine
+     3                          ; original code by Patrick Davidson (TI 85)
+     4                          ; modified by Stefano Bodrato - Jan 2001
+     5                          ;
+     6                          ; Sept 2003 - Stefano: Fixed bug for sprites wider than 8.
+     7                          ;
+     8                          ; Much More Generic version
+     9                          ; Uses plotpixel, respixel and xorpixel
+    10                          ;
+    11                          ;
+    12                          
+    13                          
+    14                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    15                              SECTION code_graphics
+    16                              PUBLIC    __generic_putsprite
+    17                          
+    18                              EXTERN    swapgfxbk
+    19                              EXTERN    __graphics_end
+    20                          
+    21                              EXTERN    plotpixel
+    22                              EXTERN    respixel
+    23                              EXTERN    xorpixel
+    24                              INCLUDE    "graphics/grafix.inc"
+    25                          
+    26                          ; __gfx_coords: h,l (vert-horz)
+    27                          ; sprite: (ix)
+    28                          
+    29                          .__generic_putsprite
+    30                          IF NEED_swapgfxbk = 1
+    31                              call    swapgfxbk
+    32                          ENDIF
+    33                                ld    hl,2
+    34                                add    hl,sp
+    35                                ld    e,(hl)
+    36                                inc    hl
+    37                                ld    d,(hl)  ;sprite address
+    38                              push    ix
+    39                              push    de
+    40                              pop    ix
+    41                          
+    42                                inc    hl
+    43                                ld    e,(hl)
+    44                              inc    hl
+    45                                inc    hl
+    46                                ld    d,(hl)    ; x and y __gfx_coords
+    47                          
+    48                              inc    hl
+    49                          
+    50                                inc    hl
+    51                                ld    a,(hl)  ; and/or/xor mode
+    52                          
+    53                              ld    h,d
+    54                              ld    l,e
+    55                          
+    56                              cp    166    ; and(hl) opcode
+    57                              jr    z,doand
+    58                          
+    59                              cp    182    ; or(hl) opcode
+    60                              jp    z,door
+    61                          
+    62                              ; 182 - or
+    63                              ; 174 - xor
+    64                          
+    65                          .doxor
+    66                              ld    a,(ix+0)    ; Width
+    67                              ld    b,(ix+1)    ; Height
+    68                          .oloopx    push    bc    ;Save # of rows
+    69                              push    af
+    70                          
+    71                              ;ld    b,a    ;Load width
+    72                              ld    b,0    ; Better, start from zero !!
+    73                          
+    74                              ld    c,(ix+2)    ;Load one line of image
+    75                          
+    76                          .iloopx    sla    c    ;Test leftmost pixel
+    77                              jr    nc,noplotx    ;See if a plot is needed
+    78                          
+    79                              pop    af
+    80                              push    af
+    81                          
+    82                              push    hl
+    83                              ;push    bc    ; this should be done by the called routine
+    84                              push    de
+    85                              ld    a,h
+    86                              add    a,b
+    87                              ld    h,a
+    88                              call    xorpixel
+    89                              pop    de
+    90                              ;pop    bc
+    91                              pop    hl
+    92                          
+    93                          .noplotx
+    94                          
+    95                              inc    b    ; witdh counter
+    96                          
+    97                              pop    af
+    98                              push    af
+    99                          
+   100                              cp    b    ; end of row ?
+   101                          
+   102                              jr    nz,noblkx
+   103                          
+   104                              inc    ix
+   105                              ld    c,(ix+2)    ;Load next byte of image
+   106                          
+   107                              jr noblockx
+   108                          
+   109                          .noblkx
+   110                          
+   111                              ld    a,b    ; next byte in row ?
+   112                              ;dec    a
+   113                              and    a
+   114                              jr    z,iloopx
+   115                              and    7
+   116                          
+   117                              jr    nz,iloopx
+   118                          
+   119                          .blockx
+   120                              inc    ix
+   121                              ld    c,(ix+2)    ;Load next byte of image
+   122                              jr    iloopx
+   123                          
+   124                          .noblockx
+   125                          
+   126                              inc    l
+   127                          
+   128                              pop    af
+   129                              pop    bc    ;Restore data
+   130                              djnz    oloopx
+   131                              ;pop    ix
+   132                          IF NEED_swapgfxbk
+   133                              jp      __graphics_end
+   134                          ELSE
+   135                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   136                              pop     ix
+   137                            ENDIF
+   138                              ret
+   139                          ENDIF
+   140                          
+   141                          
+   142                          .doand
+   143                              ld    a,(ix+0)    ; Width
+   144                              ld    b,(ix+1)    ; Height
+   145                          .oloopa    push    bc    ;Save # of rows
+   146                              push    af
+   147                          
+   148                              ;ld    b,a    ;Load width
+   149                              ld    b,0    ; Better, start from zero !!
+   150                          
+   151                              ld    c,(ix+2)    ;Load one line of image
+   152                          
+   153                          .iloopa    sla    c    ;Test leftmost pixel
+   154                              jr    nc,noplota    ;See if a plot is needed
+   155                          
+   156                              pop    af
+   157                              push    af
+   158                          
+   159                              push    hl
+   160                              ;push    bc    ; this should be done by the called routine
+   161                              push    de
+   162                              ld    a,h
+   163                              add    a,b
+   164                              ld    h,a
+   165                              call    respixel
+   166                              pop    de
+   167                              ;pop    bc
+   168                              pop    hl
+   169                          
+   170                          .noplota
+   171                          
+   172                              inc    b    ; witdh counter
+   173                          
+   174                              pop    af
+   175                              push    af
+   176                          
+   177                              cp    b    ; end of row ?
+   178                          
+   179                              jr    nz,noblka
+   180                          
+   181                              inc    ix
+   182                              ld    c,(ix+2)    ;Load next byte of image
+   183                          
+   184                              jr noblocka
+   185                          
+   186                          .noblka
+   187                          
+   188                              ld    a,b    ; next byte in row ?
+   189                              ;dec    a
+   190                              and    a
+   191                              jr    z,iloopa
+   192                              and    7
+   193                          
+   194                              jr    nz,iloopa
+   195                          
+   196                          .blocka
+   197                              inc    ix
+   198                              ld    c,(ix+2)    ;Load next byte of image
+   199                              jr    iloopa
+   200                          
+   201                          .noblocka
+   202                          
+   203                              inc    l
+   204                              pop    af
+   205                                pop    bc    ;Restore data
+   206                                djnz    oloopa
+   207                              ;pop    ix
+   208                              jp    __graphics_end
+   209                          
+   210                          
+   211                          
+   212                          
+   213                          .door
+   214                              ld    a,(ix+0)    ; Width
+   215                              ld    b,(ix+1)    ; Height
+   216                          .oloopo    push    bc    ;Save # of rows
+   217                              push    af
+   218                          
+   219                              ;ld    b,a    ;Load width
+   220                              ld    b,0    ; Better, start from zero !!
+   221                          
+   222                              ld    c,(ix+2)    ;Load one line of image
+   223                          
+   224                          .iloopo    sla    c    ;Test leftmost pixel
+   225                              jr    nc,noploto    ;See if a plot is needed
+   226                          
+   227                              pop    af
+   228                              push    af
+   229                          
+   230                              push    hl
+   231                              ;push    bc    ; this should be done by the called routine
+   232                              push    de
+   233                              ld    a,h
+   234                              add    a,b
+   235                              ld    h,a
+   236                              call    plotpixel
+   237                              pop    de
+   238                              ;pop    bc
+   239                              pop    hl
+   240                          
+   241                          .noploto
+   242                          
+   243                              inc    b    ; witdh counter
+   244                          
+   245                              pop    af
+   246                              push    af
+   247                          
+   248                              cp    b    ; end of row ?
+   249                          
+   250                              jr    nz,noblko
+   251                          
+   252                              inc    ix
+   253                              ld    c,(ix+2)    ;Load next byte of image
+   254                          
+   255                              jr noblocko
+   256                          
+   257                          .noblko
+   258                          
+   259                              ld    a,b    ; next byte in row ?
+   260                              ;dec    a
+   261                              and    a
+   262                              jr    z,iloopo
+   263                              and    7
+   264                          
+   265                              jr    nz,iloopo
+   266                          
+   267                          .blocko
+   268                              inc    ix
+   269                              ld    c,(ix+2)    ;Load next byte of image
+   270                              jr    iloopo
+   271                          
+   272                          .noblocko
+   273                          
+   274                              ;djnz    iloopo
+   275                              inc    l
+   276                              pop    af
+   277                              pop    bc    ;Restore data
+   278                              djnz    oloopo
+   279                              ;pop    ix
+   280                          IF NEED_swapgfxbk
+   281                              jp      __graphics_end
+   282                          ELSE
+   283                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   284                              pop     ix
+   285                            ENDIF
+   286                              ret
+   287                          ENDIF
+   288                          ENDIF
+   289                          

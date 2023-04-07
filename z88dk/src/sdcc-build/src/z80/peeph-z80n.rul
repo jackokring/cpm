@@ -1,0 +1,13 @@
+/* Generated file, DO NOT Edit!  */
+/* To Make changes to rules edit */
+/* <port>/peeph.def instead.     */
+"\n"
+"replace restart {\n"
+"	push	#%1\n"
+"} by {\n"
+"	;Z80N peephole 1: replace push %1 by ld %2,#%1 / push %2\n"
+"	ld	%2, #%1\n"
+"	push	%2\n"
+"} if unusedReg(%2 'bc' 'de' 'hl')\n"
+"\n"
+"barrier\n"

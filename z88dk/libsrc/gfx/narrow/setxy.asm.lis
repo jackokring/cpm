@@ -1,0 +1,874 @@
+/tmp/tmpXXC67ovI.asm:
+     1                          MODULE setxy_asm
+     2                          LINE 0, "setxy.asm"
+setxy.asm:
+                                
+     1                              INCLUDE    "graphics/grafix.inc"
+../../graphics/grafix.inc:
+     1                          ;
+     2                          ;       Z88 Graphics Functions - Small C+ stubbs
+     3                          ;
+     4                          ;       Written around the Interlogic Standard Library
+     5                          ;
+     6                          ;       Stubs Written by D Morris - 30/9/98
+     7                          ;
+     8                          ;
+     9                          ;       Define for graphics and other standard library functions
+    10                          ;       See also text/textgfx.inc and text6/textgfx.inc
+    11                          ;
+    12                          ;
+    13                          ;    $Id: grafix.inc $
+    14                          ;
+    15                          
+    16                          
+    17                          IF FORti82
+    18                              DEFINE gotgfx
+    19                              defc row_bytes    = 12
+    20                              defc maxx    = 96
+    21                              defc maxy    = 64
+    22                          ENDIF
+    23                          
+    24                          IF FORti83
+    25                              DEFINE gotgfx
+    26                              defc row_bytes    = 12
+    27                              defc maxx    = 96
+    28                              defc maxy    = 64
+    29                          ENDIF
+    30                          
+    31                          IF FORti83p
+    32                              DEFINE gotgfx
+    33                              defc row_bytes    = 12
+    34                              defc maxx    = 96
+    35                              defc maxy    = 64
+    36                          ENDIF
+    37                          
+    38                          IF FORti85
+    39                              DEFINE gotgfx
+    40                              defc row_bytes    = 16
+    41                              defc maxx    = 128
+    42                              defc maxy    = 64
+    43                          ENDIF
+    44                          
+    45                          IF FORti86
+    46                              DEFINE gotgfx
+    47                              defc row_bytes    = 16
+    48                              defc maxx    = 128
+    49                              defc maxy    = 64
+    50                          ENDIF
+    51                          
+    52                          IF FORpc6001
+    53                              DEFINE gotgfx
+    54                              defc maxx    = 256
+    55                              defc maxy    = 192
+    56                              defc blankch    = 0
+    57                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+    58                              defc    WANT_swapgfxbk = 0
+    59                          ENDIF
+    60                          
+    61                          IF FORpc88
+    62                              DEFINE gotgfx
+    63                              defc maxx    = 640
+    64                              defc maxy    = 200
+    65                              defc    WANT_swapgfxbk = 0
+    66                          ENDIF
+    67                          
+    68                          
+    69                          IF FORvz
+    70                              DEFINE gotgfx
+    71                              IF BLOCKgfx
+    72                                  defc maxx    = 64
+    73                                        defc maxy    = 32
+    74                              ELSE
+    75                                  defc maxx    = 128
+    76                                        defc maxy    = 64
+    77                              ENDIF
+    78                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+    79                              defc    WANT_swapgfxbk = 0
+    80                          ENDIF
+    81                          
+    82                          IF FORg800
+    83                              DEFINE gotgfx
+    84                              defc maxx    = 143    ; display size of the PC-G850
+    85                              defc maxy    = 47    ; (a different "getmaxy" is provided for G800 and smaller ones)
+    86                          ENDIF
+    87                          
+    88                          IF FORabc80
+    89                              DEFINE gotgfx
+    90                              defc maxx    = 78
+    91                              defc maxy    = 72
+    92                          ENDIF
+    93                          
+    94                          IF FORbee
+    95                              DEFINE gotgfx
+    96                              defc maxx    = 160
+    97                              defc maxy    = 75
+    98                              defc blankch    = 128
+    99                          ENDIF
+   100                          
+   101                          IF FORbeehr
+   102                              DEFINE gotgfx
+   103                              defc maxx    = 640
+   104                              defc maxy    = 275
+   105                          ENDIF
+   106                          
+   107                          IF FORbeehr320
+   108                              DEFINE gotgfx
+   109                              defc maxx    = 320
+   110                              defc maxy    = 275
+   111                          ENDIF
+   112                          
+   113                          IF FORbeehr512
+   114                              DEFINE gotgfx
+   115                              defc maxx    = 512
+   116                              defc maxy    = 256
+   117                          ENDIF
+   118                          
+   119                          IF FORgemini
+   120                              DEFINE gotgfx
+   121                              defc maxx    = 160
+   122                              defc maxy    = 75
+   123                              defc blankch    = 128
+   124                          ENDIF
+   125                          
+   126                          IF FORgeminihr
+   127                              DEFINE gotgfx
+   128                              defc maxx    = 256
+   129                              defc maxy    = 256
+   130                              defc blankch    = 128
+   131                          ENDIF
+   132                          
+   133                          IF FORzx80
+   134                              DEFINE gotgfx
+   135                              defc maxx    = 64
+   136                              defc maxy    = 48
+   137                          ENDIF
+   138                          
+   139                          IF FORzx81
+   140                              DEFINE gotgfx
+   141                              defc maxx    = 64
+   142                              defc maxy    = 48
+   143                              defc blankch    = 0
+   144                          ENDIF
+   145                          
+   146                          IF FORlambda
+   147                              DEFINE gotgfx
+   148                              defc maxx    = 64
+   149                              defc maxy    = 48
+   150                              defc blankch    = 0
+   151                          ENDIF
+   152                          
+   153                          IF FORzx81udg
+   154                              DEFINE gotgfx
+   155                              defc maxx    = 64
+   156                              defc maxy    = 71
+   157                              defc blankch    = 0
+   158                          ENDIF
+   159                          
+   160                          IF FORzx81phrg
+   161                              DEFINE gotgfx
+   162                              defc maxx    = 128
+   163                              defc maxy    = 96    ; This one can be changed !  1..200 are theorical valid values !
+   164                          ENDIF
+   165                          
+   166                          IF FORzx81hr64
+   167                              DEFINE gotgfx
+   168                              defc maxx    = 256
+   169                              defc maxy    = 64
+   170                          ENDIF
+   171                          
+   172                          IF FORzx81hr192
+   173                              DEFINE gotgfx
+   174                              defc maxx    = 256
+   175                              defc maxy    = 192
+   176                          ENDIF
+   177                          
+   178                          IF FORzx81mt64
+   179                              DEFINE gotgfx
+   180                              defc maxx    = 248
+   181                              defc maxy    = 64
+   182                          ENDIF
+   183                          
+   184                          IF FORzx81mt192
+   185                              DEFINE gotgfx
+   186                              defc maxx    = 248
+   187                              defc maxy    = 192
+   188                          ENDIF
+   189                          
+   190                          IF FORzx81g007
+   191                              DEFINE gotgfx
+   192                              defc maxx    = 256    ; It could be 272 but we should switch to 'wide' mode
+   193                              defc maxy    = 185
+   194                          ENDIF
+   195                          
+   196                          IF FORaceudg
+   197                              DEFINE gotgfx
+   198                              defc maxx    = 64
+   199                              defc maxy    = 72
+   200                              defc blankch    = 32
+   201                              defc    WANT_swapgfxbk = 0
+   202                          ENDIF
+   203                          
+   204                          IF FORace
+   205                              DEFINE gotgfx
+   206                              defc maxx    = 64
+   207                              defc maxy    = 48
+   208                              defc blankch    = 32
+   209                              defc    WANT_swapgfxbk = 0
+   210                          ENDIF
+   211                          
+   212                          IF FORkaypro
+   213                              DEFINE gotgfx
+   214                              defc maxx    = 160
+   215                              defc maxy    = 100
+   216                          ENDIF
+   217                          
+   218                          IF FORbondwell
+   219                              DEFINE gotgfx
+   220                              defc maxx    = 160
+   221                              defc maxy    = 75
+   222                              defc    WANT_swapgfxbk = 0
+   223                          ENDIF
+   224                          
+   225                          IF FORbondwell2
+   226                              DEFINE gotgfx
+   227                              defc maxx    = 640
+   228                              defc maxy    = 200
+   229                          ENDIF
+   230                          
+   231                          IF FORkaypro83
+   232                              DEFINE gotgfx
+   233                              defc maxx    = 80
+   234                              defc maxy    = 50
+   235                          ENDIF
+   236                          
+   237                          IF FORosborne1
+   238                              DEFINE gotgfx
+   239                              defc maxx    = 104
+   240                              defc maxy    = 48
+   241                              defc blankch    = 32
+   242                          ENDIF
+   243                          
+   244                          IF FORzx
+   245                           IF !FORts2068
+   246                              DEFINE gotgfx
+   247                              defc maxx    = 256
+   248                              defc maxy    = 192
+   249                              defc    WANT_swapgfxbk = 0
+   250                           ENDIF
+   251                          ENDIF
+   252                          
+   253                          IF FORcpc
+   254                              DEFINE gotgfx
+   255                              defc maxx    = 640
+   256                              defc maxy    = 200
+   257                              defc    WANT_swapgfxbk = 0
+   258                          ENDIF
+   259                          
+   260                          IF FORpcw
+   261                              DEFINE gotgfx
+   262                              defc maxx    = 720
+   263                              defc maxy    = 256
+   264                          ENDIF
+   265                          
+   266                          IF FOReinstein
+   267                              DEFINE gotgfx
+   268                              defc maxx    = 256
+   269                              defc maxy    = 192
+   270                              defc fcolor    = 1
+   271                              defc    WANT_swapgfxbk = 0
+   272                          ENDIF
+   273                          
+   274                          IF FORmsx
+   275                              DEFINE gotgfx
+   276                              defc maxx    = 256
+   277                              defc maxy    = 192
+   278                              defc fcolor    = 1
+   279                              defc    WANT_swapgfxbk = 0
+   280                          ENDIF
+   281                          
+   282                          IF FORmz
+   283                              DEFINE gotgfx
+   284                              defc maxx    = 80
+   285                              defc maxy    = 50
+   286                              defc    WANT_swapgfxbk = 0
+   287                          ENDIF
+   288                          
+   289                          IF FORattache
+   290                              DEFINE gotgfx
+   291                              defc maxx    = 320
+   292                              defc maxy    = 240
+   293                              defc    WANT_swapgfxbk = 0
+   294                          ENDIF
+   295                          
+   296                          IF FORsvi
+   297                              DEFINE gotgfx
+   298                              defc maxx    = 256
+   299                              defc maxy    = 192
+   300                              defc fcolor    = 1
+   301                              defc    WANT_swapgfxbk = 0
+   302                          ENDIF
+   303                          
+   304                          IF FORsam
+   305                              DEFINE gotgfx
+   306                              defc maxx    = 512
+   307                              defc maxy    = 192
+   308                              defc    WANT_swapgfxbk = 0
+   309                          ENDIF
+   310                          
+   311                          IF FORoz
+   312                              DEFINE gotgfx
+   313                              defc row_bytes    = 30
+   314                              defc maxx    = 239
+   315                              defc maxy    = 80
+   316                          ENDIF
+   317                          
+   318                          IF FORosca
+   319                              DEFINE gotgfx
+   320                              defc maxx    = 320
+   321                              defc maxy    = 200
+   322                              ; untested 240 lines resolution, see 'libsrc/graphics/osca'
+   323                              ;defc maxy    = 240
+   324                          ENDIF
+   325                          
+   326                          IF FORc128hr
+   327                              DEFINE gotgfx
+   328                              defc maxx    = 640
+   329                              defc maxy    = 200
+   330                          ENDIF
+   331                          
+   332                          IF FORc128hr480
+   333                              DEFINE gotgfx
+   334                              defc maxx    = 640
+   335                              defc maxy    = 480
+   336                          ENDIF
+   337                          
+   338                          IF FORts2068
+   339                              DEFINE gotgfx
+   340                              defc maxx       = 512
+   341                              defc maxy       = 192
+   342                              defc    WANT_swapgfxbk = 0
+   343                          ENDIF
+   344                          
+   345                          IF FORzxn
+   346                              DEFINE gotgfx
+   347                              defc maxx       = 512
+   348                              defc maxy       = 192
+   349                              defc    WANT_swapgfxbk = 0
+   350                          ENDIF
+   351                          
+   352                          IF FORtiki100
+   353                              DEFINE gotgfx
+   354                              defc maxx       = 1024
+   355                              defc maxy       = 256
+   356                          ENDIF
+   357                          
+   358                          IF FORenterprise
+   359                              DEFINE gotgfx
+   360                              defc maxx       = 336
+   361                              defc maxy       = 243
+   362                          ENDIF
+   363                          
+   364                          IF FORenterprisehr
+   365                              DEFINE gotgfx
+   366                              defc maxx       = 672
+   367                              defc maxy       = 243
+   368                          ENDIF
+   369                          
+   370                          IF FORz88
+   371                              DEFINE gotgfx
+   372                              defc    maxx    = 256
+   373                              defc    maxy     = 64
+   374                          ENDIF
+   375                          
+   376                          IF FORz9001
+   377                              DEFINE gotgfx
+   378                              defc maxx    = 320
+   379                              defc maxy    = 192
+   380                              defc    WANT_swapgfxbk = 0
+   381                              defc blankch = 32
+   382                          ENDIF
+   383                          
+   384                          IF FORkc
+   385                              DEFINE gotgfx
+   386                              defc maxx    = 320
+   387                              defc maxy    = 256
+   388                          ENDIF
+   389                          
+   390                          IF FORaussie
+   391                              DEFINE gotgfx
+   392                              defc maxx    = 640
+   393                              defc maxy    = 576
+   394                          ENDIF
+   395                          
+   396                          IF FORaquarius
+   397                              DEFINE gotgfx
+   398                              defc maxx    = 80
+   399                              defc maxy    = 72
+   400                              defc blankch    = 160
+   401                          ENDIF
+   402                          
+   403                          IF FORaq48
+   404                              DEFINE gotgfx
+   405                              defc maxx    = 80
+   406                              defc maxy    = 48
+   407                              defc blankch    = 160
+   408                          ENDIF
+   409                          
+   410                          IF FORz1013
+   411                              DEFINE gotgfx
+   412                              defc maxx    = 256
+   413                              defc maxy    = 256
+   414                              defc    WANT_swapgfxbk = 0
+   415                          ENDIF
+   416                          
+   417                          
+   418                          IF FORc128
+   419                              DEFINE gotgfx
+   420                              defc maxx    = 80
+   421                              defc maxy    = 50
+   422                              defc blankch    = 32
+   423                          ENDIF
+   424                          
+   425                          IF FORc128udg
+   426                              DEFINE gotgfx
+   427                              defc maxx    = 80
+   428                              defc maxy    = 75
+   429                              defc blankch    = 0
+   430                          ENDIF
+   431                          
+   432                          IF FORfp1100
+   433                              DEFINE gotgfx
+   434                              defc maxx    = 640
+   435                              defc maxy    = 200
+   436                              defc blankch    = 32
+   437                              defc USEplotc   = 1
+   438                              defc    WANT_swapgfxbk = 0
+   439                          ENDIF
+   440                          
+   441                          IF FORgal
+   442                              DEFINE gotgfx
+   443                              ; This size reflects the Gal+ screen mode
+   444                                  IF textgraphics
+   445                                      defc maxx    = 64
+   446                                  defc maxy    = 48
+   447                                  ELSE
+   448                                      defc maxx    = 256
+   449                                  defc maxy    = 208
+   450                                  ENDIF
+   451                              defc blankch    = 32
+   452                              defc    WANT_swapgfxbk = 0
+   453                          ENDIF
+   454                          
+   455                          IF FORnascom
+   456                              DEFINE gotgfx
+   457                              defc maxx    = 96
+   458                              defc maxy    = 48
+   459                              defc blankch    = 32
+   460                          ENDIF
+   461                          
+   462                          IF FORtrs80
+   463                              DEFINE gotgfx
+   464                              defc maxx    = 128
+   465                              defc maxy    = 48
+   466                              defc blankch    = 128
+   467                              defc    WANT_swapgfxbk = 0
+   468                          ENDIF
+   469                          
+   470                          IF FOReg2000
+   471                              DEFINE gotgfx
+   472                              defc maxx    = 160
+   473                              defc maxy    = 102
+   474                          ENDIF
+   475                          
+   476                          IF FORhrg1
+   477                              DEFINE gotgfx
+   478                              defc maxx    = 384
+   479                              defc maxy    = 192
+   480                          ENDIF
+   481                          
+   482                          IF FORgrafyx3
+   483                              DEFINE gotgfx
+   484                              defc maxx    = 512
+   485                              defc maxy    = 192
+   486                          ENDIF
+   487                          
+   488                          IF FORgrafyx4
+   489                              DEFINE gotgfx
+   490                              defc maxx    = 640
+   491                              defc maxy    = 240
+   492                          ENDIF
+   493                          
+   494                          IF FORp2000
+   495                              DEFINE gotgfx
+   496                              defc maxx    = 78
+   497                              defc maxy    = 72
+   498                              defc blankch    = 0
+   499                          ENDIF
+   500                          
+   501                          IF FORpx4
+   502                              DEFINE gotgfx
+   503                              defc maxx    = 240
+   504                              defc maxy    = 64
+   505                          ENDIF
+   506                          
+   507                          IF FORpx8
+   508                              DEFINE gotgfx
+   509                              defc maxx    = 480
+   510                              defc maxy    = 64
+   511                          ENDIF
+   512                          
+   513                          IF FORnc100
+   514                              DEFINE gotgfx
+   515                              defc maxx    = 480
+   516                              defc maxy    = 64
+   517                          ENDIF
+   518                          
+   519                          IF FORnc200
+   520                              DEFINE gotgfx
+   521                              defc maxx    = 480
+   522                              defc maxy    = 128
+   523                          ENDIF
+   524                          
+   525                          IF FORvg5k
+   526                              DEFINE gotgfx
+   527                              defc maxx    = 80
+   528                              defc maxy    = 75
+   529                              defc blankch    = 0
+   530                              defc    WANT_swapgfxbk = 0
+   531                          ENDIF
+   532                          
+   533                          IF FORsorcerer
+   534                              DEFINE gotgfx
+   535                              defc maxx    = 128
+   536                              defc maxy    = 60
+   537                              defc blankch    = 32
+   538                          ENDIF
+   539                          
+   540                          IF FORpacman
+   541                              DEFINE gotgfx
+   542                              defc maxx    = 84
+   543                              defc maxy    = 72
+   544                              defc blankch    = 192
+   545                          ENDIF
+   546                          
+   547                          IF FORpv1000
+   548                              DEFINE gotgfx
+   549                              defc maxx    = 56
+   550                              defc maxy    = 48
+   551                              defc    WANT_swapgfxbk = 0
+   552                          ENDIF
+   553                          
+   554                          IF FORalphatro
+   555                              DEFINE gotgfx
+   556                              defc maxx    = 80
+   557                              defc maxy    = 72
+   558                              defc blankch    = 32
+   559                              defc    WANT_swapgfxbk = 0
+   560                          ENDIF
+   561                          
+   562                          IF FORhemc
+   563                              DEFINE gotgfx
+   564                              defc maxx    = 64        ;Text graphics settings
+   565                              defc maxy    = 24
+   566                              defc blankch    = 32
+   567                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   568                              defc    WANT_swapgfxbk = 0
+   569                          ENDIF
+   570                          
+   571                          IF FORhgmc
+   572                              DEFINE    gotgfx
+   573                              defc    maxx = 256
+   574                              defc    maxy = 256
+   575                              defc    WANT_swapgfxbk = 0
+   576                              defc    BITS_reversed = 1
+   577                          ENDIF
+   578                          
+   579                          
+   580                          IF FORspc1000
+   581                              DEFINE gotgfx
+   582                              ;defc maxx    = 64        ;Text graphics settings
+   583                              ;defc maxy    = 48
+   584                              defc maxx    = 256        ;Graphics/VDP
+   585                              defc maxy    = 192
+   586                              defc blankch    = 32
+   587                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   588                              defc    WANT_swapgfxbk = 0
+   589                          ENDIF
+   590                          
+   591                          IF FORsmc777
+   592                              DEFINE gotgfx
+   593                              defc maxx    = 640
+   594                              defc maxy    = 200
+   595                              defc    WANT_swapgfxbk = 0
+   596                          ENDIF
+   597                          
+   598                          IF FORmulti8
+   599                              DEFINE gotgfx
+   600                              defc maxx    = 640
+   601                              defc maxy    = 200
+   602                              defc    WANT_swapgfxbk = 0
+   603                          ENDIF
+   604                          
+   605                          IF FORrx78
+   606                              DEFINE gotgfx
+   607                              defc maxx    = 192
+   608                              defc maxy    = 184
+   609                              defc    WANT_swapgfxbk = 0
+   610                          ENDIF
+   611                          
+   612                          IF FORlynx
+   613                              DEFINE gotgfx
+   614                              defc maxx    = 64        ;Text graphics settings
+   615                              defc maxy    = 64
+   616                              defc blankch    = 0
+   617                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   618                              defc    WANT_swapgfxbk = 0
+   619                          ENDIF
+   620                          
+   621                          IF FORx1
+   622                              DEFINE gotgfx
+   623                              defc maxx    = 640
+   624                              defc maxy    = 200
+   625                              defc    WANT_swapgfxbk = 0
+   626                          ENDIF
+   627                          
+   628                          IF FORlaser500
+   629                              DEFINE gotgfx
+   630                              defc maxx = 320
+   631                              defc maxy = 192
+   632                              defc blankch = 32
+   633                              defc    WANT_swapgfxbk = 0
+   634                          ENDIF
+   635                          
+   636                          IF FORexcali64
+   637                              DEFINE gotgfx
+   638                              defc maxx = 160
+   639                              defc maxy = 72
+   640                              defc blankch = 32
+   641                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   642                              defc USEindex = 1
+   643                              defc    WANT_swapgfxbk = 0
+   644                          ENDIF
+   645                          
+   646                          IF FORz80tvgame
+   647                              DEFINE gotgfx
+   648                              defc maxx = 168
+   649                              defc maxy = 208
+   650                              defc blankch = 32
+   651                              defc    WANT_swapgfxbk = 0
+   652                          ENDIF
+   653                          
+   654                          IF FORsv8000
+   655                              DEFINE gotgfx
+   656                              defc maxx = 256
+   657                              defc maxy = 96
+   658                              defc blankch = 32
+   659                              defc    WANT_swapgfxbk = 0
+   660                          ENDIF
+   661                          
+   662                          IF FORpmd85
+   663                              DEFINE gotgfx
+   664                              defc maxx = 288
+   665                              defc maxy = 256
+   666                              defc blankch = 32
+   667                              defc    WANT_swapgfxbk = 0
+   668                          ENDIF
+   669                          
+   670                          IF FORm100
+   671                              DEFINE gotgfx
+   672                              defc maxx = 240
+   673                              defc maxy = 64
+   674                          ENDIF
+   675                          
+   676                          IF FORvector06c
+   677                              DEFINE gotgfx
+   678                              defc maxx = 256
+   679                              defc maxy = 256
+   680                              defc blankch = 32
+   681                              defc    WANT_swapgfxbk = 0
+   682                          ENDIF
+   683                          
+   684                          IF FORspecial
+   685                              DEFINE gotgfx
+   686                              defc maxx = 384
+   687                              defc maxy = 256
+   688                              defc blankch = 32
+   689                              defc    WANT_swapgfxbk = 0
+   690                          ENDIF
+   691                          
+   692                          IF FORhomelab
+   693                              DEFINE gotgfx
+   694                              defc maxx = 128
+   695                              defc maxy = 64
+   696                              defc    WANT_swapgfxbk = 0
+   697                          ENDIF
+   698                          
+   699                          IF FORhomelab2
+   700                              DEFINE gotgfx
+   701                              defc maxx = 80
+   702                              defc maxy = 50
+   703                              defc    WANT_swapgfxbk = 0
+   704                          ENDIF
+   705                          
+   706                          IF FORgb
+   707                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   708                              defc    WANT_swapgfxbk = 0
+   709                          ENDIF
+   710                          
+   711                          IF FORmikro80
+   712                              defc USEplotc = 1
+   713                              defc    WANT_swapgfxbk = 0
+   714                          ENDIF
+   715                          
+   716                          IF FORondra
+   717                              DEFINE gotgfx
+   718                              defc maxx    = 320
+   719                              defc maxy    = 256
+   720                              defc    WANT_swapgfxbk = 0
+   721                          ENDIF
+   722                          
+   723                          IF FORlviv
+   724                              DEFINE gotgfx
+   725                              defc maxx    = 256
+   726                              defc maxy    = 256
+   727                              defc    WANT_swapgfxbk = 0
+   728                          ENDIF
+   729                          
+   730                          IF FORvti
+   731                              DEFINE gotgfx
+   732                              defc maxx    = 128
+   733                              defc maxy    = 48
+   734                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   735                              defc blankch    = 160
+   736                              defc    WANT_swapgfxbk = 0
+   737                          ENDIF
+   738                          
+   739                          IF FORvio
+   740                              DEFINE gotgfx
+   741                              defc maxx    = 160
+   742                              defc maxy    = 72
+   743                              defc blankch    = 32
+   744                              defc    WANT_swapgfxbk = 0
+   745                          ENDIF
+   746                          
+   747                          IF FORvdm
+   748                              DEFINE gotgfx
+   749                              defc maxx    = 64
+   750                              defc maxy    = 16
+   751                              defc USEplotc   = 1        ; We call generic_console_plotc, not _printc for text mode
+   752                              defc    WANT_swapgfxbk = 0
+   753                          ENDIF
+   754                          
+   755                          IF FORkrokha
+   756                              DEFINE gotgfx
+   757                              defc maxx    = 96
+   758                              defc maxy    = 64
+   759                              defc    WANT_swapgfxbk = 0
+   760                          ENDIF
+   761                          
+   762                          IF FORgl6000
+   763                              DEFINE gotgfx
+   764                              defc maxx    = 240
+   765                              defc maxy    = 100
+   766                              defc    WANT_swapgfxbk = 0
+   767                          ENDIF
+   768                          
+   769                          IF FORsol20
+   770                              DEFINE gotgfx
+   771                              defc maxx    = 64
+   772                              defc maxy    = 16
+   773                              defc USEplotc = 1
+   774                          ENDIF
+   775                          
+   776                          ; GSX virtual window is (32768 x 32768)
+   777                          ; HiRez display should stay between 512..800 px.
+   778                          ; We keep an average value
+   779                          IF FORcpm
+   780                            IF FORgsx
+   781                              DEFINE gotgfx
+   782                              defc maxx    = 1920        ; foo value hopefully larger than the max X resolution
+   783                              defc maxy    = 768        ; we keep unbalanced proportions, assuming non-square pixels
+   784                            ENDIF
+   785                          ENDIF
+   786                          
+   787                          ; =============================================
+   788                          
+   789                          IF FORtek
+   790                             DEFINE gotgfx
+   791                             defc maxx = 1024
+   792                             defc maxy = 768
+   793                          ENDIF
+   794                          
+   795                          IF FORregis
+   796                             DEFINE gotgfx
+   797                             defc maxx = 768
+   798                             defc maxy = 480
+   799                          ENDIF
+   800                          
+   801                          ; Catch all to sort things out
+   802                          
+   803                          IF !gotgfx
+   804                              defc    maxx = 256
+   805                              defc    maxy = 192
+   806                          ENDIF
+   807                          
+   808                          IF WANT_swapgfxbk
+   809                              defc    NEED_swapgfxbk = 0
+   810                          ELSE
+   811                              defc    NEED_swapgfxbk = 1
+   812                          ENDIF
+   813                          
+   814                          
+   815                          
+   816                          ;       Structure for open window       struct *window
+   817                          
+   818                          DEFVARS 0
+   819                          {
+   820                                  windnum ds.b    1
+   821                                  wind_x  ds.b    1
+   822                                  wind_y  ds.b    1
+   823                                  wind_w  ds.b    1       ;width/map width
+   824                                  wind_d  ds.b    1       ;
+   825                                  type    ds.b    1       ;
+   826                                  graph   ds.b    1       ;0=text 1=graphics
+   827                          }
+   828                          
+setxy.asm:
+     2                                SECTION code_graphics
+     3                              PUBLIC    setxy
+     4                          
+     5                              EXTERN    __gfx_coords
+     6                          
+     7                          ;
+     8                          ;    $Id: setxy.asm,v 1.7 2016-07-02 09:01:35 dom Exp $
+     9                          ;
+    10                          
+    11                          ; ******************************************************************
+    12                          ;
+    13                          ; Move current pixel coordinate to (x0,y0). Only legal coordinates
+    14                          ; are accepted.
+    15                          ;
+    16                          ; Design & programming by Gunther Strube, Copyright (C) InterLogic 1995
+    17                          ;
+    18                          ; X-range is always legal (0-255). Y-range must be 0 - 63.
+    19                          ;
+    20                          ; in:  hl    = (x,y) coordinate
+    21                          ;
+    22                          ; registers changed    after return:
+    23                          ;  ..bcdehl/ixiy same
+    24                          ;  af....../.... different
+    25                          ;
+    26                          .setxy
+    27                              IF maxx <> 256
+    28                              ld    a,h
+    29                              cp    maxx
+    30                              ret    nc
+    31                              ENDIF
+    32                              IF maxy <> 256
+    33  0000  7d                    ld    a,l
+    34  0001  fec0                  cp    maxy
+    35  0003  d0                    ret    nc    ; out of range...
+    36                              ENDIF
+    37  0004  220000                ld    (__gfx_coords),hl
+    38  0007  c9                    ret
+    39                          

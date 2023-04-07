@@ -1,0 +1,57 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:49 2023
+
+
+	C_LINE	0,"Issue_2150_init_const_ptr.c"
+
+	MODULE	Issue_2150_init_const_ptr_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_2150_init_const_ptr.c"
+	C_LINE	5,"Issue_2150_init_const_ptr.c"
+	C_LINE	9,"Issue_2150_init_const_ptr.c"
+	SECTION	data_compiler
+._a
+	defw	1
+	defw	0
+	defw	14
+	SECTION	code_compiler
+	C_LINE	10,"Issue_2150_init_const_ptr.c"
+	SECTION	data_compiler
+._kek1
+	defw	_a + 0
+	SECTION	code_compiler
+	C_LINE	11,"Issue_2150_init_const_ptr.c"
+	SECTION	data_compiler
+._kek2
+	defw	_a + 2
+	SECTION	code_compiler
+	C_LINE	12,"Issue_2150_init_const_ptr.c"
+	SECTION	data_compiler
+._kek3
+	defw	_a + 4
+	SECTION	code_compiler
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

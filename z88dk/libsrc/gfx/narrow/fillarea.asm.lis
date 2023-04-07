@@ -1,0 +1,49 @@
+/tmp/tmpXX2N3MYf.asm:
+     1                          MODULE fillarea_asm
+     2                          LINE 0, "fillarea.asm"
+fillarea.asm:
+                                
+     1                          
+     2                          
+     3                                  SECTION    code_graphics
+     4                              PUBLIC    fillarea
+     5                              EXTERN    plotpixel
+     6                          
+     7                          ;
+     8                          ;    $Id: fillarea.asm $
+     9                          ;
+    10                          
+    11                          ; ***********************************************************************
+    12                          ;
+    13                          ; Clear specified graphics area in map.
+    14                          ; Generic version
+    15                          ;
+    16                          ; Stefano Bodrato - March 2002
+    17                          ;
+    18                          ;
+    19                          ; IN:    HL    = (x,y)
+    20                          ;    BC    = (width,heigth)
+    21                          ;
+    22                          
+    23                          .fillarea
+    24                          
+    25  0000  e5                    push    hl
+    26  0001  c5                    push    bc
+    27                          .rowloop
+    28  0002  e5                    push    hl
+    29  0003  d5                    push    de
+    30  0004  c5                    push    bc
+    31  0005  cd0000                call    plotpixel
+    32  0008  c1                    pop    bc
+    33  0009  d1                    pop    de
+    34  000a  e1                    pop    hl
+    35                          
+    36  000b  24                    inc    h
+    37  000c  05c20200              djnz    rowloop
+    38  0010  c1                    pop    bc
+    39  0011  e1                    pop    hl
+    40  0012  2c                    inc    l
+    41  0013  0d                    dec    c
+    42  0014  c20000                jr    nz,fillarea
+    43  0017  c9                    ret
+    44                          

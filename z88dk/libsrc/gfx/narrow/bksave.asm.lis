@@ -1,0 +1,82 @@
+/tmp/tmpXX0XPJuC.asm:
+     1                          MODULE bksave_asm
+     2                          LINE 0, "bksave.asm"
+bksave.asm:
+                                
+     1                          ;
+     2                          ;    Fast background save
+     3                          ;
+     4                          ;    Generic version (just a bit slow)
+     5                          ;
+     6                          ;    $Id: bksave.asm,v 1.7 2016-07-02 09:01:35 dom Exp $
+     7                          ;
+     8                          
+     9                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    10                              SECTION smc_clib
+    11                              PUBLIC    bksave
+    12                              PUBLIC    _bksave
+    13                              EXTERN    pixeladdress
+    14                          
+    15                          
+    16                          .bksave
+    17                          ._bksave
+    18                              push    ix
+    19                                ld    hl,4
+    20                                add    hl,sp
+    21                                ld    e,(hl)
+    22                                inc    hl
+    23                                ld    d,(hl)  ;sprite address
+    24                              push    de
+    25                              pop    ix
+    26                          
+    27                                inc    hl
+    28                                ld    e,(hl)
+    29                              inc    hl
+    30                                inc    hl
+    31                                ld    d,(hl)    ; x and y __gfx_coords
+    32                          
+    33                              ld    h,d    ; current x coordinate
+    34                              ld    l,e    ; current y coordinate
+    35                          
+    36                              ld    (ix+2),h
+    37                              ld    (ix+3),l
+    38                          
+    39                              push    hl
+    40                              call    pixeladdress
+    41                              pop    hl
+    42                          
+    43                              ld    a,(ix+0)
+    44                              ld    b,(ix+1)
+    45                          
+    46                              dec    a
+    47                              srl    a
+    48                              srl    a
+    49                              srl    a
+    50                              inc    a
+    51                              inc    a    ; INT ((Xsize-1)/8+2)
+    52                              ld    (rbytes+1),a
+    53                          
+    54                          .bksaves
+    55                              push    bc
+    56                          
+    57                          .rbytes
+    58                              ld    b,0
+    59                          .rloop
+    60                              ld    a,(de)
+    61                              ld    (ix+4),a
+    62                              inc    de
+    63                              inc    ix
+    64                              djnz    rloop
+    65                          
+    66                              inc    l
+    67                              push    hl
+    68                              call    pixeladdress
+    69                              pop    hl
+    70                          
+    71                              pop    bc
+    72                          
+    73                              djnz    bksaves
+    74                              pop    ix
+    75                              ret
+    76                          ENDIF
+    77                          

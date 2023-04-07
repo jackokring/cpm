@@ -1,0 +1,60 @@
+/tmp/tmpXXXwV35k.asm:
+     1                          MODULE drawb_callee_asm
+     2                          LINE 0, "drawb_callee.asm"
+drawb_callee.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Written around the Interlogic Standard Library
+     5                          ;
+     6                          ;
+     7                          ; ----- void __CALLEE__ drawb(int x, int y, int h, int v)
+     8                          ;
+     9                          ;    $Id: drawb_callee.asm $
+    10                          ;
+    11                          
+    12                          
+    13                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    14                              SECTION    code_graphics
+    15                          
+    16                              PUBLIC    drawb_callee
+    17                              PUBLIC    _drawb_callee
+    18                          
+    19                              PUBLIC    asm_drawb
+    20                          
+    21                              EXTERN    drawbox
+    22                              EXTERN    plotpixel
+    23                              EXTERN    swapgfxbk
+    24                              EXTERN      __graphics_end
+    25                              INCLUDE "graphics/grafix.inc"
+    26                          
+    27                          
+    28                          .drawb_callee
+    29                          ._drawb_callee
+    30                              pop af
+    31                              pop bc    ; height
+    32                              pop de
+    33                              ld    b,e    ; width
+    34                              pop hl    ; x
+    35                              pop    de
+    36                              ld    h,e    ; y
+    37                              push af
+    38                          
+    39                          .asm_drawb
+    40                              push ix
+    41                              ld    ix,plotpixel
+    42                          IF NEED_swapgfxbk = 1
+    43                              call    swapgfxbk
+    44                          ENDIF
+    45                              call    drawbox
+    46                          IF NEED_swapgfxbk
+    47                              jp      __graphics_end
+    48                          ELSE
+    49                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    50                              pop     ix
+    51                            ENDIF
+    52                              ret
+    53                          ENDIF
+    54                          ENDIF
+    55                          

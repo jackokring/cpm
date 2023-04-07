@@ -1,0 +1,124 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:39 2023
+
+
+	C_LINE	0,"interrupt.c"
+
+	MODULE	interrupt_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"interrupt.c"
+	C_LINE	4,"interrupt.c"
+	SECTION	code_compiler
+
+; Function funcnmi flags 0x00041200 __smallc __critical __interrupt 
+; void funcnmi()
+	C_LINE	4,"interrupt.c::funcnmi::0::0"
+._funcnmi
+	push	af
+	push	bc
+	push	de
+	push	hl
+	push	ix
+	push	iy
+	ld	hl,0	;const
+	push	hl
+	call	_func3
+	pop	bc
+	pop	iy
+	pop	ix
+	pop	hl
+	pop	de
+	pop	bc
+	pop	af
+	retn
+
+
+	C_LINE	8,"interrupt.c::funcnmi::0::1"
+
+; Function func2im2 flags 0x00040200 __smallc __interrupt 
+; void func2im2()
+	C_LINE	8,"interrupt.c::func2im2::0::1"
+._func2im2
+	ei
+	push	af
+	push	bc
+	push	de
+	push	hl
+	push	ix
+	push	iy
+	push	bc
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	_func3
+	pop	bc
+	pop	bc
+	pop	iy
+	pop	ix
+	pop	hl
+	pop	de
+	pop	bc
+	pop	af
+	reti
+
+
+	C_LINE	13,"interrupt.c::func2im2::0::2"
+
+; Function func2im1 flags 0x00041200 __smallc __critical __interrupt(0) 
+; void func2im1()
+	C_LINE	13,"interrupt.c::func2im1::0::2"
+._func2im1
+	push	af
+	push	bc
+	push	de
+	push	hl
+	push	ix
+	push	iy
+	push	bc
+	push	bc
+	ld	hl,0	;const
+	add	hl,sp
+	push	hl
+	call	_func3
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	iy
+	pop	ix
+	pop	hl
+	pop	de
+	pop	bc
+	pop	af
+	ei
+	reti
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func3
+	GLOBAL	_funcnmi
+	GLOBAL	_func2im2
+	GLOBAL	_func2im1
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

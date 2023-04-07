@@ -1,0 +1,85 @@
+rrd.asm:
+     1                          ; Substitute for z80 rrd instruction
+     2                          ; aralbrec 06.2007
+     3                          ; CPU   Min T Max T
+     4                          ; 8080  229   260
+     5                          ; 8085  224   253
+     6                          ; gbz80 136   160
+     7                          ; r2ka   94   111
+     8                          ; z180   18    18
+     9                          ; z80    18    18
+    10                          ; z80n   18    18
+    11                          
+    12                                  SECTION code_l_sccz80
+    13                                  PUBLIC  __z80asm__rrd
+    14                          
+    15                          __z80asm__rrd:
+    16                          
+    17  0000  3005                      jr      nc, dorrd
+    18                          
+    19  0002  cd0700                    call    dorrd
+    20  0005  37                        scf
+    21  0006  c9                        ret
+    22                          
+    23                          dorrd:
+    24                          
+    25                            IF    __CPU_INTEL__                   ; a = xi, (hl) = jk --> a = xk, (hl) = ij
+    26                                  push    de
+    27                                  push    hl
+    28                          
+    29                                  ld      l, (hl)
+    30                                  ld      h, 0                    ; hl = 00jk
+    31                          
+    32                                  ld      d, a                    ; d = xi
+    33                                  and     0xf0
+    34                                  ld      e, a                    ; e = x0
+    35                                  ld      a, d
+    36                                  and     0x0f
+    37                                  ld      d, a                    ; d = a = 0i
+    38                          
+    39                                  ld      a, l                    ; a = jk
+    40                                  and     0x0f                    ; a = 0k
+    41                                  add     a, e                    ; a = xk
+    42                                  ld      e, a                    ; e = xk
+    43                          
+    44                                  add     hl, hl
+    45                                  add     hl, hl
+    46                                  add     hl, hl
+    47                                  add     hl, hl                  ; e = xk, a = xk, hl = 0jk0
+    48                          
+    49                                  ld      a, d
+    50                                  add     a, a
+    51                                  add     a, a
+    52                                  add     a, a
+    53                                  add     a, a                    ; a = i0
+    54                                  add     a, h                    ; a = ij
+    55                          
+    56                                  pop     hl
+    57                                  ld      (hl), a                 ; (hl) = ij
+    58                          
+    59                                  ld      a, e                    ; a = xk
+    60                                  pop     de
+    61                            ELSE
+    62  0007  cb3f                      srl     a
+    63  0009  cb1e                      rr      (hl)
+    64                          
+    65  000b  1f                        rra
+    66  000c  cb1e                      rr      (hl)
+    67                          
+    68  000e  1f                        rra
+    69  000f  cb1e                      rr      (hl)
+    70                          
+    71  0011  1f                        rra
+    72  0012  cb1e                      rr      (hl)                    ; a = [bits(HL):210, 0, bits(A):7654], carry = bit 3 of (HL)
+    73                          
+    74  0014  1f                        rra
+    75  0015  1f                        rra
+    76  0016  1f                        rra
+    77  0017  1f                        rra
+    78  0018  1f                        rra
+    79                          
+    80                            ENDIF
+    81                          
+    82  0019  b7                        or      a
+    83  001a  c9                        ret
+    84                          

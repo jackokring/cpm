@@ -1,0 +1,35 @@
+ex_sp_hl.asm:
+     1                          ; Substitute for the z80 ex (sp),hl instruction
+     2                          ; CPU   Min T Max T
+     3                          ; 8080   18    18
+     4                          ; 8085   16    16
+     5                          ; gbz80 148   148
+     6                          ; r2ka   15    15
+     7                          ; z180   16    16
+     8                          ; z80    19    19
+     9                          ; z80n   19    19
+    10                          
+    11                            IF    __CPU_GBZ80__
+    12                                  SECTION code_l_sccz80
+    13                                  PUBLIC  __z80asm__ex_sp_hl
+    14                          
+    15                          __z80asm__ex_sp_hl:
+    16                                  push    af                      ;16
+    17                                  push    de                      ;16
+    18                                  ld      d, h                    ;4			DE = HL0
+    19                                  ld      e, l                    ;4
+    20                                  ld      hl, sp+6                ;12, (sp)	HL = & SP0
+    21                                  ld      a, (hl)                 ;8
+    22                                  ld      (hl), e                 ;8
+    23                                  ld      e, a                    ;4			swap low HL0, SP0
+    24                                  inc     hl                      ;8			HL = & SP0+1
+    25                                  ld      a, (hl)                 ;8
+    26                                  ld      (hl), d                 ;8
+    27                                  ld      h, a                    ;4			swap hi HL0, SP0 -> HL
+    28                                  ld      l, e                    ;4
+    29                                  pop     de                      ;12
+    30                                  pop     af                      ;12
+    31                                  ret                             ;16
+    32                          
+    33                            ENDIF
+    34                          

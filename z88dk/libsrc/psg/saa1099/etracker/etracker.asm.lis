@@ -1,0 +1,1083 @@
+/tmp/tmpXXLdIFjt.asm:
+     1                          MODULE etracker_asm
+     2                          LINE 0, "etracker/etracker.asm"
+etracker/etracker.asm:
+                                
+     1                          ; Disassembly of the compiled E-Tracker player
+     2                          ;
+     3                          ; (C) 2020-2021 Stefan Drissen
+     4                          ;
+     5                          ; Object code (C) 1992 ESI
+     6                          ;----------------------------------------------
+     7                          ; row as shown in E-Tracker editor:
+     8                          ;
+     9                          ; | 000 | --- 0000 | --- 0000 | --- 0000
+    10                          ;   row   |/| ||command + parameter
+    11                          ;         | | |+- ornament
+    12                          ;         | | +-- instrument
+    13                          ;         | +- octave
+    14                          ;         +--- note
+    15                          
+    16                          ; note: C C# D D# E F F# G G# A A# B
+    17                          ; octave:     1-8
+    18                          ; instrument: 1-9 A-V (= 31 instruments)
+    19                          ; ornament:   1-9 A-V (= 31 ornaments)
+    20                          ; command:
+    21                          ;   0 no change
+    22                          ;   1 envelope generator    - [0-c] see cmd_envelope
+    23                          ;   2 instrument inversion  - [0-1] see cmd_instrument_inversion
+    24                          ;   3 tune delay (default 6)- [0-f] see cmd_tune_delay
+    25                          ;   4 volume reduction      - [0-f] see cmd_volume_reduction
+    26                          ;   5 extended noise        - [0-1] see cmd_extended_noise
+    27                          ;   6 stop sound                    see cmd_stop_sound
+    28                          ;   7 no change
+    29                          
+    30                          IF __CPU_Z80__ | __CPU_Z80N__
+    31                              MODULE etracker
+    32                              SECTION smc_clib
+    33                          
+    34                              PUBLIC  asm_etracker_init
+    35                              PUBLIC  asm_etracker_play
+    36                          
+    37                              defc asm_etracker_init = init
+    38                              defc asm_etracker_play = etracker_play
+    39                          
+    40                          
+    41                          
+    42                          include "saa1099.def"
+    43                          include "ports.def"
+    44                          
+    45                          
+    46                          ;==============================================
+    47                          etracker_init:
+    48                          
+    49                              ld hl,module
+    50                              jp init
+    51                          
+    52                          ;==============================================
+    53                          etracker_play:
+    54                          
+    55                          var_delay:
+    56                              ld a,1
+    57                              dec a
+    58                              jr nz,same_notes
+    59                          
+    60                              ld ix,str_channel_0
+    61                          
+    62                              ld b,6
+    63                          loop1:
+    64                              push bc
+    65                              call get_note
+    66                              ld bc,str_channel_size
+    67                              add ix,bc
+    68                              pop bc
+    69                          
+    70                              djnz loop1
+    71                          
+    72                          
+    73                              ld hl,(var_noise_0)
+    74                              ld a,h
+    75                              call swap_nibbles_a
+    76                              or l
+    77                              ld (var_noise_extended+1),a
+    78                          
+    79                          var_tune_delay:
+    80                              ld a,6
+    81                          
+    82                          same_notes:
+    83                          
+    84                              ld (var_delay+1),a
+    85                          
+    86                          ;----------------------------------------------
+    87                          
+    88                              ld ix,str_channel_0
+    89                              call update_channel    ; sets a, l, a'
+    90                              ld (out + saa_register_amplitude_0),a
+    91                              ld (out + saa_register_frequency_tone_0),hl
+    92                          
+    93                              push hl
+    94                          
+    95                              ld hl,0
+    96                              call get_noise         ; move lower two bits of a' into l and h
+    97                              ld (store_noise1+1),hl
+    98                              ld (var_noise_gen_0+1),a
+    99                          
+   100                          ;----------------------------------------------
+   101                          
+   102                              ld ix,str_channel_1
+   103                              call update_channel
+   104                              ld (out + saa_register_amplitude_1),a
+   105                              ld (out + saa_register_frequency_tone_1),hl
+   106                          
+   107                              push hl
+   108                          store_noise1:
+   109                              ld hl,0
+   110                              call get_noise
+   111                              ld (store_noise2+1),hl
+   112                              rl h
+   113                              jr nc,no_noise1
+   114                              ld (var_noise_gen_0+1),a
+   115                          no_noise1:
+   116                          
+   117                          ;----------------------------------------------
+   118                          
+   119                              ld ix,str_channel_2
+   120                              call update_channel
+   121                              ld (out + saa_register_amplitude_2),a
+   122                              ld (out + saa_register_frequency_tone_2),hl
+   123                          
+   124                              push hl
+   125                          store_noise2:
+   126                              ld hl,0
+   127                              call get_noise
+   128                              ld (store_noise3+1),hl
+   129                              rl h
+   130                              jr nc,no_noise2
+   131                              ld (var_noise_gen_0+1),a
+   132                          no_noise2:
+   133                          
+   134                          ;----------------------------------------------
+   135                          
+   136                              ld ix,str_channel_3
+   137                              call update_channel
+   138                              ld (out + saa_register_amplitude_3),a
+   139                              ld (out + saa_register_frequency_tone_3),hl
+   140                          
+   141                              push hl
+   142                          store_noise3:
+   143                              ld hl,0
+   144                              call get_noise
+   145                              ld (store_noise4+1),hl
+   146                              ld (var_noise_gen_1+1),a
+   147                          
+   148                          ;----------------------------------------------
+   149                          
+   150                              ld ix,str_channel_4
+   151                              call update_channel
+   152                              ld (out + saa_register_amplitude_4),a
+   153                              ld (out + saa_register_frequency_tone_4),hl
+   154                          
+   155                              push hl
+   156                          store_noise4:
+   157                              ld hl,0
+   158                              call get_noise
+   159                              ld (store_noise5+1),hl
+   160                              rl h
+   161                              jr nc,no_noise3
+   162                              ld (var_noise_gen_1+1),a
+   163                          no_noise3:
+   164                          
+   165                          ;----------------------------------------------
+   166                          
+   167                              ld ix,str_channel_5
+   168                              call update_channel
+   169                              ld (out + saa_register_amplitude_5),a
+   170                              ld (out + saa_register_frequency_tone_5),hl
+   171                          
+   172                              push hl
+   173                          store_noise5:
+   174                              ld hl,0
+   175                              call get_noise
+   176                              rr l
+   177                              rr l
+   178                              rr h
+   179                              rr h
+   180                              ld (out + saa_register_frequency_enable),hl
+   181                          
+   182                              rlca
+   183                              jr c,no_noise4
+   184                          
+   185                          var_noise_gen_1:                           ; set by instruments ch3-ch5
+   186                              ld a,0
+   187                              rlca
+   188                          no_noise4:
+   189                              rlca
+   190                              rlca
+   191                              rlca
+   192                          var_noise_gen_0:                           ; set by instruments ch0-ch2
+   193                              or 0
+   194                          var_noise_extended:                        ; set by cmd_extended_noise
+   195                              or 0
+   196                              ld (out + saa_register_noise_generator_1_0),a
+   197                          
+   198                              pop af                                  ; tone channel 5
+   199                              pop bc                                  ; tone channel 4
+   200                              call swap_nibbles_a
+   201                              or b
+   202                              ld h,a
+   203                              pop af                                  ; tone channel 3
+   204                              pop bc                                  ; tone channel 2
+   205                              call swap_nibbles_a
+   206                              or b
+   207                              ld l,a
+   208                              ld (out + saa_register_octave_3_2),hl
+   209                          
+   210                              pop af                                  ; tone channel 1
+   211                              pop bc                                  ; tone channel 0
+   212                              call swap_nibbles_a
+   213                              or b
+   214                              ld (out + saa_register_octave_1_0),a
+   215                          
+   216                              ld bc,port_sound_address
+   217                              ld de,saa_register_sound_enable * $100 + saa_se_channels_enabled
+   218                              out (c),d
+   219                              dec b                                   ; -> b = port_sound_data
+   220                              out (c),e
+   221                          
+   222                          if SILENT
+   223                          
+   224                              xor a
+   225                              ld hl,out + saa_register_amplitude_0
+   226                              ld (hl),a       ; 0
+   227                              inc hl
+   228                              ld (hl),a       ; 1
+   229                              inc hl
+   230                          ;   ld (hl),a       ; 2 ! bleep
+   231                              inc hl
+   232                              ld (hl),a       ; 3
+   233                              inc hl
+   234                              ld (hl),a       ; 4
+   235                              inc hl
+   236                              ld (hl),a       ; 5
+   237                          
+   238                              ;!!! silence channels
+   239                          
+   240                          endif
+   241                          
+   242                              ld hl,out + saa_register_envelope_generator_1
+   243                              ld d,saa_register_envelope_generator_1  ; $19
+   244                          loop2:
+   245                              inc b                                   ; -> b = port_sound_address
+   246                              out (c),d
+   247                              dec b                                   ; -> b = port_sound_data
+   248                              ld a,(hl)
+   249                              out (c),a
+   250                              dec d
+   251                          
+   252                              ret m                                   ; d = -1
+   253                          
+   254                              dec hl
+   255                              jr loop2
+   256                          
+   257                          ;----------------------------------------------
+   258                          frequency_note:
+   259                          
+   260                              defb $05    ; B
+   261                              defb $21    ; C
+   262                              defb $3c    ; C#
+   263                              defb $55    ; D
+   264                              defb $6d    ; D#
+   265                              defb $84    ; E
+   266                              defb $99    ; F
+   267                              defb $ad    ; F#
+   268                              defb $c0    ; G
+   269                              defb $d2    ; G#
+   270                              defb $e3    ; A
+   271                              defb $f3    ; A#
+   272                          
+   273                          ;----------------------------------------------
+   274                          instrument_none:
+   275                          
+   276                              defb $fe    ; set loop
+   277                              defb $01
+   278                              defb $00
+   279                              defb $00
+   280                              defb $fc    ; get loop
+   281                          
+   282                          ;----------------------------------------------
+   283                          list_envelopes:
+   284                          
+   285                              enabled: equ saa_envelope_enabled
+   286                              bits_3:  equ saa_envelope_bits_3
+   287                              bits_4:  equ saa_envelope_bits_4
+   288                              same:    equ saa_envelope_left_right_same
+   289                              inverse: equ saa_envelope_left_right_inverse
+   290                          
+   291                              defb same    | bits_4 | saa_envelope_mode_zero            | saa_envelope_reset
+   292                          
+   293                              defb same    | bits_3 | saa_envelope_mode_repeat_decay    | enabled   ; 1
+   294                              defb same    | bits_3 | saa_envelope_mode_repeat_attack   | enabled   ; 2
+   295                              defb same    | bits_3 | saa_envelope_mode_repeat_triangle | enabled   ; 3
+   296                          
+   297                              defb same    | bits_4 | saa_envelope_mode_repeat_decay    | enabled   ; 4
+   298                              defb same    | bits_4 | saa_envelope_mode_repeat_attack   | enabled   ; 5
+   299                              defb same    | bits_4 | saa_envelope_mode_repeat_triangle | enabled   ; 5
+   300                          
+   301                              defb inverse | bits_3 | saa_envelope_mode_repeat_decay    | enabled   ; 7
+   302                              defb inverse | bits_3 | saa_envelope_mode_repeat_attack   | enabled   ; 8
+   303                              defb inverse | bits_3 | saa_envelope_mode_repeat_triangle | enabled   ; 9
+   304                          
+   305                              defb inverse | bits_4 | saa_envelope_mode_repeat_decay    | enabled   ; A
+   306                              defb inverse | bits_4 | saa_envelope_mode_repeat_attack   | enabled   ; B
+   307                              defb inverse | bits_4 | saa_envelope_mode_repeat_triangle | enabled   ; C
+   308                          
+   309                          ;----------------------------------------------
+   310                          ornament_none:
+   311                          
+   312                              defb $fe    ; set loop
+   313                              defb $00
+   314                              defb $ff    ; get loop
+   315                          
+   316                          ;==============================================
+   317                          list_commands:
+   318                          
+   319                          ; jr table, used to adjust jr at smc_command_jr
+   320                          ; first byte of each pair is compared, if command is
+   321                          ; equal or higher, jr is used else proceed to next
+   322                          ; -> compare bytes must be in descending order
+   323                          
+   324                          ; the subtracted value is in c
+   325                          
+   326                              offset:    equ smc_command_jr + 2
+   327                          
+   328                              defb $d2                        ; [$d2-$ff] -> c = [$00-$2d]
+   329                              defb cmd_set_delay_next_note - offset
+   330                          
+   331                              defb $72                        ; [$72-$d2] -> c = [$00-$60]
+   332                              defb cmd_set_note - offset
+   333                          
+   334                              defb $52                        ; [$52-$71] -> c = [$00-$1f]
+   335                              defb cmd_set_instrument - offset
+   336                          
+   337                              defb $51                        ; [$51]     -> c =  $00
+   338                              defb cmd_end_of_track - offset
+   339                          
+   340                              defb $50                        ; [$50]     -> c =  $00
+   341                              defb cmd_stop_sound - offset
+   342                          
+   343                              defb $30                        ; [$30-$4f] -> c = [$00-$1f]
+   344                              defb cmd_set_ornament - offset
+   345                          
+   346                              defb $2e                        ; [$2e-$2f] -> c = [$00-$01]
+   347                              defb cmd_instrument_inversion - offset
+   348                          
+   349                              defb $21                        ; [$21-2$d] -> c = [$00-$0c]
+   350                              defb cmd_envelope - offset
+   351                          
+   352                              defb $11                        ; [$11-$20] -> c = [$00-$0f]
+   353                              defb cmd_volume_reduction - offset
+   354                          
+   355                              defb $0f                        ; [$0f-$10] -> c = [$00-$01]
+   356                              defb cmd_extended_noise - offset
+   357                          
+   358                              defb $00                        ; [$00-$0f] -> c = [$00-$0f]
+   359                              defb cmd_tune_delay - offset
+   360                          
+   361                          ;==============================================
+   362                          swap_nibbles_a:
+   363                          
+   364                              rlca
+   365                              rlca
+   366                              rlca
+   367                              rlca
+   368                              ret
+   369                          
+   370                          ;==============================================
+   371                          get_noise:
+   372                          
+   373                          ; move lower two bits of a' into l and h
+   374                          
+   375                              ex af,af'
+   376                              rrca            ; move bit 0 of a into carry
+   377                              rr l            ; move carry bit into bit 7 of l
+   378                              rrca            ; move bit 0 of a into carry
+   379                              rr h            ; move carry bit into bit 7 of h
+   380                              ret
+   381                          
+   382                          ;==============================================
+   383                          bc_eq_section_c:
+   384                          
+   385                          ; input
+   386                          ;   hl = index
+   387                          ;   c  = section
+   388                          
+   389                          ; output
+   390                          ;   bc = address
+   391                          ;----------------------------------------------
+   392                          
+   393                              sla c
+   394                              ld b,0
+   395                              jr nc,$+3
+   396                              inc b
+   397                              add hl,bc   ; bc = c * 2
+   398                          
+   399                          bc_eq_section:
+   400                              ld c,(hl)
+   401                              inc hl
+   402                              ld b,(hl)
+   403                              inc hl
+   404                          
+   405                              push hl
+   406                          var_module_start:
+   407                              ld hl,0
+   408                              add hl,bc
+   409                              ld c,l
+   410                              ld b,h
+   411                              pop hl
+   412                          
+   413                              ret
+   414                          
+   415                          ;==============================================
+   416                          cmd_set_instrument:
+   417                          
+   418                          ; input
+   419                          ;   c = [$00-$1f]
+   420                          
+   421                          var_instruments:
+   422                              ld hl,0
+   423                              call bc_eq_section_c
+   424                              ld (ix+ch_ptr_instrument_start  ),c
+   425                              ld (ix+ch_ptr_instrument_start+1),b
+   426                          
+   427                              ld hl,instrument_none
+   428                              ld (ix+ch_ptr_instrument_loop  ),l
+   429                              ld (ix+ch_ptr_instrument_loop+1),h
+   430                          
+   431                              jr set_instrument
+   432                          
+   433                          ;==============================================
+   434                          cmd_set_ornament:
+   435                          
+   436                          ; input
+   437                          ;   c = [$00-$1f]
+   438                          
+   439                          var_ornaments:
+   440                              ld hl,0
+   441                              call bc_eq_section_c
+   442                              ld (ix+ch_ptr_ornament_start  ),c
+   443                              ld (ix+ch_ptr_ornament_start+1),b
+   444                          
+   445                              ld hl,ornament_none
+   446                              ld (ix+ch_ptr_ornament_loop  ),l
+   447                              ld (ix+ch_ptr_ornament_loop+1),h
+   448                          
+   449                              jr set_ornament
+   450                          
+   451                          ;==============================================
+   452                          get_note:
+   453                          
+   454                          ; input
+   455                          ;   b  = counter channel
+   456                          ;           6       0 freq noise generator 0
+   457                          ;           5       1 freq internal envelope clock
+   458                          ;           4       2
+   459                          
+   460                          ;           3       3 freq noise generator 1
+   461                          ;           2       4 freq internal envelope clock
+   462                          ;           1       5
+   463                          ;   ix = ptr_channel
+   464                          ;
+   465                          ; BUG: envelope set in channel 3 sets incorrect envelope generator
+   466                          ;----------------------------------------------
+   467                          
+   468                              dec (ix+ch_delay_next_note)
+   469                              ret p           ; ret when (ix+ch_delay_next_note) > 0
+   470                          
+   471                              ld a,b
+   472                              cp 3            ; !!! bug - should be cp 4 according to DTA
+   473                              ld hl,out + saa_register_envelope_generator_0
+   474                              jr nc,$+3       ; b >= 3 (-> channel <= 3, should be <= 2)
+   475                              inc hl          ; hl = envelope_generator_1
+   476                              ld (ptr_envelope_generator+1),hl
+   477                          
+   478                          get_note_again:
+   479                              ld e,(ix+ch_ptr_track  )
+   480                              ld d,(ix+ch_ptr_track+1)
+   481                          
+   482                          get_command:
+   483                          
+   484                              ld hl,list_commands - 1
+   485                          
+   486                          find1:
+   487                              ld a,(de)
+   488                              inc hl
+   489                              sub (hl)
+   490                              inc hl
+   491                              jr c,find1 ; (hl) > a
+   492                          
+   493                              inc de
+   494                              ld c,a
+   495                              ld a,(hl)
+   496                              ld (smc_command_jr+1),a  ; update jr below
+   497                          
+   498                          smc_command_jr:
+   499                              jr smc_command_jr        ; smc = command from list_commands
+   500                          
+   501                          ;==============================================
+   502                          cmd_set_note:
+   503                          
+   504                          ; input
+   505                          ;   c = [$00-$60]
+   506                          
+   507                              ld (ix+ch_note),c
+   508                          
+   509                              ld c,(ix+ch_ptr_instrument_start  )
+   510                              ld b,(ix+ch_ptr_instrument_start+1)
+   511                          
+   512                          ;----------------------------------------------
+   513                          set_instrument:
+   514                          
+   515                              ld (ix+ch_ptr_instrument  ),c
+   516                              ld (ix+ch_ptr_instrument+1),b
+   517                          
+   518                              ld c,(ix+ch_ptr_ornament_start  )
+   519                              ld b,(ix+ch_ptr_ornament_start+1)
+   520                          
+   521                          ;----------------------------------------------
+   522                          set_ornament:
+   523                          
+   524                              ld (ix+ch_ptr_ornament  ),c
+   525                              ld (ix+ch_ptr_ornament+1),b
+   526                          
+   527                              ld (ix+ch_delay_next_ornament),1
+   528                              ld (ix+ch_delay_next_instrument),1
+   529                              ld (ix+ch_delay_next_volume),1
+   530                          
+   531                              jr get_command
+   532                          
+   533                          ;==============================================
+   534                          cmd_envelope:  ; turn on or off envelope generator
+   535                          
+   536                          ; input
+   537                          ;   c = envelope [$00-$0c]
+   538                          
+   539                              ld b,0
+   540                              ld hl,list_envelopes
+   541                              add hl,bc
+   542                              ld a,(hl)
+   543                          ptr_envelope_generator:
+   544                              ld (0),a                ; out + saa_register_envelope_generator_0 or 1
+   545                          
+   546                              jr get_command
+   547                          
+   548                          ;==============================================
+   549                          cmd_instrument_inversion:  ; turn on or off instrument inversion
+   550                          
+   551                          ; input
+   552                          ;   c = [$00-$01]
+   553                          
+   554                              ld (ix+ch_instrument_inversion),c
+   555                          
+   556                              jr get_command
+   557                          
+   558                          ;==============================================
+   559                          cmd_tune_delay:
+   560                          
+   561                          ; input
+   562                          ;   c = [$00-$0f]
+   563                          
+   564                              ld a,c
+   565                              inc a
+   566                              ld (var_tune_delay+1),a
+   567                          
+   568                              jr get_command
+   569                          
+   570                          ;==============================================
+   571                          cmd_volume_reduction: ; volume reduction
+   572                          
+   573                          ; input
+   574                          ;   c = [$00-$0f]
+   575                          
+   576                              ld (ix+ch_volume_reduction),c
+   577                          
+   578                              jr get_command
+   579                          
+   580                          ;==============================================
+   581                          cmd_extended_noise:
+   582                          
+   583                          ; input
+   584                          ;   c = [$00-$01]
+   585                          
+   586                              jr z,extended_noise_off
+   587                          
+   588                              ld c,saa_noise_0_variable
+   589                          
+   590                          extended_noise_off:
+   591                              ld hl,(ptr_envelope_generator+1)   ; hl = out_envelope_generator_0 or 1
+   592                              inc hl
+   593                              inc hl
+   594                              ld (hl),c                           ; hl = var_noise_0 or 1
+   595                          
+   596                              jr get_command
+   597                          
+   598                          ;==============================================
+   599                          cmd_stop_sound:
+   600                          
+   601                              ld bc,instrument_none
+   602                              jr set_instrument
+   603                          
+   604                          ;==============================================
+   605                          cmd_set_delay_next_note:
+   606                          
+   607                          ; input
+   608                          ;   c = [$00-$2d]
+   609                          
+   610                              ld (ix+ch_delay_next_note),c
+   611                              ld (ix+ch_ptr_track  ),e
+   612                              ld (ix+ch_ptr_track+1),d
+   613                          
+   614                              ret
+   615                          
+   616                          ;==============================================
+   617                          cmd_end_of_track:
+   618                          
+   619                              call read_song_table
+   620                          
+   621                              jp get_note_again
+   622                          
+   623                          ;==============================================
+   624                          handle_instrument_loop_or_delay:
+   625                          
+   626                              cp $7f                      ; a was $fe
+   627                              jr z,set_instrument_loop
+   628                          
+   629                              cp $7e                      ; a was $fc
+   630                              jr z,get_instrument_loop
+   631                          
+   632                              add a,2
+   633                              ld c,a                      ; delay until next command
+   634                              jr handle_instrument
+   635                          
+   636                          ;----------------------------------------------
+   637                          set_instrument_loop:
+   638                          
+   639                              ld (ix+ch_ptr_instrument_loop  ),l
+   640                              ld (ix+ch_ptr_instrument_loop+1),h
+   641                              jr handle_instrument
+   642                          
+   643                          ;----------------------------------------------
+   644                          get_instrument_loop:
+   645                          
+   646                              ld l,(ix+ch_ptr_instrument_loop  )
+   647                              ld h,(ix+ch_ptr_instrument_loop+1)
+   648                              jr handle_instrument
+   649                          
+   650                          ;==============================================
+   651                          handle_ornament_loop_or_delay:
+   652                          
+   653                              inc a
+   654                              jr z,get_ornament_loop     ; a was $ff
+   655                          
+   656                              inc a
+   657                              jr z,set_ornament_loop     ; a was $fe
+   658                          
+   659                              sub 8 * 12
+   660                              ld c,a                      ; c = delay until next command
+   661                              jr handle_ornament
+   662                          
+   663                          ;----------------------------------------------
+   664                          get_ornament_loop:
+   665                          
+   666                              ld l,(ix+ch_ptr_ornament_loop  )
+   667                              ld h,(ix+ch_ptr_ornament_loop+1)
+   668                              jr handle_ornament
+   669                          
+   670                          ;----------------------------------------------
+   671                          set_ornament_loop:
+   672                          
+   673                              ld (ix+ch_ptr_ornament_loop  ),l
+   674                              ld (ix+ch_ptr_ornament_loop+1),h
+   675                              jr handle_ornament
+   676                          
+   677                          ;==============================================
+   678                          update_channel:
+   679                          
+   680                          ; input
+   681                          ;   ix = ptr_channel
+   682                          
+   683                          ; output
+   684                          ;   a   =   amplitude
+   685                          ;   l   =   tone
+   686                          ;   a'  =   noise
+   687                          ;----------------------------------------------
+   688                          
+   689                              ld e,(ix+ch_ptr_instrument_pitch  )
+   690                              ld d,(ix+ch_ptr_instrument_pitch+1)
+   691                              dec (ix+ch_delay_next_instrument)
+   692                              ld l,(ix+ch_ptr_instrument  )
+   693                              ld h,(ix+ch_ptr_instrument+1)
+   694                              jr nz,no_instrument_change
+   695                          
+   696                              ld c,1
+   697                          handle_instrument:
+   698                              ld a,(hl)
+   699                              inc hl
+   700                              rrca
+   701                              jr nc,handle_instrument_loop_or_delay  ; a = even - returns c with delay until next command
+   702                          
+   703                              ld (ix+ch_delay_next_instrument),c
+   704                              ld (ix+ch_ptr_instrument_pitch+1),a
+   705                              ld e,(hl)
+   706                              ld d,a
+   707                              ld (ix+ch_ptr_instrument_pitch),e
+   708                              inc hl
+   709                          
+   710                          no_instrument_change:
+   711                              push hl
+   712                              ld a,(ix+ch_ornament_note)
+   713                              dec (ix+ch_delay_next_ornament)
+   714                              jr nz,no_ornament_change
+   715                          
+   716                              ld c,1
+   717                              ld l,(ix+ch_ptr_ornament  )
+   718                              ld h,(ix+ch_ptr_ornament+1)
+   719                          handle_ornament:
+   720                              ld a,(hl)
+   721                              inc hl
+   722                              cp 8 * 12                               ; ornament values capped at 8 octaves
+   723                                                                      ; since they wrap around anyway
+   724                              jr nc,handle_ornament_loop_or_delay    ; a >= 8 * 12
+   725                          
+   726                              ld (ix+ch_delay_next_ornament),c
+   727                              ld (ix+ch_ornament_note),a
+   728                              ld (ix+ch_ptr_ornament  ),l
+   729                              ld (ix+ch_ptr_ornament+1),h
+   730                          
+   731                          no_ornament_change:
+   732                              add a,(ix+ch_note)
+   733                              cp 8 * 12 - 1
+   734                              ld hl,$07ff     ; maximum octave (7) + note ($ff)
+   735                              jr z,max_note  ; a == $5f
+   736                          
+   737                          var_pattern_height:
+   738                              add a,0         ; set
+   739                              jr nc,$+4
+   740                              sub 8 * 12
+   741                          
+   742                              ld hl,$ff0c         ; h = -1, l = 12
+   743                              ld b,h
+   744                          loop3:
+   745                              inc h
+   746                              sub l               ; l = 12 = octave
+   747                              jr nc,loop3
+   748                                                  ; h = octave
+   749                              ld c,a
+   750                              ld a,h
+   751                              ld hl,frequency_note + 12
+   752                              add hl,bc
+   753                              ld l,(hl)
+   754                              ld h,a              ; hl = octave + frequency
+   755                          max_note:
+   756                              add hl,de           ; de = instrument_pitch
+   757                              ld a,h
+   758                              and $07             ; prevent octave overflow
+   759                              ld h,a
+   760                          
+   761                              ld a,d
+   762                              rrca
+   763                              rrca
+   764                              rrca
+   765                              and $0f
+   766                              ex af,af'           ; a' used by get_noise to fill bit 7 of h $ bit 7 of l
+   767                          
+   768                              ex de,hl
+   769                              pop hl              ; <- ch_ptr_instrument
+   770                              ld a,(ix+ch_volume)
+   771                              dec (ix+ch_delay_next_volume)
+   772                              jr nz,no_volume_change
+   773                          
+   774                              ld a,(hl)
+   775                              inc hl
+   776                          var_default_volume_delay:
+   777                              cp 0
+   778                              jr nz,handle_volume_delay
+   779                          
+   780                              ld c,(hl)           ; delay next volume change
+   781                              inc hl
+   782                          get_volume_hl:
+   783                              ld a,(hl)           ; volume
+   784                              inc hl
+   785                          use_volume_a:
+   786                              ld (ix+ch_delay_next_volume),c
+   787                          
+   788                          no_volume_change:
+   789                              ld (ix+ch_ptr_instrument  ),l
+   790                              ld (ix+ch_ptr_instrument+1),h
+   791                              ld (ix+ch_volume),a
+   792                              ex de,hl
+   793                              ld b,(ix+ch_volume_reduction)
+   794                          
+   795                              ld c,a
+   796                              and $0f
+   797                              sub b
+   798                              jr nc,volume_ge_0__1
+   799                              xor a
+   800                          volume_ge_0__1:
+   801                              ld e,a
+   802                          
+   803                              ld a,c
+   804                              and $f0
+   805                              call swap_nibbles_a
+   806                              sub b
+   807                              jr nc,volume_ge_0__2
+   808                              xor a
+   809                          volume_ge_0__2:
+   810                              ld d,a
+   811                          
+   812                              ld a,(ix+ch_instrument_inversion)
+   813                              or a
+   814                              ld a,e
+   815                              jr nz,inverted
+   816                          
+   817                              ld a,d
+   818                              ld d,e
+   819                          
+   820                          inverted:
+   821                              call swap_nibbles_a
+   822                              or d
+   823                          
+   824                              ret
+   825                          
+   826                          ;==============================================
+   827                          handle_volume_delay:
+   828                          
+   829                          ; input
+   830                          ;   a = value to lookup
+   831                          
+   832                          ; output
+   833                          ;   c = value of entry that matches b
+   834                          
+   835                              push hl
+   836                              ld b,a
+   837                          var_volume_delay:
+   838                              ld hl,0
+   839                          find2:
+   840                              ld a,(hl)
+   841                              or a
+   842                              jr z,not_found
+   843                          
+   844                              inc hl
+   845                              ld c,(hl)
+   846                              inc hl
+   847                              cp b
+   848                              jr nz,find2
+   849                          
+   850                              pop hl
+   851                              jr get_volume_hl
+   852                          
+   853                          ;----------------------------------------------
+   854                          
+   855                          not_found:
+   856                              pop hl
+   857                              ld c,1
+   858                              ld a,b
+   859                              jr use_volume_a
+   860                          
+   861                          ;----------------------------------------------
+   862                          
+   863                              SECTION bss_clib
+   864                          
+   865                          
+   866                          
+   867                          DEFVARS 0
+   868                          {
+   869                          ch_ptr_track               ds.w 1
+   870                          ch_ptr_instrument          ds.w 1
+   871                          ch_ptr_instrument_loop     ds.w 1
+   872                          ch_ptr_ornament            ds.w 1
+   873                          ch_ptr_ornament_loop       ds.w 1
+   874                          ch_ptr_instrument_pitch    ds.w 1
+   875                          
+   876                          ch_volume                  ds.b 1
+   877                          ch_ornament_note           ds.b 1
+   878                          ch_note                    ds.b 1
+   879                          
+   880                          ch_ptr_instrument_start    ds.w 1
+   881                          ch_ptr_ornament_start      ds.w 1
+   882                          
+   883                          ch_delay_next_note         ds.b 1
+   884                          ch_delay_next_ornament     ds.b 1
+   885                          ch_delay_next_instrument   ds.b 1
+   886                          ch_delay_next_volume       ds.b 1
+   887                          
+   888                          ch_instrument_inversion    ds.b 1
+   889                          ch_volume_reduction        ds.b 1
+   890                          str_channel_size  	   ds.b 0
+   891                          }
+   892                          
+   893                          
+   894                          str_channel_0: defs str_channel_size
+   895                          str_channel_1: defs str_channel_size
+   896                          str_channel_2: defs str_channel_size
+   897                          str_channel_3: defs str_channel_size
+   898                          str_channel_4: defs str_channel_size
+   899                          str_channel_5: defs str_channel_size
+   900                          
+   901                          out:
+   902                          
+   903                                  defb 0          ; $00 amplitude_0
+   904                                  defb 0          ; $01 amplitude_1
+   905                                  defb 0          ; $02 amplitude_2
+   906                                  defb 0          ; $03 amplitude_3
+   907                                  defb 0          ; $04 amplitude_4
+   908                                  defb 0          ; $05 amplitude_5
+   909                                  defb 0          ; ---
+   910                                  defb 0          ; ---
+   911                                  defb 0          ; $08 frequency_tone_0
+   912                                  defb 0          ; $09 frequency_tone_1
+   913                                  defb 0          ; $0a frequency_tone_2
+   914                                  defb 0          ; $0b frequency_tone_3
+   915                                  defb 0          ; $0c frequency_tone_4
+   916                                  defb 0          ; $0d frequency_tone_5
+   917                                  defb 0          ; ---
+   918                                  defb 0          ; ---
+   919                                  defb 0          ; $10 octave_1_0
+   920                                  defb 0          ; $11 octave_3_2
+   921                                  defb 0          ; $12 octave_5_4
+   922                                  defb 0          ; ---
+   923                                  defb 0          ; $14 frequency_enable
+   924                                  defb 0          ; $15 noise_enable
+   925                                  defb 0          ; $16 noise_generator_1_0
+   926                                  defb 0          ; ---
+   927                                  defb 0          ; $18 envelope_generator_0
+   928                                  defb 0          ; $19 envelope_generator_1
+   929                          
+   930                          var_noise_0:   defb 0
+   931                          var_noise_1:   defb 0
+   932                          
+   933                          out_size: equ $ - out
+   934                          
+   935                              SECTION smc_clib
+   936                          
+   937                          ;==============================================
+   938                          init:
+   939                          
+   940                          ; input
+   941                          ;   hl = start address of compiled module
+   942                          ;----------------------------------------------
+   943                          
+   944                              ld (var_module_start+1),hl
+   945                              call bc_eq_section
+   946                              ld (var_song_table+1),bc
+   947                          
+   948                              call bc_eq_section
+   949                              ld (var_patterns+1),bc
+   950                          
+   951                              call bc_eq_section
+   952                              ld (var_instruments+1),bc
+   953                          
+   954                              call bc_eq_section
+   955                              ld (var_ornaments+1),bc
+   956                          
+   957                              call bc_eq_section
+   958                              ld a,(bc)
+   959                              inc bc
+   960                              ld (var_default_volume_delay+1),a
+   961                              ld (var_volume_delay+1),bc
+   962                          
+   963                              ld hl,str_channel_0
+   964                              ld b,6 * str_channel_size + out_size
+   965                              xor a
+   966                          loop4:
+   967                              ld (hl),a
+   968                              inc hl
+   969                              djnz loop4
+   970                          
+   971                              inc a                   ; -> a = 1
+   972                              ld (var_delay+1),a
+   973                          
+   974                              ld ix,str_channel_0
+   975                              ld de,str_channel_size
+   976                          
+   977                              ld b,6
+   978                          loop5:
+   979                              ld (ix+ch_delay_next_ornament),a    ; a = 1
+   980                              ld (ix+ch_delay_next_instrument),a  ; a = 1
+   981                              ld (ix+ch_delay_next_volume),a      ; a = 1
+   982                          
+   983                              ld hl,instrument_none
+   984                              ld (ix+ch_ptr_instrument_start  ),l
+   985                              ld (ix+ch_ptr_instrument_start+1),h
+   986                          
+   987                              ld (ix+ch_ptr_instrument  ),l
+   988                              ld (ix+ch_ptr_instrument+1),h
+   989                          
+   990                              ld hl,ornament_none
+   991                              ld (ix+ch_ptr_ornament_start  ),l
+   992                              ld (ix+ch_ptr_ornament_start+1),h
+   993                              add ix,de
+   994                              djnz loop5
+   995                          
+   996                              ld de,saa_register_sound_enable * $100 + saa_se_generators_reset
+   997                              ld bc,port_sound_address
+   998                              out (c),d
+   999                              dec b
+  1000                              out (c),e
+  1001                          
+  1002                          ;----------------------------------------------
+  1003                          read_song_table:
+  1004                          
+  1005                          ; song table entries are a multiple of 3 -> [$00,$03,$06 __ $5a,$5d]
+  1006                          
+  1007                          var_song_table:
+  1008                              ld hl,0
+  1009                          
+  1010                          init_song_table:
+  1011                          
+  1012                              ld c,(hl)
+  1013                              ld a,c
+  1014                              inc hl
+  1015                              inc a
+  1016                              jr z,song_table_get_loop       ; a = $ff -> end of song
+  1017                          
+  1018                              inc a
+  1019                              jr z,song_table_set_loop       ; a = $fe
+  1020                          
+  1021                              sub $62
+  1022                              jr nc,song_table_set_height    ; a >= $60 (a was incremented twice above)
+  1023                          
+  1024                              ld (var_song_table+1),hl
+  1025                              sla c                           ; c * 2 -> song_table is multiple of 3 -> per channel
+  1026                          
+  1027                          var_patterns:
+  1028                              ld hl,0
+  1029                              call bc_eq_section_c
+  1030                              ld (str_channel_0+ch_ptr_track),bc
+  1031                          
+  1032                              call bc_eq_section
+  1033                              ld (str_channel_1+ch_ptr_track),bc
+  1034                          
+  1035                              call bc_eq_section
+  1036                              ld (str_channel_2+ch_ptr_track),bc
+  1037                          
+  1038                              call bc_eq_section
+  1039                              ld (str_channel_3+ch_ptr_track),bc
+  1040                          
+  1041                              call bc_eq_section
+  1042                              ld (str_channel_4+ch_ptr_track),bc
+  1043                          
+  1044                              call bc_eq_section
+  1045                              ld (str_channel_5+ch_ptr_track),bc
+  1046                          
+  1047                              ret
+  1048                          
+  1049                          ;==============================================
+  1050                          song_table_get_loop:
+  1051                          
+  1052                          var_song_table_loop:
+  1053                              ld hl,0
+  1054                              jr init_song_table
+  1055                          
+  1056                          ;==============================================
+  1057                          song_table_set_loop:
+  1058                          
+  1059                              ld (var_song_table_loop+1),hl
+  1060                              jr init_song_table
+  1061                          
+  1062                          ;==============================================
+  1063                          song_table_set_height:
+  1064                          
+  1065                          ; input
+  1066                          ;   a = [$00-$9b]
+  1067                          
+  1068                              ld (var_pattern_height+1),a
+  1069                              jr init_song_table
+  1070                          
+  1071                          ;==============================================
+  1072                          
+  1073                          ; easier to debug module when aligned
+  1074                          ; align $1000
+  1075                          
+  1076                          module:
+  1077                          ENDIF
+  1078                          

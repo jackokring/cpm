@@ -1,0 +1,40 @@
+/tmp/tmpXXsGUJtn.asm:
+     1                          MODULE drawb_asm
+     2                          LINE 0, "drawb.asm"
+drawb.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ;
+     4                          ;     Written around the Interlogic Standard Library
+     5                          ;
+     6                          ;
+     7                          ; ----- void __CALLEE__ drawb(int x, int y, int h, int v)
+     8                          ;
+     9                          ;    $Id: drawb.asm $
+    10                          ;
+    11                          
+    12                          
+    13                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    14                              SECTION    code_graphics
+    15                          
+    16                              PUBLIC    drawb
+    17                              PUBLIC    _drawb
+    18                          
+    19                              EXTERN    asm_drawb
+    20                          
+    21                          
+    22                          .drawb
+    23                          ._drawb
+    24                              push    ix
+    25                              ld    ix,2
+    26                              add    ix,sp
+    27                              ld    c,(ix+2)
+    28                              ld    b,(ix+4)
+    29                              ld    l,(ix+6)
+    30                              ld    h,(ix+8)
+    31                              pop    ix
+    32                          
+    33                             jp asm_drawb
+    34                          ENDIF
+    35                          

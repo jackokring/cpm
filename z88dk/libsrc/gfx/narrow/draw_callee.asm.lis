@@ -1,0 +1,58 @@
+/tmp/tmpXX1yJ5Fg.asm:
+     1                          MODULE draw_callee_asm
+     2                          LINE 0, "draw_callee.asm"
+draw_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ draw(int x, int y, int x2, int y2)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  draw_callee
+     8                              PUBLIC  _draw_callee
+     9                          
+    10                              PUBLIC  asm_draw
+    11                          
+    12                              EXTERN  swapgfxbk
+    13                              EXTERN  __graphics_end
+    14                          
+    15                              EXTERN  Line
+    16                              EXTERN  plotpixel
+    17                              INCLUDE "graphics/grafix.inc"
+    18                          
+    19                          
+    20                          .draw_callee
+    21                          ._draw_callee
+    22                              pop     af    ; ret addr
+    23                              pop     de    ; y2
+    24                              pop     hl
+    25                              ld      d,l    ; x2
+    26                              pop     hl    ; y
+    27                              pop     bc
+    28                              ld      h,c    ; x
+    29                              push    af    ; ret addr
+    30                          
+    31                          .asm_draw
+    32                              push    ix
+    33                          IF NEED_swapgfxbk = 1
+    34                              call    swapgfxbk
+    35                          ENDIF
+    36                              push    hl
+    37                              push    de
+    38                              call    plotpixel
+    39                              pop     de
+    40                              pop     hl
+    41                              ld      ix,plotpixel
+    42                              call    Line
+    43                          IF NEED_swapgfxbk
+    44                              jp      __graphics_end
+    45                          ELSE
+    46                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    47                              pop     ix
+    48                            ENDIF
+    49                              ret
+    50                          ENDIF
+    51                          
+    52                          ENDIF
+    53                          

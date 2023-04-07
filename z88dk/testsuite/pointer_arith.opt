@@ -1,0 +1,524 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:00 2023
+
+
+	C_LINE	0,"pointer_arith.c"
+
+	MODULE	pointer_arith_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	2,"pointer_arith.c"
+	C_LINE	4,"pointer_arith.c"
+	SECTION	code_compiler
+
+; Function func1a flags 0x00000200 __smallc 
+; char * func1a(char * ptr)
+; parameter 'char * ptr' at sp+2 size(2)
+	C_LINE	4,"pointer_arith.c::func1a::0::0"
+._func1a
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	inc	hl
+	inc	hl
+	ret
+
+
+	C_LINE	7,"pointer_arith.c::func1a::0::1"
+
+; Function func1b flags 0x00000200 __smallc 
+; char * func1b(char * ptr)
+; parameter 'char * ptr' at sp+2 size(2)
+	C_LINE	7,"pointer_arith.c::func1b::0::1"
+._func1b
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	inc	hl
+	inc	hl
+	ret
+
+
+	C_LINE	10,"pointer_arith.c::func1b::0::2"
+
+; Function func1c flags 0x00000200 __smallc 
+; int func1c(char * p1, char * p2)
+; parameter 'char * p2' at sp+2 size(2)
+; parameter 'char * p1' at sp+4 size(2)
+	C_LINE	10,"pointer_arith.c::func1c::0::2"
+._func1c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	13,"pointer_arith.c::func1c::0::3"
+
+; Function func1d flags 0x00000200 __smallc 
+; char * func1d(char * ptr)
+; parameter 'char * ptr' at sp+2 size(2)
+	C_LINE	13,"pointer_arith.c::func1d::0::3"
+._func1d
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ex	de,hl
+	ld	hl,(_c)
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	16,"pointer_arith.c::func1d::0::4"
+
+; Function func1e flags 0x00000200 __smallc 
+; char * func1e(char * ptr)
+; parameter 'char * ptr' at sp+2 size(2)
+	C_LINE	16,"pointer_arith.c::func1e::0::4"
+._func1e
+	pop	de
+	pop	hl
+	dec	hl
+	push	hl
+	push	de
+	inc	hl
+	ret
+
+
+	C_LINE	20,"pointer_arith.c::func1e::0::5"
+
+; Function func2a flags 0x00000200 __smallc 
+; int * func2a(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	20,"pointer_arith.c::func2a::0::5"
+._func2a
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	23,"pointer_arith.c::func2a::0::6"
+
+; Function func2b flags 0x00000200 __smallc 
+; int * func2b(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	23,"pointer_arith.c::func2b::0::6"
+._func2b
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	26,"pointer_arith.c::func2b::0::7"
+
+; Function func2c flags 0x00000200 __smallc 
+; int func2c(int * p1, int * p2)
+; parameter 'int * p2' at sp+2 size(2)
+; parameter 'int * p1' at sp+4 size(2)
+	C_LINE	26,"pointer_arith.c::func2c::0::7"
+._func2c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	srl	h
+	rr	l
+	ret
+
+
+	C_LINE	29,"pointer_arith.c::func2c::0::8"
+
+; Function func2d flags 0x00000200 __smallc 
+; int * func2d(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	29,"pointer_arith.c::func2d::0::8"
+._func2d
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	push	hl
+	ld	hl,(_c)
+	add	hl,hl
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	32,"pointer_arith.c::func2d::0::9"
+
+; Function func2e flags 0x00000200 __smallc 
+; int * func2e(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	32,"pointer_arith.c::func2e::0::9"
+._func2e
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	call	l_gint	;
+	dec	hl
+	dec	hl
+	pop	de
+	call	l_pint
+	inc	hl
+	inc	hl
+	ret
+
+
+	C_LINE	36,"pointer_arith.c::func2e::0::10"
+
+; Function func3a flags 0x00000200 __smallc 
+; int * func3a(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	36,"pointer_arith.c::func3a::0::10"
+._func3a
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	39,"pointer_arith.c::func3a::0::11"
+
+; Function func3b flags 0x00000200 __smallc 
+; int * func3b(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	39,"pointer_arith.c::func3b::0::11"
+._func3b
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	42,"pointer_arith.c::func3b::0::12"
+
+; Function func3c flags 0x00000200 __smallc 
+; int func3c(int * p1, int * p2)
+; parameter 'int * p2' at sp+2 size(2)
+; parameter 'int * p1' at sp+4 size(2)
+	C_LINE	42,"pointer_arith.c::func3c::0::12"
+._func3c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	srl	h
+	rr	l
+	ret
+
+
+	C_LINE	45,"pointer_arith.c::func3c::0::13"
+
+; Function func3d flags 0x00000200 __smallc 
+; int * func3d(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	45,"pointer_arith.c::func3d::0::13"
+._func3d
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	push	hl
+	ld	hl,(_c)
+	add	hl,hl
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	48,"pointer_arith.c::func3d::0::14"
+
+; Function func3e flags 0x00000200 __smallc 
+; int * func3e(int * ptr)
+; parameter 'int * ptr' at sp+2 size(2)
+	C_LINE	48,"pointer_arith.c::func3e::0::14"
+._func3e
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	call	l_gint	;
+	dec	hl
+	dec	hl
+	pop	de
+	call	l_pint
+	inc	hl
+	inc	hl
+	ret
+
+
+	C_LINE	52,"pointer_arith.c::func3e::0::15"
+
+; Function func4a flags 0x00000200 __smallc 
+; long * func4a(long * ptr)
+; parameter 'long * ptr' at sp+2 size(2)
+	C_LINE	52,"pointer_arith.c::func4a::0::15"
+._func4a
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,8
+	add	hl,bc
+	ret
+
+
+	C_LINE	55,"pointer_arith.c::func4a::0::16"
+
+; Function func4b flags 0x00000200 __smallc 
+; long * func4b(long * ptr)
+; parameter 'long * ptr' at sp+2 size(2)
+	C_LINE	55,"pointer_arith.c::func4b::0::16"
+._func4b
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,8
+	add	hl,bc
+	ret
+
+
+	C_LINE	58,"pointer_arith.c::func4b::0::17"
+
+; Function func4c flags 0x00000200 __smallc 
+; int func4c(long * p1, long * p2)
+; parameter 'long * p2' at sp+2 size(2)
+; parameter 'long * p1' at sp+4 size(2)
+	C_LINE	58,"pointer_arith.c::func4c::0::17"
+._func4c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	srl	h
+	rr	l
+	srl	h
+	rr	l
+	ret
+
+
+	C_LINE	61,"pointer_arith.c::func4c::0::18"
+
+; Function func4d flags 0x00000200 __smallc 
+; long * func4d(long * ptr)
+; parameter 'long * ptr' at sp+2 size(2)
+	C_LINE	61,"pointer_arith.c::func4d::0::18"
+._func4d
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	push	hl
+	ld	hl,(_c)
+	add	hl,hl
+	add	hl,hl
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	64,"pointer_arith.c::func4d::0::19"
+
+; Function func4e flags 0x00000200 __smallc 
+; long * func4e(long * ptr)
+; parameter 'long * ptr' at sp+2 size(2)
+	C_LINE	64,"pointer_arith.c::func4e::0::19"
+._func4e
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	ld	c,(hl)
+	inc	hl
+	ld	b,(hl)
+	ld	hl,-4
+	add	hl,bc
+	pop	de
+	call	l_pint
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	69,"pointer_arith.c::func4e::0::20"
+
+; Function func5a flags 0x00000200 __smallc 
+; long * * func5a(long * * ptr)
+; parameter 'long * * ptr' at sp+2 size(2)
+	C_LINE	69,"pointer_arith.c::func5a::0::20"
+._func5a
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	72,"pointer_arith.c::func5a::0::21"
+
+; Function func5b flags 0x00000200 __smallc 
+; long * * func5b(long * * ptr)
+; parameter 'long * * ptr' at sp+2 size(2)
+	C_LINE	72,"pointer_arith.c::func5b::0::21"
+._func5b
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,4
+	add	hl,bc
+	ret
+
+
+	C_LINE	76,"pointer_arith.c::func5b::0::22"
+
+; Function func5c flags 0x00000200 __smallc 
+; int func5c(long * * p1, long * * p2)
+; parameter 'long * * p2' at sp+2 size(2)
+; parameter 'long * * p1' at sp+4 size(2)
+	C_LINE	76,"pointer_arith.c::func5c::0::22"
+._func5c
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	call	l_gint6sp	;
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	srl	h
+	rr	l
+	ret
+
+
+	C_LINE	79,"pointer_arith.c::func5c::0::23"
+
+; Function func5d flags 0x00000200 __smallc 
+; long * * func5d(long * * ptr)
+; parameter 'long * * ptr' at sp+2 size(2)
+	C_LINE	79,"pointer_arith.c::func5d::0::23"
+._func5d
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	push	hl
+	ld	hl,(_c)
+	add	hl,hl
+	pop	de
+	ex	de,hl
+	and	a
+	sbc	hl,de
+	ret
+
+
+	C_LINE	82,"pointer_arith.c::func5d::0::24"
+
+; Function func5e flags 0x00000200 __smallc 
+; long * * func5e(long * * ptr)
+; parameter 'long * * ptr' at sp+2 size(2)
+	C_LINE	82,"pointer_arith.c::func5e::0::24"
+._func5e
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	call	l_gint	;
+	dec	hl
+	dec	hl
+	pop	de
+	call	l_pint
+	inc	hl
+	inc	hl
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._c	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_c
+	GLOBAL	_func1a
+	GLOBAL	_func1b
+	GLOBAL	_func1c
+	GLOBAL	_func1d
+	GLOBAL	_func1e
+	GLOBAL	_func2a
+	GLOBAL	_func2b
+	GLOBAL	_func2c
+	GLOBAL	_func2d
+	GLOBAL	_func2e
+	GLOBAL	_func3a
+	GLOBAL	_func3b
+	GLOBAL	_func3c
+	GLOBAL	_func3d
+	GLOBAL	_func3e
+	GLOBAL	_func4a
+	GLOBAL	_func4b
+	GLOBAL	_func4c
+	GLOBAL	_func4d
+	GLOBAL	_func4e
+	GLOBAL	_func5a
+	GLOBAL	_func5b
+	GLOBAL	_func5c
+	GLOBAL	_func5d
+	GLOBAL	_func5e
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

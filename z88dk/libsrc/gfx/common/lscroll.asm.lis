@@ -1,0 +1,31 @@
+/tmp/tmpXXPWMJHy.asm:
+     1                          MODULE lscroll_asm
+     2                          LINE 0, "lscroll.asm"
+lscroll.asm:
+                                
+     1                          ;Usage: void lscroll(int x, int y, int width, int height, int pixels)
+     2                          
+     3                          IF !__CPU_GBZ80__ & !__CPU_INTEL__
+     4                          
+     5                              SECTION code_graphics
+     6                              PUBLIC  lscroll
+     7                              PUBLIC  _lscroll
+     8                          
+     9                              EXTERN  scroll_left
+    10                          
+    11                          
+    12                          
+    13                          .lscroll
+    14                          ._lscroll
+    15                              push    ix
+    16                              ld      ix,2
+    17                              add     ix,sp
+    18                              ld      a,(ix+2)
+    19                              ld      c,(ix+4)
+    20                              ld      b,(ix+6)
+    21                              ld      l,(ix+8)
+    22                              ld      h,(ix+10)
+    23                              pop     ix
+    24                              jp     scroll_left
+    25                          ENDIF
+    26                          

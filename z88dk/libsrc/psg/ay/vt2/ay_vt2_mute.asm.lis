@@ -1,0 +1,19 @@
+/tmp/tmpXXaoBXjz.asm:
+     1                          MODULE ay_vt2_mute_asm
+     2                          LINE 0, "ay_vt2_mute.asm"
+ay_vt2_mute.asm:
+                                
+     1                          
+     2                          	SECTION	code_psg
+     3                          
+     4                          	PUBLIC	ay_vt2_mute
+     5                          	PUBLIC	_ay_vt2_mute
+     6                          	EXTERN	asm_VT_MUTE
+     7                          
+     8                          
+     9                          ay_vt2_mute:
+    10                          _ay_vt2_mute:
+    11  0000  cd0000            	call	asm_VT_MUTE
+    12  0003  c9                	ret
+    13                          
+    14                          

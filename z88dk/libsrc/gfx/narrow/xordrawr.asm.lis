@@ -1,0 +1,29 @@
+/tmp/tmpXXKviwbC.asm:
+     1                          MODULE xordrawr_asm
+     2                          LINE 0, "xordrawr.asm"
+xordrawr.asm:
+                                
+     1                          ;
+     2                          ;     Z88 Graphics Functions - Small C+ stubs
+     3                          ; ----- void  xordrawr(int x2, int y2)
+     4                          
+     5                          
+     6                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     7                              SECTION code_graphics
+     8                          
+     9                              PUBLIC  xordrawr
+    10                              PUBLIC  _xordrawr
+    11                          
+    12                              EXTERN  asm_xordrawr
+    13                          
+    14                          .xordrawr
+    15                          ._xordrawr
+    16                              pop     af    ; ret addr
+    17                              pop     de    ; y
+    18                              pop     hl    ; x
+    19                              push    hl
+    20                              push    de
+    21                              push    af    ; ret addr
+    22                              jp      asm_xordrawr
+    23                          ENDIF
+    24                          

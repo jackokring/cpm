@@ -1,0 +1,28 @@
+/tmp/tmpXXyFmrIW.asm:
+     1                          MODULE plot_asm
+     2                          LINE 0, "plot.asm"
+plot.asm:
+                                
+     1                          ; ----- void  plot(int x, int y)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  plot
+     7                              PUBLIC  _plot
+     8                          
+     9                              EXTERN  asm_plot
+    10                          
+    11                          
+    12                          .plot
+    13                          ._plot
+    14                              pop     af    ; ret addr
+    15                              pop     hl    ; y
+    16                              pop     de    ; x
+    17                              push    de
+    18                              push    hl
+    19                              ld      h,e
+    20                              push    af    ; ret addr
+    21                              jp      asm_plot
+    22                          ENDIF
+    23                          

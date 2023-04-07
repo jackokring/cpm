@@ -1,0 +1,54 @@
+/tmp/tmpXXnPMHZf.asm:
+     1                          MODULE psg_envelope_asm
+     2                          LINE 0, "psg_envelope.asm"
+psg_envelope.asm:
+                                
+     1                          	SECTION code_clib
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_RABBIT__ & !__CPU_GBZ80__
+     4                          	PUBLIC	psg_envelope
+     5                          	PUBLIC	_psg_envelope
+     6                          
+     7                          ;
+     8                          
+     9                          ;	$Id: psg_envelope.asm $
+    10                          
+    11                          ;========================================================================================
+    12                          ; void psg_envelope(unsigned int waveform, int period, unsigned int channel) __smallc;
+    13                          ;========================================================================================
+    14                          ;  foo entry, envelope is not avaliable on SN76489
+    15                          ;==============================================================
+    16                          
+    17                          	INCLUDE	"sn76489.inc"
+    18                          
+    19                          .psg_envelope
+    20                          ._psg_envelope
+    21                          
+    22                          	ld	hl, 2
+    23                          	add	hl, sp
+    24                          	ld	c, (hl)		; C = Channel
+    25                          
+    26                          	ld	a, $0F		; max attenuation,
+    27                          	ld	b, a		; ..only the 4 lower bits are significant
+    28                          
+    29                          	ld	a, c
+    30                          	rrc	a
+    31                          	rrc	a
+    32                          	rrc	a
+    33                          	and	a, $60		; Puts the channel number in bits 5 and 6
+    34                          
+    35                          	or	a, $90
+    36                          	or	a, b		; Prepares the first byte of the command
+    37                          IF HAVE16bitbus
+    38                          	ld	bc,psgport
+    39                          	out	(c),a
+    40                          ELSE
+    41                          	out	(psgport), a	; Sends it
+    42                            IF PSGLatchPort
+    43                              in a,(PSGLatchPort)
+    44                            ENDIF
+    45                          ENDIF
+    46                          
+    47                          	ret
+    48                          ENDIF
+    49                          

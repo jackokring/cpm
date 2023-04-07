@@ -1,0 +1,24 @@
+/tmp/tmpXXrM8pGz.asm:
+     1                          MODULE ay_vt2_init_asm
+     2                          LINE 0, "ay_vt2_init.asm"
+ay_vt2_init.asm:
+                                
+     1                          
+     2                          IF !__CPU_INTEL__ && !__CPU_GBZ80__
+     3                          	SECTION	code_psg
+     4                          	PUBLIC	ay_vt2_init
+     5                          	PUBLIC	_ay_vt2_init
+     6                          
+     7                          	EXTERN	asm_VT_INIT
+     8                          
+     9                          ay_vt2_init:
+    10                          _ay_vt2_init:
+    11                          	push	ix
+    12                          	push	iy
+    13                          	call	asm_VT_INIT
+    14                          	pop	iy
+    15                          	pop	ix
+    16                          	ret
+    17                          
+    18                          ENDIF
+    19                          

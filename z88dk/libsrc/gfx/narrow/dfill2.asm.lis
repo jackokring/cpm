@@ -1,0 +1,191 @@
+/tmp/tmpXXNLeAcr.asm:
+     1                          MODULE dfill2_asm
+     2                          LINE 0, "dfill2.asm"
+dfill2.asm:
+                                
+     1                          ;     Z88DK Small C+ Graphics Functions
+     2                          ;     Fills a screen area
+     3                          ;    Original code by Massimo Morra (Thanks!)
+     4                          ;    Ported by Stefano Bodrato
+     5                          ;
+     6                          ;    Feb 2000 - Platform dependent stack usage
+     7                          ;      Stack usage should be maxy*8 (512 bytes for the Z88)
+     8                          ;
+     9                          ;    Since some platform (expecially the TI83) has very little stack space,
+    10                          ;    we undersize it; this will cause a crash if a big area is filled.
+    11                          ;
+    12                          ;    GENERIC VERSION
+    13                          ;   IT DOESN'T MAKE USE OF ALTERNATE REGISTERS
+    14                          ;   IT IS BASED ON "pointxy" and "plotpixel"
+    15                          ;
+    16                          ;    $Id: dfill2.asm,v 1.4 2016-04-13 21:09:09 dom Exp $
+    17                          ;
+    18                          
+    19                          
+    20                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    21                              INCLUDE    "graphics/grafix.inc"
+    22                          
+    23                                  SECTION    code_graphics
+    24                                PUBLIC    do_fill
+    25                                EXTERN   pointxy
+    26                                EXTERN   plotpixel
+    27                          
+    28                          
+    29                          ;ix points to the table on stack (above)
+    30                          
+    31                          ;Entry:
+    32                          ;     d=x0 e=y0
+    33                          
+    34                          .do_fill
+    35                                ld    hl,-maxy*3    ; create buffer 1 on stack
+    36                                add    hl,sp    ; The stack size depends on the display height.
+    37                                ld    sp,hl    ; The worst case is when we paint a blank
+    38                                push    hl    ; display starting from the center.
+    39                                pop    ix
+    40                                ld    (hl),d
+    41                                inc    hl
+    42                                ld    (hl),e
+    43                                inc    hl
+    44                                ld    (hl),255
+    45                                ld    hl,-maxy*3    ; create buffer 2 on stack
+    46                                add    hl,sp
+    47                                ld    sp,hl
+    48                          
+    49                          .loop    push    ix
+    50                              push    hl
+    51                                call    cfill
+    52                              pop    ix
+    53                              pop    hl
+    54                          
+    55                          ;.asave    ld    a,0
+    56                              ;and    a
+    57                          
+    58                              push de
+    59                              pop af
+    60                          
+    61                              ;;ex    af,af    ; Restore the Z flag
+    62                              ;;push    af
+    63                              ;;ex    af,af
+    64                              ;;pop    af
+    65                          
+    66                              jr    nz,loop
+    67                                ld    hl,maxy*6    ; restore the stack pointer (parm*2)
+    68                                add    hl,sp
+    69                                ld    sp,hl
+    70                                ret
+    71                          
+    72                          .cfill
+    73                              ;sub    a,a    ; Reset the Z flag
+    74                              ;ex    af,af    ; and save it
+    75                          
+    76                              xor    a
+    77                              push af
+    78                              pop de
+    79                          
+    80                              ;ld    (asave+1),a
+    81                          
+    82                          .next    ld    a,(ix+0)
+    83                              cp    255    ; stopper ?
+    84                              ret    z    ; return
+    85                              ld    b,a
+    86                              ld    c,(ix+1)
+    87                          
+    88                              push    bc
+    89                          
+    90                              or    a
+    91                              jr    z,l1
+    92                          
+    93                              dec    b
+    94                              call    doplot
+    95                              pop    bc
+    96                              push    bc
+    97                          
+    98                          .l1
+    99                              ld    a,b
+   100                          
+   101                              cp    maxy-1
+   102                              jr    z,l2
+   103                          
+   104                              inc    b
+   105                              call    doplot
+   106                              pop    bc
+   107                              push    bc
+   108                          
+   109                          .l2
+   110                          
+   111                              ld    a,c
+   112                              or    a
+   113                              jr    z,l3
+   114                          
+   115                              dec    c
+   116                              call    doplot
+   117                          
+   118                          .l3
+   119                              pop    bc
+   120                          
+   121                              ld    a,c
+   122                              cp    maxx-1
+   123                              jr    z,l4
+   124                          
+   125                              inc    c
+   126                              call    doplot
+   127                          
+   128                          .l4
+   129                              inc    ix
+   130                              inc    ix
+   131                              jr    next
+   132                          
+   133                          .doplot
+   134                              push    bc
+   135                              ld    (hl),255
+   136                          
+   137                              push    hl
+   138                              ld    l,b
+   139                              ld    h,c
+   140                          
+   141                              ;call    pixeladdress    ; bc must be saved by pixeladdress !
+   142                              push de
+   143                              call pointxy
+   144                              pop de
+   145                              pop    hl
+   146                          
+   147                              jr    z,dontret
+   148                              pop    af
+   149                              ret
+   150                          .dontret
+   151                          
+   152                              or    b    ; Z flag set...
+   153                          ;    or 1
+   154                          ;    and a
+   155                          
+   156                              ;ld    (asave+1),a
+   157                              push af
+   158                              ;pop de
+   159                          
+   160                          ;    ld    (de),a
+   161                          
+   162                              push    hl
+   163                              ld    l,b
+   164                              ld    h,c
+   165                              call plotpixel
+   166                              pop    hl
+   167                          
+   168                              pop de
+   169                          
+   170                              pop    bc
+   171                              ld    (hl),b
+   172                              inc    hl
+   173                              ld    (hl),c
+   174                              inc    hl
+   175                              ld    (hl),255
+   176                          
+   177                              ;ex    af,af    ; Save the Z flag
+   178                          
+   179                              xor    a
+   180                          
+   181                              ret
+   182                          
+   183                                  SECTION    bss_graphics
+   184                          .spsave    defw 0
+   185                          ENDIF
+   186                          

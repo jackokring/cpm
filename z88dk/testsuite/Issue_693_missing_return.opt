@@ -1,0 +1,65 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:57 2023
+
+
+	C_LINE	0,"Issue_693_missing_return.c"
+
+	MODULE	Issue_693_missing_return_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"Issue_693_missing_return.c"
+	C_LINE	2,"Issue_693_missing_return.c"
+	C_LINE	3,"Issue_693_missing_return.c"
+	C_LINE	4,"Issue_693_missing_return.c"
+	C_LINE	5,"Issue_693_missing_return.c"
+	C_LINE	6,"Issue_693_missing_return.c"
+	C_LINE	8,"Issue_693_missing_return.c"
+	SECTION	code_compiler
+
+; Function str_word_wrap flags 0x00000200 __smallc 
+; unsigned char type8* str_word_wrap(unsigned char type8* str)
+; parameter 'unsigned char type8* str' at sp+2 size(2)
+	C_LINE	9,"Issue_693_missing_return.c::str_word_wrap::0::0"
+._str_word_wrap
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ret
+
+
+	C_LINE	13,"Issue_693_missing_return.c::str_word_wrap::0::1"
+
+; Function ms_statuschar flags 0x00000200 __smallc 
+; void ms_statuschar(unsigned char c)
+; parameter 'unsigned char c' at sp+2 size(1)
+	C_LINE	14,"Issue_693_missing_return.c::ms_statuschar::0::1"
+._ms_statuschar
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_ms_statuschar
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

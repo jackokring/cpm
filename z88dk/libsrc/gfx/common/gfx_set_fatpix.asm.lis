@@ -1,0 +1,22 @@
+/tmp/tmpXXF4ysPB.asm:
+     1                          MODULE gfx_set_fatpix_asm
+     2                          LINE 0, "gfx_set_fatpix.asm"
+gfx_set_fatpix.asm:
+                                
+     1                          
+     2                          SECTION code_clib
+     3                          PUBLIC gfx_set_fatpix
+     4                          PUBLIC _gfx_set_fatpix
+     5                          EXTERN __gfx_fatpix
+     6                          
+     7                          ; void gfx_set_fatpix(int enable);
+     8                          gfx_set_fatpix:
+     9                          _gfx_set_fatpix:
+    10  0000  c1                    pop     bc
+    11  0001  e1                    pop     hl
+    12  0002  e5                    push    hl
+    13  0003  c5                    push    bc
+    14  0004  7d                    ld      a,l
+    15  0005  320000                ld      (__gfx_fatpix),a
+    16  0008  c9                    ret
+    17                          

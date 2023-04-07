@@ -1,0 +1,110 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:02 2023
+
+
+	C_LINE	0,"8080/Issue_1531_opt_rule.c"
+
+	MODULE	X8080_Issue_1531_opt_rule_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	EXTERN	saved_hl
+	EXTERN	saved_de
+	C_LINE	1,"8080/Issue_1531_opt_rule.c"
+	SECTION	data_compiler
+._A
+	defw	11
+	SECTION	code_compiler
+	C_LINE	2,"8080/Issue_1531_opt_rule.c"
+	SECTION	data_compiler
+._Q
+	defw	2
+	SECTION	code_compiler
+	C_LINE	3,"8080/Issue_1531_opt_rule.c"
+	SECTION	data_compiler
+._L
+	defw	5
+	SECTION	code_compiler
+	C_LINE	5,"8080/Issue_1531_opt_rule.c"
+	C_LINE	7,"8080/Issue_1531_opt_rule.c"
+
+; Function main flags 0x00000000 __stdc 
+; void main()
+	C_LINE	8,"8080/Issue_1531_opt_rule.c::main::0::1"
+._main
+	ld	hl,(_L)
+	push	hl
+	ld	hl,(_Q)
+	add	hl,hl
+	pop	de
+	add	hl,de
+	dec	hl
+	dec	hl
+	dec	hl
+	push	hl
+	ld	hl,(_A)
+	ld	bc,-5
+	add	hl,bc
+	pop	de
+	call	l_sub
+	ld	a,h
+	or	l
+	jp	nz,ASMPC+4
+	scf
+	jp	nc,i_5	;
+	ld	hl,i_1+0
+	push	hl
+	call	_func
+	pop	bc
+	ret
+.i_5
+	ld	hl,i_1+12
+	push	hl
+	call	_func
+	pop	bc
+.i_6
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+	SECTION	rodata_compiler
+.i_1
+	defm	"It is zero"
+	defb	10
+
+	defm	""
+	defb	0
+
+	defm	"It is not zero"
+	defb	10
+
+	defm	""
+	defb	0
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_A
+	GLOBAL	_Q
+	GLOBAL	_L
+	GLOBAL	_func
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

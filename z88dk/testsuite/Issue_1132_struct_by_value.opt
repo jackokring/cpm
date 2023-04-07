@@ -1,0 +1,155 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:43 2023
+
+
+	C_LINE	0,"Issue_1132_struct_by_value.c"
+
+	MODULE	Issue_1132_struct_by_value_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_1132_struct_by_value.c"
+	C_LINE	9,"Issue_1132_struct_by_value.c"
+	C_LINE	10,"Issue_1132_struct_by_value.c"
+	C_LINE	11,"Issue_1132_struct_by_value.c"
+	C_LINE	13,"Issue_1132_struct_by_value.c"
+	SECTION	code_compiler
+
+; Function func_global_assign flags 0x00000200 __smallc 
+; void func_global_assign()
+	C_LINE	14,"Issue_1132_struct_by_value.c::func_global_assign::0::0"
+._func_global_assign
+	ld	de,_x
+	ld	hl,_y
+	ld	bc,14
+	ldir
+	ret
+
+
+	C_LINE	18,"Issue_1132_struct_by_value.c::func_global_assign::0::1"
+
+; Function func_global_assign_to_pointer flags 0x00000200 __smallc 
+; void func_global_assign_to_pointer()
+	C_LINE	19,"Issue_1132_struct_by_value.c::func_global_assign_to_pointer::0::1"
+._func_global_assign_to_pointer
+	ld	de,(_z)
+	ld	hl,_y
+	ld	bc,14
+	ldir
+	ret
+
+
+	C_LINE	23,"Issue_1132_struct_by_value.c::func_global_assign_to_pointer::0::2"
+
+; Function func_global_assign_from_pointer flags 0x00000200 __smallc 
+; void func_global_assign_from_pointer()
+	C_LINE	24,"Issue_1132_struct_by_value.c::func_global_assign_from_pointer::0::2"
+._func_global_assign_from_pointer
+	ld	de,_x
+	ld	hl,(_z)
+	ld	bc,14
+	ldir
+	ret
+
+
+	C_LINE	28,"Issue_1132_struct_by_value.c::func_global_assign_from_pointer::0::3"
+
+; Function func_local_assign flags 0x00000200 __smallc 
+; void func_local_assign()
+	C_LINE	29,"Issue_1132_struct_by_value.c::func_local_assign::0::3"
+._func_local_assign
+	ld	hl,65508	;const
+	add	hl,sp
+	ld	sp,hl
+	ld	hl,14	;const
+	add	hl,sp
+	push	hl
+	ld	hl,2	;const
+	add	hl,sp
+	pop	de
+	ld	bc,14
+	ldir
+	ld	hl,28	;const
+	add	hl,sp
+	ld	sp,hl
+	ret
+
+
+	C_LINE	36,"Issue_1132_struct_by_value.c::func_local_assign::0::4"
+
+; Function func_local_assign_to_pointer flags 0x00000200 __smallc 
+; void func_local_assign_to_pointer()
+	C_LINE	37,"Issue_1132_struct_by_value.c::func_local_assign_to_pointer::0::4"
+._func_local_assign_to_pointer
+	ld	hl,65520	;const
+	add	hl,sp
+	ld	sp,hl
+	ld	hl,0	;const
+	call	l_gintspsp	;
+	ld	hl,4	;const
+	add	hl,sp
+	pop	de
+	ld	bc,14
+	ldir
+	ld	hl,16	;const
+	add	hl,sp
+	ld	sp,hl
+	ret
+
+
+	C_LINE	45,"Issue_1132_struct_by_value.c::func_local_assign_to_pointer::0::5"
+
+; Function func_local_assign_from_pointer flags 0x00000200 __smallc 
+; void func_local_assign_from_pointer()
+	C_LINE	46,"Issue_1132_struct_by_value.c::func_local_assign_from_pointer::0::5"
+._func_local_assign_from_pointer
+	ld	hl,65520	;const
+	add	hl,sp
+	ld	sp,hl
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	dec	hl
+	dec	hl
+	call	l_gint	;
+	pop	de
+	ld	bc,14
+	ldir
+	ld	hl,16	;const
+	add	hl,sp
+	ld	sp,hl
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._x	defs	14
+._y	defs	14
+._z	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func_global_assign
+	GLOBAL	_func_global_assign_to_pointer
+	GLOBAL	_func_global_assign_from_pointer
+	GLOBAL	_func_local_assign
+	GLOBAL	_func_local_assign_to_pointer
+	GLOBAL	_func_local_assign_from_pointer
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

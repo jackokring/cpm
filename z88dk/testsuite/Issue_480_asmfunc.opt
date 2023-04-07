@@ -1,0 +1,101 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:51 2023
+
+
+	C_LINE	0,"Issue_480_asmfunc.c"
+
+	MODULE	Issue_480_asmfunc_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	31,"Issue_480_asmfunc.c"
+	C_LINE	33,"Issue_480_asmfunc.c"
+	SECTION	code_compiler
+
+; Function isr1 flags 0x00000200 __smallc 
+; void isr1()
+	C_LINE	33,"Issue_480_asmfunc.c::isr1::0::0"
+._isr1
+		EXTERN	asm_im2_push_registers_8080
+	EXTERN	asm_im2_pop_registers_8080
+	
+	call	asm_im2_push_registers_8080
+	call	__im2_isr_8080_isr1
+	call	asm_im2_pop_registers_8080
+	
+	ei
+	reti
+	ret
+
+
+	C_LINE	33,"Issue_480_asmfunc.c::isr1::0::1"
+
+; Function _im2_isr_8080_isr1 flags 0x00000200 __smallc 
+; void _im2_isr_8080_isr1()
+	C_LINE	34,"Issue_480_asmfunc.c::_im2_isr_8080_isr1::0::1"
+.__im2_isr_8080_isr1
+	ld	hl,(_x)
+	inc	hl
+	ld	(_x),hl
+	ret
+
+
+	C_LINE	38,"Issue_480_asmfunc.c::_im2_isr_8080_isr1::0::2"
+
+; Function isr2 flags 0x00000200 __smallc 
+; void isr2()
+	C_LINE	38,"Issue_480_asmfunc.c::isr2::0::2"
+._isr2
+		EXTERN	asm_im2_push_registers
+	EXTERN	asm_im2_pop_registers
+	
+	call	asm_im2_push_registers
+	call	__im2_isr_isr2
+	call	asm_im2_pop_registers
+	
+	ei
+	reti
+	ret
+
+
+	C_LINE	38,"Issue_480_asmfunc.c::isr2::0::3"
+
+; Function _im2_isr_isr2 flags 0x00000200 __smallc 
+; void _im2_isr_isr2()
+	C_LINE	39,"Issue_480_asmfunc.c::_im2_isr_isr2::0::3"
+.__im2_isr_isr2
+	ld	hl,(_x)
+	inc	hl
+	ld	(_x),hl
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+._x	defs	2
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_x
+	GLOBAL	_isr1
+	GLOBAL	__im2_isr_8080_isr1
+	GLOBAL	_isr2
+	GLOBAL	__im2_isr_isr2
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

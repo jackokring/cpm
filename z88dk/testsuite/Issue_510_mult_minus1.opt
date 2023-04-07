@@ -1,0 +1,51 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:54 2023
+
+
+	C_LINE	0,"Issue_510_mult_minus1.c"
+
+	MODULE	Issue_510_mult_minus1_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_510_mult_minus1.c"
+	SECTION	code_compiler
+
+; Function func flags 0x00000200 __smallc 
+; void func()
+	C_LINE	4,"Issue_510_mult_minus1.c::func::0::0"
+._func
+	ld	hl,1	;const
+	push	hl
+	dec	hl
+	add	hl,sp
+	call	l_gint	;
+	call	l_neg
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

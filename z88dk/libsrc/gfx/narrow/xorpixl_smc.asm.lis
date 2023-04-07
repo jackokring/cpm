@@ -1,0 +1,30 @@
+/tmp/tmpXXOsKwyx.asm:
+     1                          MODULE xorpixl_smc_asm
+     2                          LINE 0, "xorpixl_smc.asm"
+xorpixl_smc.asm:
+                                
+     1                          ;
+     2                          ;     Generic graphics routines
+     3                          ;    Self modifying code version
+     4                          ;
+     5                          ;     Stefano Bodrato - 4/1/2007
+     6                          ;
+     7                          ;
+     8                          ;     Invert pixel at (x,y) coordinate.
+     9                          ;
+    10                          ;
+    11                          ;    $Id: xorpixl_smc.asm,v 1.2 2015-01-19 01:32:47 pauloscustodio Exp $
+    12                          ;
+    13                          
+    14                          
+    15                              PUBLIC    xorpixel
+    16                          
+    17                              EXTERN    pixel
+    18                              EXTERN    pixmode
+    19                          
+    20  0000  e5                .xorpixel    push    hl
+    21  0001  21ae00                ld    hl,174    ; XOR (HL)
+    22  0004  220000                ld    (pixmode),hl
+    23  0007  e1                    pop    hl
+    24  0008  c30000                jp    pixel
+    25                          

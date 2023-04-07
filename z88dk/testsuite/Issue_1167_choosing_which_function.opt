@@ -1,0 +1,66 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:43 2023
+
+
+	C_LINE	0,"Issue_1167_choosing_which_function.c"
+
+	MODULE	Issue_1167_choosing_which_function_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	3,"Issue_1167_choosing_which_function.c"
+	C_LINE	4,"Issue_1167_choosing_which_function.c"
+	C_LINE	7,"Issue_1167_choosing_which_function.c"
+	SECTION	code_compiler
+
+; Function callit flags 0x00000200 __smallc 
+; void callit(int val)
+; parameter 'int val' at sp+2 size(2)
+	C_LINE	8,"Issue_1167_choosing_which_function.c::callit::0::0"
+._callit
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	a,h
+	or	l
+	jp	z,i_2	;
+	ld	hl,_func1
+	jp	i_3	;
+.i_2
+	ld	hl,_func2
+.i_3
+	push	hl
+	call	l_gint4sp	;
+	ex	(sp),hl
+	call	l_jphl
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_func1
+	GLOBAL	_func2
+	GLOBAL	_callit
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

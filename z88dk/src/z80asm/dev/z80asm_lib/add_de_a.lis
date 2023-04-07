@@ -1,0 +1,28 @@
+add_de_a.asm:
+     1                          ; Substitute for the z80 add de,a instruction
+     2                          ; no flags are affected
+     3                          ; CPU   Min T Max T
+     4                          ; 8080  74    74
+     5                          ; 8085  73    73
+     6                          ; gbz80 72    72
+     7                          ; r2ka  52    52
+     8                          ; z180  69    69
+     9                          ; z80   71    71
+    10                          ; z80n   8     8
+    11                          
+    12                                  SECTION code_l_sccz80
+    13                                  PUBLIC  __z80asm__add_de_a
+    14                          
+    15                          __z80asm__add_de_a:
+    16  0000  f5                        push    af
+    17                          
+    18  0001  83                        add     a, e
+    19  0002  5f                        ld      e, a
+    20                          
+    21  0003  7a                        ld      a, d
+    22  0004  ce00                      adc     a, 0
+    23  0006  57                        ld      d, a
+    24                          
+    25  0007  f1                        pop     af
+    26  0008  c9                        ret
+    27                          

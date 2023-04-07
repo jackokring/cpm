@@ -1,0 +1,81 @@
+rld.asm:
+     1                          ; Substitute for z80 rld instruction
+     2                          ; aralbrec 06.2007
+     3                          ; CPU   Min T Max T
+     4                          ; 8080  201   232
+     5                          ; 8085  197   226
+     6                          ; gbz80 164   188
+     7                          ; r2ka  108   125
+     8                          ; z180   18    18
+     9                          ; z80    18    18
+    10                          ; z80n   18    18
+    11                          
+    12                                  SECTION code_l_sccz80
+    13                                  PUBLIC  __z80asm__rld
+    14                          
+    15                          __z80asm__rld:
+    16                          
+    17  0000  3005                      jr      nc, dorld
+    18                          
+    19  0002  cd0700                    call    dorld
+    20  0005  37                        scf
+    21  0006  c9                        ret
+    22                          
+    23                          dorld:
+    24                          
+    25                            IF    __CPU_INTEL__                   ; a = xi, (hl) = jk --> a = xj, (hl) = ki
+    26                                  push    de
+    27                                  push    hl
+    28                          
+    29                                  ld      l, (hl)
+    30                                  ld      h, 0                    ; hl = 00jk
+    31                          
+    32                                  ld      d, a                    ; d = xi
+    33                                  and     0xf0
+    34                                  ld      e, a                    ; e = x0
+    35                                  ld      a, d
+    36                                  and     0x0f
+    37                                  ld      d, a                    ; d = a = 0i
+    38                          
+    39                                  add     hl, hl
+    40                                  add     hl, hl
+    41                                  add     hl, hl
+    42                                  add     hl, hl                  ; a = 0i, hl = 0jk0
+    43                          
+    44                                  add     a, l
+    45                                  ld      l, a                    ; a = 0i, hl = 0jki
+    46                                  ld      a, h                    ; a = 0j, hl = 0jki
+    47                                  add     a, e                    ; a = xj, hl = 0jki
+    48                          
+    49                                  ld      e, l                    ; a = xj, e = ki
+    50                          
+    51                                  pop     hl
+    52                                  ld      (hl), e                 ; a = xj, (hl) = ki
+    53                          
+    54                                  pop     de
+    55                            ELSE
+    56  0007  07                        rlca
+    57  0008  07                        rlca
+    58  0009  07                        rlca
+    59  000a  07                        rlca                            ; a = bits 32107654
+    60                          
+    61  000b  cb27                      sla     a
+    62  000d  cb16                      rl      (hl)
+    63  000f  ce00                      adc     a, 0
+    64                          
+    65  0011  17                        rla
+    66  0012  cb16                      rl      (hl)
+    67  0014  ce00                      adc     a, 0
+    68                          
+    69  0016  17                        rla
+    70  0017  cb16                      rl      (hl)
+    71  0019  ce00                      adc     a, 0
+    72                          
+    73  001b  17                        rla
+    74  001c  cb16                      rl      (hl)
+    75  001e  ce00                      adc     a, 0
+    76                            ENDIF
+    77                          
+    78  0020  b7                        or      a
+    79  0021  c9                        ret
+    80                          

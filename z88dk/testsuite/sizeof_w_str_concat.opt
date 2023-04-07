@@ -1,0 +1,54 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:01 2023
+
+
+	C_LINE	0,"sizeof_w_str_concat.c"
+
+	MODULE	sizeof_w_str_concat_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"sizeof_w_str_concat.c"
+	SECTION	code_compiler
+
+; Function main flags 0x00000000 __stdc 
+; int main()
+	C_LINE	2,"sizeof_w_str_concat.c::main::0::1"
+._main
+	ld	hl,14	;const
+	push	hl
+	ld	l,8
+	push	hl
+	ld	hl,7	;const
+	push	hl
+	ld	l,0
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

@@ -1,0 +1,34 @@
+lddr.asm:
+     1                          ; Substitute for the z80 lddr instruction
+     2                          ; Doesn't emulate the flags correctly
+     3                          
+     4                          
+     5                                  SECTION code_l_sccz80
+     6                                  PUBLIC  __z80asm__lddr
+     7                          
+     8                          __z80asm__lddr:
+     9  0000  f5                        push    af
+    10                          
+    11                          		; setup loop
+    12  0001  0b                        dec     bc
+    13  0002  04                        inc     b
+    14  0003  0c                        inc     c
+    15                          loop:
+    16                            IF    __CPU_GBZ80__
+    17                                  ld      a, (hl-)
+    18                            ELSE
+    19  0004  7e                        ld      a, (hl)
+    20  0005  2b                        dec     hl
+    21                            ENDIF
+    22  0006  12                        ld      (de), a
+    23  0007  1b                        dec     de
+    24                          
+    25                                  ; iterate
+    26  0008  0d                        dec     c
+    27  0009  c20400                    jp      nz, loop
+    28  000c  05                        dec     b
+    29  000d  c20400                    jp      nz, loop
+    30                          
+    31  0010  f1                        pop     af
+    32  0011  c9                        ret
+    33                          

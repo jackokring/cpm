@@ -1,0 +1,14 @@
+/tmp/tmpXXlNUFTA.asm:
+     1                          MODULE stencil_render2_asm
+     2                          LINE 0, "stencil_render2.asm"
+stencil_render2.asm:
+                                
+     1                          
+     2                          
+     3                          PUBLIC stencil_render
+     4                          PUBLIC _stencil_render
+     5                          EXTERN __generic_stencil_render
+     6                          
+     7                          defc stencil_render = __generic_stencil_render
+     8                          defc _stencil_render = stencil_render
+     9                          

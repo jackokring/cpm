@@ -1,0 +1,20 @@
+/tmp/tmpXXblXBQt.asm:
+     1                          MODULE saa_etracker_init_asm
+     2                          LINE 0, "etracker/saa_etracker_init.asm"
+etracker/saa_etracker_init.asm:
+                                
+     1                          
+     2                              SECTION code_clib
+     3                              PUBLIC  saa_etracker_init
+     4                              PUBLIC  _saa_etracker_init
+     5                              EXTERN  asm_etracker_init
+     6                          
+     7                          
+     8                          saa_etracker_init:
+     9                          _saa_etracker_init:
+    10  0000  c1                    pop     bc
+    11  0001  e1                    pop     hl
+    12  0002  e5                    push    hl
+    13  0003  c5                    push    bc
+    14  0004  c30000                jp      asm_etracker_init
+    15                          

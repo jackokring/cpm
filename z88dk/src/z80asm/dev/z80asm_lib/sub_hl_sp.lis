@@ -1,0 +1,42 @@
+sub_hl_sp.asm:
+     1                          ; Substitute for 'sbc hl, sp' instruction
+     2                          ; CPU   Min T Max T
+     3                          ; 8080  156   156
+     4                          ; 8085  154   154
+     5                          ; gbz80 232   232
+     6                          ; r2ka  111   111
+     7                          ; z180  146   146
+     8                          ; z80   151   151
+     9                          ; z80n  151   151
+    10                          
+    11                                  SECTION code_l_sccz80
+    12                                  PUBLIC  __z80asm__sub_hl_sp
+    13                          
+    14                          __z80asm__sub_hl_sp:
+    15  0000  c5                        push    bc
+    16  0001  47                        ld      b, a
+    17  0002  d5                        push    de
+    18  0003  eb                        ex      de, hl                  ; subtrahed to de
+    19                          
+    20                            IF    __CPU_GBZ80__
+    21                                  ld      hl, sp+6                ; minuend to hl, compensate for return address, DE and BC in stack
+    22                            ELSE
+    23  0004  f5                        push    af
+    24  0005  210800                    ld      hl, 8                   ; minuend to hl, compensate for return address, DE, BC and AF in stack
+    25  0008  39                        add     hl, sp
+    26  0009  f1                        pop     af
+    27                            ENDIF
+    28  000a  7b                        ld      a, e
+    29  000b  95                        sub     a, l
+    30  000c  5f                        ld      e, a
+    31                          
+    32  000d  7a                        ld      a, d
+    33  000e  9c                        sbc     a, h
+    34  000f  57                        ld      d, a
+    35                          
+    36  0010  eb                        ex      de, hl
+    37  0011  d1                        pop     de
+    38  0012  78                        ld      a, b
+    39  0013  c1                        pop     bc
+    40  0014  c9                        ret
+    41                          

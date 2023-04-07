@@ -1,0 +1,29 @@
+/tmp/tmpXXQEmCzg.asm:
+     1                          MODULE xorclga_asm
+     2                          LINE 0, "xorclga.asm"
+xorclga.asm:
+                                
+     1                          ;Usage: xorclga(struct *pixels)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                          
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  xorclga
+     8                              PUBLIC  _xorclga
+     9                          
+    10                              EXTERN  asm_xorclga
+    11                          
+    12                          .xorclga
+    13                          ._xorclga
+    14                              push    ix
+    15                              ld      ix,2
+    16                              add     ix,sp
+    17                              ld      c,(ix+2)
+    18                              ld      b,(ix+4)
+    19                              ld      l,(ix+6)
+    20                              ld      h,(ix+8)
+    21                              pop     ix
+    22                              jp      asm_xorclga
+    23                          ENDIF
+    24                          

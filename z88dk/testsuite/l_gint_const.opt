@@ -1,0 +1,161 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:59 2023
+
+
+	C_LINE	0,"l_gint_const.c"
+
+	MODULE	l_gint_const_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	1,"l_gint_const.c"
+	C_LINE	11,"l_gint_const.c"
+	C_LINE	21,"l_gint_const.c"
+	SECTION	code_compiler
+
+; Function check1 flags 0x00000200 __smallc 
+; void check1(int a, int b, int c, int d)
+; parameter 'int d' at sp+2 size(2)
+; parameter 'int c' at sp+4 size(2)
+; parameter 'int b' at sp+6 size(2)
+; parameter 'int a' at sp+8 size(2)
+	C_LINE	22,"l_gint_const.c::check1::0::0"
+._check1
+	call	l_gint8sp	;
+	add	hl,hl
+	push	hl
+	call	l_gint8sp	;
+	ld	b,h
+	ld	c,l
+	add	hl,bc
+	add	hl,bc
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint6sp	;
+	add	hl,hl
+	add	hl,hl
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	ld	b,h
+	ld	c,l
+	add	hl,hl
+	add	hl,hl
+	add	hl,bc
+	pop	de
+	add	hl,de
+	ret
+
+
+	C_LINE	26,"l_gint_const.c::check1::0::1"
+
+; Function check_gchar flags 0x00000200 __smallc 
+; void check_gchar(struct v * vv)
+; parameter 'struct v * vv' at sp+2 size(2)
+	C_LINE	27,"l_gint_const.c::check_gchar::0::1"
+._check_gchar
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	call	l_gchar
+	push	hl
+	call	l_gint4sp	;
+	call	l_gchar1
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gchar2
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gchar3
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gchar4
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gchar5
+	pop	de
+	add	hl,de
+	ret
+
+
+	C_LINE	31,"l_gint_const.c::check_gchar::0::2"
+
+; Function check_gint flags 0x00000200 __smallc 
+; void check_gint(struct v2 * vv)
+; parameter 'struct v2 * vv' at sp+2 size(2)
+	C_LINE	32,"l_gint_const.c::check_gint::0::2"
+._check_gint
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	e,(hl)
+	inc	hl
+	ld	d,(hl)
+	push	de
+	call	l_gint4sp	;
+	call	l_gint2	;
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gint4	;
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gint6	;
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	call	l_gint8	;
+	pop	de
+	add	hl,de
+	push	hl
+	call	l_gint4sp	;
+	ld	bc,10
+	add	hl,bc
+	call	l_gint	;
+	pop	de
+	add	hl,de
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_check1
+	GLOBAL	_check_gchar
+	GLOBAL	_check_gint
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

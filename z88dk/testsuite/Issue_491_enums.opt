@@ -1,0 +1,124 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:50:53 2023
+
+
+	C_LINE	0,"Issue_491_enums.c"
+
+	MODULE	Issue_491_enums_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/compiler.h"
+	C_LINE	10,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	0,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	45,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	50,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	60,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	65,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	70,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	75,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	80,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	85,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	89,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	90,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	91,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	93,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	94,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	95,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	101,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	106,"/home/jackokring/cpm/z88dk/lib/config//../..//include/sys/types.h"
+	C_LINE	11,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	13,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	14,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	15,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	17,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	18,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	19,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	21,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	22,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	23,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	25,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	26,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	27,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	29,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	30,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	31,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	33,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	34,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	35,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	37,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	38,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	40,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	41,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	43,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	44,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	49,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	52,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	54,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	55,"/home/jackokring/cpm/z88dk/lib/config//../..//include/stdint.h"
+	C_LINE	2,"Issue_491_enums.c"
+	C_LINE	4,"Issue_491_enums.c"
+	C_LINE	6,"Issue_491_enums.c"
+	C_LINE	11,"Issue_491_enums.c"
+	C_LINE	19,"Issue_491_enums.c"
+	SECTION	rodata_compiler
+._g_noteEditMode
+	defw	0
+	SECTION	code_compiler
+	C_LINE	21,"Issue_491_enums.c"
+	C_LINE	29,"Issue_491_enums.c"
+	C_LINE	36,"Issue_491_enums.c"
+	C_LINE	38,"Issue_491_enums.c"
+
+; Function main flags 0x00000000 __stdc 
+; int main()
+	C_LINE	39,"Issue_491_enums.c::main::0::1"
+._main
+	push	bc
+	ld	hl,3	;const
+	ld	(_g_noteEditMode),hl
+	ld	hl,(_editedNoteStep)
+	inc	hl
+	pop	bc
+	push	hl
+	ld	hl,(_editedNoteStep)
+	call	l_gint5	;
+	pop	bc
+	push	hl
+	ld	hl,1	;const
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_g_noteEditMode
+	GLOBAL	_editedNoteStep
+	GLOBAL	_main
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

@@ -1,0 +1,38 @@
+ldi.asm:
+     1                          ; Substitute for the z80 ldi instruction
+     2                          ; Doesn't emulate the flags correctly
+     3                          
+     4                                  SECTION code_l_sccz80
+     5                                  PUBLIC  __z80asm__ldi
+     6                          
+     7                          __z80asm__ldi:
+     8  0000  f5                        push    af                      ;Save incoming flags
+     9                            IF    __CPU_GBZ80__
+    10                                  ld      a, (hl+)
+    11                            ELSE
+    12  0001  7e                        ld      a, (hl)
+    13  0002  23                        inc     hl
+    14                            ENDIF
+    15  0003  12                        ld      (de), a
+    16  0004  13                        inc     de
+    17  0005  0b                        dec     bc
+    18                            IF    !__CPU_GBZ80__
+    19                                                        ; There's no point setting PV flag on a gbz80 since flag doesn't exist
+    20  0006  e3                        ex      (sp), hl                ;incoming af in hl, outgoing hl on stack
+    21  0007  c5                        push    bc                      ;Save bc, we need a temporary
+    22  0008  78                        ld      a, b
+    23  0009  b1                        or      c
+    24  000a  0e04                      ld      c, 4
+    25  000c  2002                      jr      nz, set_pv
+    26  000e  0e00                      ld      c, 0
+    27                          set_pv:
+    28  0010  7d                        ld      a, l
+    29  0011  e6e9                      and     @11101001               ;Knock out H + N flags as well
+    30  0013  b1                        or      c                       ;Add in PV flag required
+    31  0014  6f                        ld      l, a
+    32  0015  c1                        pop     bc
+    33  0016  e3                        ex      (sp), hl                ;Get hl back
+    34                            ENDIF
+    35  0017  f1                        pop     af                      ;And restore our modified af
+    36  0018  c9                        ret
+    37                          

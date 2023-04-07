@@ -1,0 +1,233 @@
+;* * * * *  Small-C/Plus z88dk * * * * *
+;  Version: 20789-c163a5749-20230406
+;
+;	Reconstructed for z80 Module Assembler
+;
+;	Module compile time: Thu Apr  6 17:51:01 2023
+
+
+	C_LINE	0,"z80n/Issue_312_z80n_optimisations.c"
+
+	MODULE	z80n_Issue_312_z80n_optimisations_c
+
+
+	INCLUDE "z80_crt0.hdr"
+
+
+	C_LINE	4,"z80n/Issue_312_z80n_optimisations.c"
+	SECTION	code_compiler
+
+; Function mult flags 0x00000200 __smallc 
+; int mult()
+	C_LINE	5,"z80n/Issue_312_z80n_optimisations.c::mult::0::0"
+._mult
+	push	bc
+	push	bc
+	ld	hl,2	;const
+	call	l_gintspsp	;
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	pop	de
+	call	l_mult
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	11,"z80n/Issue_312_z80n_optimisations.c::mult::0::1"
+
+; Function addition flags 0x00000200 __smallc 
+; int addition(int a)
+; parameter 'int a' at sp+2 size(2)
+	C_LINE	12,"z80n/Issue_312_z80n_optimisations.c::addition::0::1"
+._addition
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,10
+	add	hl,bc
+	push	hl
+	call	_mult
+	pop	hl
+	ret
+
+
+	C_LINE	20,"z80n/Issue_312_z80n_optimisations.c::addition::0::2"
+
+; Function subtract flags 0x00000200 __smallc 
+; int subtract(int a)
+; parameter 'int a' at sp+2 size(2)
+	C_LINE	21,"z80n/Issue_312_z80n_optimisations.c::subtract::0::2"
+._subtract
+	pop	bc
+	pop	hl
+	push	hl
+	push	bc
+	ld	bc,-10
+	add	hl,bc
+	push	hl
+	call	_mult
+	pop	hl
+	ret
+
+
+	C_LINE	30,"z80n/Issue_312_z80n_optimisations.c::subtract::0::3"
+
+; Function longops flags 0x00000200 __smallc 
+; long longops(long l)
+; parameter 'long l' at sp+2 size(4)
+	C_LINE	31,"z80n/Issue_312_z80n_optimisations.c::longops::0::3"
+._longops
+	ld	hl,2	;const
+	add	hl,sp
+	push	hl
+	call	l_glong
+	call	l_inclong
+	pop	bc
+	call	l_plong
+	call	l_declong
+	ret
+
+
+	C_LINE	35,"z80n/Issue_312_z80n_optimisations.c::longops::0::4"
+
+; Function longadd flags 0x00000200 __smallc 
+; long longadd(long l)
+; parameter 'long l' at sp+2 size(4)
+	C_LINE	36,"z80n/Issue_312_z80n_optimisations.c::longadd::0::4"
+._longadd
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_glong
+	ld	bc,10
+	add	hl,bc
+	jr	nc,ASMPC+3
+	inc	de
+	ret
+
+
+	C_LINE	40,"z80n/Issue_312_z80n_optimisations.c::longadd::0::5"
+
+; Function longadd_negative flags 0x00000200 __smallc 
+; long longadd_negative(long l)
+; parameter 'long l' at sp+2 size(4)
+	C_LINE	41,"z80n/Issue_312_z80n_optimisations.c::longadd_negative::0::5"
+._longadd_negative
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_glong
+	ld	bc,65516
+	add	hl,bc
+	jr	c,ASMPC+3
+	dec	de
+	push	de
+	push	hl
+	ld	hl,6	;const
+	add	hl,sp
+	call	l_glong
+	ld	bc,15536
+	add	hl,bc
+	jr	c,ASMPC+3
+	dec	de
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	46,"z80n/Issue_312_z80n_optimisations.c::longadd_negative::0::6"
+
+; Function longsub flags 0x00000200 __smallc 
+; long longsub(long l)
+; parameter 'long l' at sp+2 size(4)
+	C_LINE	47,"z80n/Issue_312_z80n_optimisations.c::longsub::0::6"
+._longsub
+	ld	hl,2	;const
+	add	hl,sp
+	call	l_glong
+	ld	bc,65516
+	add	hl,bc
+	jr	c,ASMPC+3
+	dec	de
+	push	de
+	push	hl
+	ld	hl,6	;const
+	add	hl,sp
+	call	l_glong
+	ld	bc,15536
+	add	hl,bc
+	jr	c,ASMPC+3
+	dec	de
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	53,"z80n/Issue_312_z80n_optimisations.c::longsub::0::7"
+	C_LINE	54,"z80n/Issue_312_z80n_optimisations.c::longsub::0::7"
+
+; Function longcall flags 0x00000200 __smallc 
+; int longcall()
+	C_LINE	55,"z80n/Issue_312_z80n_optimisations.c::longcall::0::7"
+._longcall
+	push	10000
+	push	0
+	ld	hl,10	;const
+	push	hl
+	call	_longfunc
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+	C_LINE	61,"z80n/Issue_312_z80n_optimisations.c::longcall::0::8"
+	C_LINE	63,"z80n/Issue_312_z80n_optimisations.c::longcall::0::8"
+
+; Function pushinstr flags 0x00000200 __smallc 
+; long pushinstr()
+	C_LINE	64,"z80n/Issue_312_z80n_optimisations.c::pushinstr::0::8"
+._pushinstr
+	ld	hl,1	;const
+	push	hl
+	ld	l,2
+	push	hl
+	ld	hl,3	;const
+	push	hl
+	call	_anotherfunc
+	pop	bc
+	pop	bc
+	pop	bc
+	ret
+
+
+; --- Start of Optimiser additions ---
+
+
+; --- Start of Static Variables ---
+
+	SECTION	bss_compiler
+	SECTION	code_compiler
+
+
+; --- Start of Scope Defns ---
+
+	GLOBAL	_mult
+	GLOBAL	_addition
+	GLOBAL	_subtract
+	GLOBAL	_longops
+	GLOBAL	_longadd
+	GLOBAL	_longadd_negative
+	GLOBAL	_longsub
+	GLOBAL	_longfunc
+	GLOBAL	_longcall
+	GLOBAL	_anotherfunc
+	GLOBAL	_pushinstr
+
+
+; --- End of Scope Defns ---
+
+
+; --- End of Compilation ---

@@ -1,0 +1,52 @@
+/tmp/tmpXXnHgnie.asm:
+     1                          MODULE xorclga_callee_asm
+     2                          LINE 0, "xorclga_callee.asm"
+xorclga_callee.asm:
+                                
+     1                          ;Usage: xorclga(struct *pixels)
+     2                          
+     3                          
+     4                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     5                              SECTION code_graphics
+     6                          
+     7                              PUBLIC  xorclga_callee
+     8                              PUBLIC  _xorclga_callee
+     9                          
+    10                              PUBLIC  asm_xorclga
+    11                          
+    12                              EXTERN  swapgfxbk
+    13                              EXTERN  __graphics_end
+    14                          
+    15                              EXTERN  xorclrarea
+    16                              INCLUDE "graphics/grafix.inc"
+    17                          
+    18                          
+    19                          .xorclga_callee
+    20                          ._xorclga_callee
+    21                          
+    22                              pop     af    ; ret addr
+    23                              pop     bc    ; y2
+    24                              pop     hl
+    25                              ld      b,l    ; x2
+    26                              pop     hl    ; y
+    27                              pop     de
+    28                              ld      h,e    ; x
+    29                              push    af    ; ret addr
+    30                          
+    31                          .asm_xorclga
+    32                              push    ix
+    33                          IF NEED_swapgfxbk = 1
+    34                              call    swapgfxbk
+    35                          ENDIF
+    36                              call    xorclrarea
+    37                          IF NEED_swapgfxbk
+    38                              jp      __graphics_end
+    39                          ELSE
+    40                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    41                              pop     ix
+    42                            ENDIF
+    43                              ret
+    44                          ENDIF
+    45                          
+    46                          ENDIF
+    47                          

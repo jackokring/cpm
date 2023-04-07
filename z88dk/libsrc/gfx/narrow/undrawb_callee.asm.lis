@@ -1,0 +1,50 @@
+/tmp/tmpXX1ZuLMt.asm:
+     1                          MODULE undrawb_callee_asm
+     2                          LINE 0, "undrawb_callee.asm"
+undrawb_callee.asm:
+                                
+     1                          ; ----- void __CALLEE__ undrawb(int x, int y, int h, int v)
+     2                          
+     3                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+     4                              SECTION code_graphics
+     5                          
+     6                              PUBLIC  undrawb_callee
+     7                              PUBLIC  _undrawb_callee
+     8                          
+     9                              PUBLIC  asm_undrawb
+    10                          
+    11                              EXTERN  drawbox
+    12                              EXTERN  respixel
+    13                              EXTERN  swapgfxbk
+    14                              EXTERN  __graphics_end
+    15                              INCLUDE "graphics/grafix.inc"
+    16                          
+    17                          
+    18                          .undrawb_callee
+    19                          ._undrawb_callee
+    20                              pop     af
+    21                              pop     bc    ; height
+    22                              pop     de
+    23                              ld      b,e    ; width
+    24                              pop     hl    ; x
+    25                              pop     de
+    26                              ld      h,e    ; y
+    27                              push    af
+    28                          
+    29                          .asm_undrawb
+    30                              push    ix
+    31                              ld      ix,respixel
+    32                          IF NEED_swapgfxbk = 1
+    33                              call    swapgfxbk
+    34                          ENDIF
+    35                              call    drawbox
+    36                          IF NEED_swapgfxbk
+    37                              jp      __graphics_end
+    38                          ELSE
+    39                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    40                              pop     ix
+    41                            ENDIF
+    42                              ret
+    43                          ENDIF
+    44                          ENDIF
+    45                          

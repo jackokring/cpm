@@ -1,0 +1,134 @@
+/tmp/tmpXXDrASr8.asm:
+     1                          MODULE getsprite_asm
+     2                          LINE 0, "getsprite.asm"
+getsprite.asm:
+                                
+     1                          ;
+     2                          ; Getsprite - Picks up a sprite from display with the given size
+     3                          ; by Stefano Bodrato - Jan 2001
+     4                          ; Apr 2002 - Fixed.  (Long time, I know...)
+     5                          ;
+     6                          ; The original putsprite code is by Patrick Davidson (TI 85)
+     7                          ;
+     8                          ; Generic version (just a bit slow)
+     9                          ;
+    10                          ;
+    11                          ; $Id: getsprite.asm $
+    12                          ;
+    13                          
+    14                          
+    15                          IF !__CPU_INTEL__ & !__CPU_GBZ80__
+    16                              SECTION   smc_clib
+    17                              PUBLIC    getsprite
+    18                              PUBLIC    _getsprite
+    19                              PUBLIC    getsprite_sub
+    20                              EXTERN    pixeladdress
+    21                              EXTERN    swapgfxbk
+    22                              EXTERN    __graphics_end
+    23                          
+    24                              INCLUDE    "graphics/grafix.inc"
+    25                          
+    26                          ; __gfx_coords: d,e (vert-horz)
+    27                          ; sprite: (ix)
+    28                          
+    29                          
+    30                          
+    31                          
+    32                          .getsprite
+    33                          ._getsprite
+    34                          
+    35                              push    ix
+    36                          
+    37                              ld    hl,4
+    38                              add    hl,sp
+    39                              ld    e,(hl)
+    40                              inc    hl
+    41                              ld    d,(hl)  ; sprite address
+    42                              push    de
+    43                              pop    ix
+    44                          
+    45                              inc    hl
+    46                              ld    e,(hl)
+    47                              inc    hl
+    48                              inc    hl
+    49                              ld    d,(hl)    ; x and y __gfx_coords
+    50                          
+    51                          
+    52                          .getsprite_sub
+    53                              ld    h,d
+    54                              ld    l,e
+    55                          
+    56                              ld    (actcoord),hl    ; save current coordinates
+    57                          
+    58                          IF NEED_swapgfxbk = 1
+    59                              call    swapgfxbk
+    60                          ENDIF
+    61                              call    pixeladdress
+    62                              xor    7
+    63                          
+    64                              ld     (_smc+1),a
+    65                          
+    66                              ld    h,d
+    67                              ld    l,e
+    68                          
+    69                              ld     e,(ix+0)
+    70                              ld     b,(ix+1)
+    71                          
+    72                              dec    e
+    73                              srl    e
+    74                              srl    e
+    75                              srl    e
+    76                              inc    e    ; INT ((width-1)/8+1)
+    77                          
+    78                          ._oloop    push    bc    ;Save # of rows
+    79                              push    de    ;Save # of bytes per row
+    80                          
+    81                          ._iloop2    ld    a,(hl)
+    82                              inc    hl
+    83                              ld    d,(hl)
+    84                          
+    85                          ._smc    ld    b,1    ;Load pixel position
+    86                              inc    b
+    87                              dec    b
+    88                              jr    z,zpos
+    89                          
+    90                          ._iloop
+    91                              rl    d
+    92                              rl    a
+    93                              djnz    _iloop
+    94                          
+    95                          .zpos
+    96                              ld    (ix+2),a
+    97                              inc    ix
+    98                          
+    99                              dec    e
+   100                              jr    nz,_iloop2
+   101                          
+   102                              ; ---------
+   103                              push    de
+   104                                ld    hl,(actcoord)
+   105                              inc    l
+   106                              ld    (actcoord),hl
+   107                              call    pixeladdress
+   108                              ld    h,d
+   109                              ld    l,e
+   110                              pop    de
+   111                              ; ---------
+   112                          
+   113                              pop    de
+   114                              pop    bc        ;Restore data
+   115                              djnz    _oloop
+   116                          
+   117                          IF NEED_swapgfxbk
+   118                              jp      __graphics_end
+   119                          ELSE
+   120                            IF !__CPU_INTEL__ & !__CPU_GBZ80__
+   121                              pop     ix
+   122                            ENDIF
+   123                              ret
+   124                          ENDIF
+   125                                  SECTION    bss_graphics
+   126                          .actcoord
+   127                              defw    0
+   128                          ENDIF
+   129                          
