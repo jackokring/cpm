@@ -4,10 +4,10 @@
 * `reader` is a network netcat server on `17202` (there is no responder as the socket is not defined before connect).
 
 # Ideas?
-* Add punch and reader (I/O channel use)
 * Extend BIOS for sound/gfx
 * Extend ANSI
 * Extended memory banking
+* Fully implement `bdos.c`
 
 # Coded Interface
 * BIOS calls via OUT FF (along with print raw vt52 character OUT 00).

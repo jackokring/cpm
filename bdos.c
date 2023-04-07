@@ -303,7 +303,7 @@ static unsigned sfn = 0;
 char *bdos_decode(int n)
 {
 	switch (n) {
-	    case  0: return "System Reset";
+	    case 0: return "System Reset";
 	    case 1: return "Console Input";
 	    case 2: return "Console Output";
 	    case 3: return "Reader Input";
