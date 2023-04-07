@@ -306,42 +306,46 @@ char *bdos_decode(int n)
 	    case  0: return "System Reset";
 	    case 1: return "Console Input";
 	    case 2: return "Console Output";
-	    case 3: return "Reader input";
-	    case 4: return "Punch output";
-	    case 5: return "List output";
-	    case 6: return "direct I/O";
-	    case 7: return "get I/O byte";
-	    case 8: return "set I/O byte";
+	    case 3: return "Reader Input";
+	    case 4: return "Punch Output";
+	    case 5: return "List Output";
+	    case 6: return "Direct I/O";
+	    case 7: return "Get I/O Byte";
+	    case 8: return "Set I/O Byte";
 	    case 9: return "Print String";
 	    case 10: return "Read Command Line";
 	    case 11: return "Console Status";
 	    case 12: return "Return Version Number";
-	    case 13: return "reset disk system";
-	    case 14: return "select disk";
-	    case 15: return "open file";
-	    case 16: return "close file";
-	    case 17: return "search for first";
-	    case 18: return "search for next";
-	    case 19: return "delete file (no wildcards yet)";
-	    case 20: return "read sequential";
-	    case 21: return "write sequential";
-	    case 22: return "make file";
-	    case 23: return "rename file";
-	    case 24: return "return login vector";
-	    case 25: return "return current disk";
+	    case 13: return "Reset Disk System";
+	    case 14: return "Select Disk";
+	    case 15: return "Open File";
+	    case 16: return "Close File";
+	    case 17: return "Search for First";
+	    case 18: return "Search for Next";
+	    case 19: return "Delete File";
+	    case 20: return "Read Sequential";
+	    case 21: return "Write Sequential";
+	    case 22: return "Make File";
+	    case 23: return "Rename File";
+	    case 24: return "Return Login Vector";
+	    case 25: return "Return Current Disk";
 	    case 26: return "Set DMA Address";
-	    case 27: return "Get alloc addr";
-	    case 28: return "Set r/o vector";
-	    case 29: return "return r/o vector";
-	    case 30: return "Set file attributes";
-	    case 31: return "get disk parameters";
+	    case 27: return "Get Alloc Address";
+	    case 28: return "Write Protect Disk";
+	    case 29: return "Get R/O Vector";
+	    case 30: return "Set File Attributes";
+	    case 31: return "Get DPB Address";
 	    case 32: return "Get/Set User Code";
-	    case 33: return "read random record";
-	    case 34: return "write random record";
-	    case 35: return "compute file size";
-	    case 36: return "set random record";
+	    case 33: return "Read Random";
+	    case 34: return "Write Random";
+	    case 35: return "Compute File Size";
+	    case 36: return "Set Random Record";
 	    /* Seems BDOS ends here */
-	    case 41:
+	    case 37: /* Reset Drive (but 13) */
+	    /* 38, 39 not used Access and Free Drive */
+	    case 40: /* Write Random with Zero Fill (rare? but 34) */ 
+	    /* CP/M 2.2 ends here */
+	    case 41: /* seems to use chdir() */
 	    default: return "unknown";
 	}
 }
