@@ -207,7 +207,11 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			putmes("\033[95m"); /* magenta */
 			break;
 		case 0x11: /* DC1 (user do) */
+			putmes("\033[94m"); /* blue */
+			break;
 		case 0x14: /* DC4 (user undo) */
+			putmes("\033[93m"); /* yellow */
+			break;
 		case 0x15: /* NAK (say waht?) */
 			putmes("\033[91m"); /* red */
 			break;
