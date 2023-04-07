@@ -318,6 +318,7 @@ consout(z80info *z80)
 }
 
 /* list or printer print character in C */
+static int listOK = -1;
 static void
 list(z80info *z80)
 {
@@ -328,8 +329,10 @@ list(z80info *z80)
 		/* linux lpr command spooling */
 		fp = popen("lpr -J 'CP/M'", "w");
 
-		if (fp == NULL)
+		if (fp == NULL) {
+			listOK = 0;
 			return;
+		}
 	}
 
 	/* close up on EOF */
@@ -634,7 +637,7 @@ secttran(z80info *z80)
 static void
 liststat(z80info *z80)
 {
-	A = 0xFF;
+	A = listOK == -1 ? 0xFF : 0x00;/* failed popen */
 }
 
 /* These two routines read and write ints at arbitrary aligned addrs.
