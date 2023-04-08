@@ -226,7 +226,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			/* the best constant syn jokes are the best */
 			break;
 		case 0x17: /* ETB (back later, busy) ^W */
-			putmes(" \033[92m$\033[0m ");
+			putmes(" \033[92m'$\033[0m ");
 			/* I believe */
 			break;
 		case 0x19: /* EM (back later, must buy magnetic media) ^Y */
