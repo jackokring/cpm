@@ -222,7 +222,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			putmes("\033[91m"); /* red ^U */
 			break;
 		case 0x16: /* SYN (achives phase lock so needs bit changes) ^V */
-			putmes(" \033[91mThe body of Christ. Blessed Mary Mother of God. Hands together for holy code handling.\033[0m ");
+			putmes(" \033[91mThe body of Christ. Blessed Mary Mother of God. Hands together for holy code handling. Like an 'er gin, boop, boop. Touched for the very first time. \033[0m ");
 			/* the best constant syn jokes are the best */
 			break;
 		case 0x17: /* ETB (back later, busy) ^W */
