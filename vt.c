@@ -396,7 +396,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	state = 0;
 	if(c < 32) {
 		putmes("\033[90m^"); /* literal escape (bold) */
-		putch(c + 32); /* code CTRL */  
+		putch(c + 64); /* code CTRL +32 is space gen slow, but funny */  
 		putmes("\033[0m");
 	} else putch(c);
 	break;	    
