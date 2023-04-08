@@ -195,29 +195,29 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0: /* NUL (C string terminal, but nothing as a SYN duplicate but zero, so flash default) */
 			break;
 		case 6: /* ACK (got you) */
-			putmes("\033[92m"); /* green */
+			putmes("\033[92m"); /* green ^F */
 			break;
-		case 0xe: /* SO */
+		case 0xe: /* SO ^N */
 			putmes("\033[37m"); /* cyan, wakey, not RYGB or M */
 			break;
-		case 0xf: /* SI */
-			putmes("\033[0m");
+		case 0xf: /* SI ^O */
+			putmes("\033[0m"); /* default */
 			break;
 		case 0x10: /* DLE (ask root RPC options) */
-			putmes("\033[95m"); /* magenta */
+			putmes("\033[95m"); /* magenta ^P */
 			break;
 		case 0x11: /* DC1 (user do) */
-			putmes("\033[94m"); /* blue */
+			putmes("\033[94m"); /* blue ^Q */
 			break;
 		case 0x14: /* DC4 (user undo) */
-			putmes("\033[93m"); /* yellow */
+			putmes("\033[93m"); /* yellow ^T */
 			break;
 		case 0x15: /* NAK (say waht?) */
-			putmes("\033[91m"); /* red */
+			putmes("\033[91m"); /* red ^U */
 			break;
-		case 0x16: /* SYN (achives phase lock so needs bit changes) */
-		case 0x17: /* ETB (back later, busy) */
-		case 0x19: /* EM (back later, must buy magnetic media) */
+		case 0x16: /* SYN (achives phase lock so needs bit changes) ^V */
+		case 0x17: /* ETB (back later, busy) ^W */
+		case 0x19: /* EM (back later, must buy magnetic media) ^Y */
 			break;
 		case 0x1c: /* FS */
 			putmes("\"\f\"");
@@ -262,7 +262,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	case 0x18: case 5:	/* clear to eol */
 	    putmes("\033[K");
 	    break;
-	case 0x12: case 0x13: /* DC2, DC3 */
+	case 0x12: case 0x13: /* DC2, DC3 / ^R, ^S */
 	    break;
 	default:
 	    putch(c);
