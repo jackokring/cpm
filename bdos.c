@@ -346,7 +346,7 @@ char *bdos_decode(int n)
 	    /* 38, 39 not used Access and Free Drive */
 	    case 40: return "Write Random with Zero Fill (Use 34)"; /* Write Random with Zero Fill (rare? but 34) */ 
 	    /* CP/M 2.2 ends here */
-	    case 41: /* seems to use chdir() */
+	    /* case 41: */ /* seems to use chdir() */
 	    default: return "Unknown";
 	}
 }
@@ -429,7 +429,6 @@ int fixrc(z80info *z80, FILE *fp)
 }
 
 /* emulation of BDOS calls */
-int tempA;
 void check_BDOS_hook(z80info *z80) {
 		/* 0 to 36 */
     int i;
@@ -851,13 +850,12 @@ void check_BDOS_hook(z80info *z80) {
 	    fixrc(z80, fp);
 	}
 	break;
-    case 41:
-    /* Assume something linux based */
+    /* case 41:
 	for (s = (char *)(z80->mem + DE); *s; ++s)
 	    *s = tolower(*(unsigned char *)s);
 	HL = (restricted_mode || chdir((char  *)(z80->mem + DE))) ? 0xff : 0x00;
         B = H; A = L;
-	break;
+	break; */ /* I think 41 is not strictly safe in an errant way */
 	/* Additions Jacko additions possible or better defaults */
 		case 7: /* Get IO Byte */
 			A = 0xA9; /* custom mapping */
@@ -868,33 +866,26 @@ void check_BDOS_hook(z80info *z80) {
 		case 30: /* Set File Attributes (are they any?) */
 		case 37: /* Reset Disk (try 13 but just one disk) */
 		case 40: /* Write Random with Zero Fill (try 34 with zeros) */
-			A = 0xFF;/* an error as can't close etc. and no attributes */
+			A = 0xFF; /* an error as can't close etc. and no attributes */
 			break;
 		case 3: /* Reader Input */
-		    	tmpA = C;
 			bios(z80, 7);
-		    	E = C;
-		    	C = tmpA;
+		    	E = C; /* clobbers command code */
 			break;
 		case 4: /* Punch Output */
-		    	tmpA = C;
-		    	C = E;
+		    	C = E; /* clobbers command code */
 			bios(z80, 6);
-		    	C = tmpA;
 			break;
 		case 5: /* List Output */
-		    	tmpA = C;
-		    	C = E;
+		    	C = E; /* clobbers command code */
 			bios(z80, 5);
-		    	C = tmpA;
 			break;
 		case 27: /* Get Alloc Address (doesn't exist, ouside 64 kB) */
-			printf("\n\nThere is no way to use a custom linux Alloc Addr.\n");
+			printf("\n\nThere is no way to get and use a custom linux Alloc Addr.\n");
 			/* fall through as dangerous to proceed */
+		    	printf("Falling through to exit handler.\n");
     default:
-	printf("\n\nUnrecognized BDOS-Function:\n");
-	printf("AF=%04x  BC=%04x  DE=%04x  HL=%04x  SP=%04x\nStack =",
-	       AF, BC, DE, HL, SP);
+	printf("\r\nbdos %d %s (AF=%04x BC=%04x DE=%04x HL=%04x SP=%04x STACK=", C, bdos_decode(C), AF, BC, DE, HL, SP);
 	for (i = 0; i < 8; ++i)
 	    printf(" %4x", z80->mem[SP + 2*i]
 		   + 256 * z80->mem[SP + 2*i + 1]);
