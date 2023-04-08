@@ -213,7 +213,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			putmes("\033[95m"); /* magenta ^P */
 			break;
 		case 0x11: /* DC1 (user do) */
-			putmes("\033[94m"); /* blue ^Q */
+			putmes("\033[94m"); /* blue ^Q */ /* XON */
 			break;
 		case 0x14: /* DC4 (user undo) */
 			putmes("\033[93m"); /* yellow ^T */
@@ -226,7 +226,12 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			/* the best constant syn jokes are the best */
 			break;
 		case 0x17: /* ETB (back later, busy) ^W */
+			putmes(" \033[92m$\033[0m ");
+			/* I believe */
+			break;
 		case 0x19: /* EM (back later, must buy magnetic media) ^Y */
+			/* Hard limit indicator */
+			putmes(" \033[92mYou are in a queue. All our operatives are using remote controls. We'll get back to you as soon a possible.\033[0m ");
 			break;
 		case 0x1c: /* FS ^\ */
 			state = 10; /* escape control literal */
@@ -266,7 +271,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	case 0x18: case 5:	/* clear to eol */
 	    putmes("\033[K");
 	    break;
-	case 0x12: case 0x13: /* DC2, DC3 / ^R, ^S */
+	case 0x12: case 0x13: /* DC2, DC3 / ^R, ^S (XOFF) */
 	    break;
 	default:
 	    putch(c);
