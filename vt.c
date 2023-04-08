@@ -187,11 +187,17 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	log = fopen("cpm.out", "w");
     fputc(c, log);
 #endif
+    if(c == 0x1d) /* GS ^] */ {
+	/* escape sequence close/reset */
+	state = 0;
+	return;
+    }
     switch (state) {
     case 0:
 	switch (c) {
 		/* Jacko override put CTRL */
 		/*^ the irony of LF equates to VT when the CR is not auto (the LF/CR what do auto point?) */
+		/* Always pass ^D */
 		case 0: /* NUL (C string terminal, but nothing as a SYN duplicate but zero, so flash default) */
 			break;
 		case 6: /* ACK (got you) */
@@ -219,18 +225,13 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x17: /* ETB (back later, busy) ^W */
 		case 0x19: /* EM (back later, must buy magnetic media) ^Y */
 			break;
-		case 0x1c: /* FS */
-			putmes("\"\f\"");
+		case 0x1c: /* FS ^\ */
+			state = 10; /* escape control literal */
 			break;
-		case 0x1d: /* GS */
-			putmes("\"\n\"");
-			break;
-		/* case 0x1e: / RS / adm3a - home
-			putmes("\"\n\"");
-			break; */
-		case 0x1f: /* US */
-			putmes("\", \"");
-			break; /* don't quote me on this */
+		/* case 0x1e: / RS ^^ / adm3a - home */
+		case 0x1f: /* US ^_ (used on input to enter monitor) */
+			printf("\r\n^_ (AF=%04x BC=%04x DE=%04x HL =%04x SP=%04x)\n", C, bdos_decode(C), AF, BC, DE, HL, SP);
+			break; /* better */
 			
 #ifdef VBELL
         case 0x07:              /* BEL: flash screen */
@@ -381,5 +382,15 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	break;
     case 9:
 	state = 0;
+	break;
+/* control literal */
+    case 10:
+	state = 0;
+	if(c < 32) {
+		putmes("\033[90m^"); /* literal escape (bold) */
+		putch(c + 32); /* code CTRL */  
+		putmes("\033[0m");
+	} else putch(c);
+	break;	    
     } 
 }
