@@ -313,3 +313,9 @@ Both XFree86 3.3.1 xterm and the Linux console support them, so I'm
 happy.
 
  -- "Benjamin C. W. Sittler" <bsittler@iname.com>
+ 
+The `ESC S` command sequences:
+
+	ESC S 
+
+ -- Jacko

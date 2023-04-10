@@ -312,6 +312,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	    state = 2;
 	    pix = c;
 	    break;
+	case 'S':	/* hook for fun */
+	    state = 11;
+	    break;
 	default:		/* some true ANSI sequence? */
 	    state = 0;
 	    putch(0x1b);
@@ -421,6 +424,10 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		putch(c + 64); /* code CTRL +32 is space gen slow, but funny */  
 		putmes("\033[0m");
 	} else putch(c);
-	break;	    
+	break;	
+    case 11: /* ESC S prefixed */
+        /* fun hook */
+        state = 0; /* auto exit after character process */
+    	break;    
     } 
 }
