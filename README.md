@@ -293,6 +293,8 @@ Here are the added escape sequences:
 	ESC C 4 (cursor off)
 	ESC B 6 (remember cursor position)
 	ESC C 6 (restore cursor position)
+	ESC * row+32 col+32 (set pixel)
+	ESC SPC row+32 col+32 (clear pixel)
 
 The following sequences are recognized by vt52() but don't cause any
 ANSI output:
@@ -301,8 +303,6 @@ ANSI output:
 	ESC C 5 (leave video mode)
 	ESC B 7 (preserve status line)
 	ESC C 7 (don't preserve status line)
-	ESC * row+32 col+32 (set pixel)
-	ESC SPC row+32 col+32 (clear pixel)
 	ESC L row+32 col+32 row+32 col+32 (set line)
 	ESC D row+32 col+32 row+32 col+32 (delete line)
 

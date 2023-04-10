@@ -185,6 +185,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	z80info *z80 = z80term;
     static int state = 0, x, y;
     char buff[32];
+    static int pix = 0;
 #ifdef DEBUGLOG
     static FILE *log = NULL;
     if (!log)
@@ -287,7 +288,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	    putch(c);
 	    break;
 	case '=':
-	case 'Y':
+	case 'Y': /* adm3a steals vt52 ESC A to D cursor option */
 	    state = 2;
 	    break;
 	case 'E':	/* insert line */
@@ -308,7 +309,8 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
             break;
 	case '*':       /* set pixel */
 	case ' ':       /* clear pixel */
-	    state = 8;
+	    state = 2;
+	    pix = c;
 	    break;
 	default:		/* some true ANSI sequence? */
 	    state = 0;
@@ -323,8 +325,24 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     case 3:
 	x = c - ' '+1;
 	state = 0;
-	sprintf(buff, "\033[%d;%dH", y, x);
-	putmes(buff);
+	if(pix == 0) {
+		sprintf(buff, "\033[%d;%dH", y, x);
+		putmes(buff);
+	} else {
+		/* set or clear pixel (remember cursor) */
+		putmes("\033[s");
+		sprintf(buff, "\033[%d;%dH", y, x);
+		putmes(buff);
+		if(pix == '*') {
+			/* set pixel */
+			putmes("μ"); /* SI for real micro computing joke 0xB5 Socio-economic classifications et al? */
+		} else {
+			/* clear pixel */
+			putch(' ');
+		}
+		putmes("\033[u");
+		pix = 0;
+	}
 	break;
     case 4:	/* <ESC>+B prefix */
         state = 0;
