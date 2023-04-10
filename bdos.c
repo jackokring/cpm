@@ -884,6 +884,9 @@ void check_BDOS_hook(z80info *z80) {
 			printf("\n\nThere is no way to get and use a custom linux Alloc Addr.\n");
 			/* fall through as dangerous to proceed */
 		    	printf("Falling through to exit handler.\n");
+		    	C = 0xFF; /* Bad Command Code */
+		    	check_BDOS_hook(z80); /* exit here via command bump */
+		    	break; /* remove compile error */
     default:
 	printf("\r\nbdos %d %s (AF=%04x BC=%04x DE=%04x HL=%04x SP=%04x STACK=", C, bdos_decode(C), AF, BC, DE, HL, SP);
 	for (i = 0; i < 8; ++i)

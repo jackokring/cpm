@@ -99,12 +99,13 @@ resetterm(void)
 \*-----------------------------------------------------------------------*/
 
 void
-setterm(void)
+setterm(z80info *z80)
 {
 #ifndef _WIN32
     if (have_term)
 		tcsetattr(fileno(stdin), TCSADRAIN, &rawterm);
 #endif
+	z80term = z80;
 }
 
 
@@ -247,7 +248,7 @@ loop:	/* "infinite" loop */
 		break;
 
 	case 'b':				/* boot cp/m */
-		setterm();
+		setterm(z80);
 		sysreset(z80);
 		return;
 		break;
@@ -495,7 +496,7 @@ loop:	/* "infinite" loop */
 	case 'c':			/* continue z80 execution */
 	case 'g':
 	cont:
-		setterm();
+		setterm(z80);
 
 		if (z80->trace)
 		{
@@ -841,7 +842,7 @@ input(z80info *z80, byte haddr, byte laddr, byte *val)
 		printf("INPUT : addr = %X%X    DATA = ", haddr, laddr);
 		fflush(stdout);
 		scanf("%x", &data);
-		setterm();
+		setterm(z80);
 		*val = data;
 		break;
 	}
@@ -1111,7 +1112,7 @@ main(int argc, const char *argv[])
 	signal(SIGINT, interrupt);
 #endif
 
-	setterm();
+	setterm(z80);
 
 	sysreset(z80);
 

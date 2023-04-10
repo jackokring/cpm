@@ -358,6 +358,7 @@ static void
 reader(z80info *z80)
 {
 	static FILE *fp = NULL;
+	int tst;
 
 	if (fp == NULL)
 	{
@@ -371,9 +372,9 @@ reader(z80info *z80)
 	}
 	
 	do {
-		int tst = get(fp);
+		tst = getc(fp);
 		A = tst & 0x7F;	
-	} while(A != tst && tst != EOF) /* UTF-8 -> ASCII */
+	} while(A != tst && tst != EOF); /* UTF-8 -> ASCII */
 
 	/* close up on EOF */
 	if (tst == EOF || A == CNTL('D') || A == '\0')

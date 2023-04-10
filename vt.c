@@ -2,7 +2,10 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
+#include "defs.h"
 #include "vt.h"
+
+z80info *z80term; /* terminal controller */
 
 int last = -1;
 
@@ -179,6 +182,7 @@ void putmes(const char *s) {
 }
 
 void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
+	z80info *z80 = z80term;
     static int state = 0, x, y;
     char buff[32];
 #ifdef DEBUGLOG
@@ -238,7 +242,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			break;
 		/* case 0x1e: / RS ^^ / adm3a - home */
 		case 0x1f: /* US ^_ (used on input to enter monitor) */
-			printf("\r\n^_ (AF=%04x BC=%04x DE=%04x HL =%04x SP=%04x)\n", C, bdos_decode(C), AF, BC, DE, HL, SP);
+			printf("\r\n^_ (AF=%04x BC=%04x DE=%04x HL =%04x SP=%04x)\n", AF, BC, DE, HL, SP);
 			break; /* better */
 			
 #ifdef VBELL

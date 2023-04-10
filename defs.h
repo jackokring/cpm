@@ -267,7 +267,7 @@ extern int nobdos;
 
 /* main.c */
 extern void resetterm(void);
-extern void setterm(void);
+extern void setterm(z80info *z80);
 extern boolean input(z80info *z80, byte haddr, byte laddr, byte *val);
 extern void output(z80info *z80, byte haddr, byte laddr, byte data);
 extern void haltcpu(z80info *z80);
@@ -298,5 +298,8 @@ extern int strace;
 char *bdos_decode(int n);
 int bdos_fcb(int n);
 void bdos_fcb_dump(z80info *z80);
+
+/* vt.c */
+extern z80info *z80term;
 
 #endif /* __DEFS_H_ */
