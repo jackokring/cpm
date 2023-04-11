@@ -482,11 +482,12 @@ void check_BDOS_hook(z80info *z80) {
 	}
 	break;
     case 2:     /* Console Output */
-	vt52(0x7F & E);
+	vt52(E);
 	HL = 0;
         B = H; A = L;
 	break;
     case 6:     /* direct I/O */
+    	/* The no echo input version */
 	switch (E) {
 	case 0xff:  if (!constat()) {
 	    HL = 0;
@@ -502,7 +503,7 @@ void check_BDOS_hook(z80info *z80) {
             B = H; A = L;
 	    F = 0;
 	    break;
-	default:    vt52(0x7F & E);
+	default:    vt52(E); /* just an auxiliary effect */
             HL = 0;
             B = H; A = L;
 	}
@@ -510,7 +511,7 @@ void check_BDOS_hook(z80info *z80) {
     case 9:	/* Print String */
 	s = (char *)(z80->mem + DE);
 	while (*s != '$')
-	    vt52(0x7F & *s++);
+	    vt52(*s++);
         HL = 0;
         B = H; A = L;
 	break;

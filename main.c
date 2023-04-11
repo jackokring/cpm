@@ -1052,7 +1052,7 @@ interrupt(int s)
 	    z80->sig = s;
 	}
 
-	signal(s, interrupt);
+	signal(s, interrupt); /* reshedule interrupt */
 }
 
 /*-----------------------------------------------------------------------*\

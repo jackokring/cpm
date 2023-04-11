@@ -471,6 +471,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         switch(c) {
         case ' ': /* no operation */
         default:
+        	if(c < 32) { /* CC0 control block */
+        	
+        	}
         	state = 0;
         	break;
         /* the added extra codes with functioning beyond character absorbtion
