@@ -506,7 +506,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     case 12: /* Mini UTF-8. Poor man's UDG. */
     	prefix[1] = (c >> 6) | 0x80 | ((prefix[0] & 0x0f) << 2);
     	prefix[0] = (prefix[0] >> 4) | 0xc0;
-    	prefix[2] = c & 0x3f | 0x80;
+    	prefix[2] = (c & 0x3f) | 0x80;
     	prefix[3] = state = 0;    
     	putmes(prefix); /* as string to bypass & 0x7f */
     } 
