@@ -319,6 +319,7 @@ happy.
 The `ESC S` command sequences are a terminal extension, as this is the best method of
 adding a feature output hook due to being able to print `$` terminated literal strings:
 
+	ESC S ctrl low (UTF-8 of ctrl*256+low. 13 bit)
 	ESC S SPC (no operation default)
 	ESC S ! (send raw MIDI byte, auto opens device)
 	ESC S " (prints a literal $ character mid string to not terminate print)

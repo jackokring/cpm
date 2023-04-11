@@ -189,6 +189,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     static int parse = 0;
     static unsigned int hex = 0;
     static unsigned int mcount = 0;
+    static char prefix;
     static FILE *midi = NULL;
 #ifdef DEBUGLOG
     static FILE *log = NULL;
@@ -472,7 +473,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         case ' ': /* no operation */
         default:
         	if(c < 32) { /* CC0 control block */
-        	
+        		prefix = c + 0xc0;
+        		state = 12;
+        		break;
         	}
         	state = 0;
         	break;
@@ -497,6 +500,10 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         	state = 0;
         	break;
         }
-    	break;    
+    	break;
+    case 12: /* Mini UTF-8. Poor man's UDG. */
+    	putch(prefix);
+    	putch(c + 0x80);
+    	state = 0;    
     } 
 }
