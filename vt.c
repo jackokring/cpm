@@ -174,10 +174,12 @@ int kget(int w)
 */
 
 void putch(int c) {	/* output character without postprocessing */
+    c &= 0x7f; /* save messed up UTF-8 terminal */
     write(fileno(stdout), &c, 1);
 }
 
 void putmes(const char *s) {
+    /* allow UTF-8 messages */
     write(fileno(stdout), s, strlen(s));
 }
 
@@ -189,7 +191,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     static int parse = 0;
     static unsigned int hex = 0;
     static unsigned int mcount = 0;
-    static char prefix;
+    static char prefix[3];
     static FILE *midi = NULL;
 #ifdef DEBUGLOG
     static FILE *log = NULL;
@@ -473,7 +475,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         case ' ': /* no operation */
         default:
         	if(c < 32) { /* CC0 control block */
-        		prefix = c + 0xc0;
+        		prefix[0] = c + 0xc0;
         		state = 12;
         		break;
         	}
@@ -502,8 +504,8 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         }
     	break;
     case 12: /* Mini UTF-8. Poor man's UDG. */
-    	putch(prefix);
-    	putch(c + 0x80);
-    	state = 0;    
+    	prefix[1] = c + 0x80;
+    	prefix[2] = state = 0;    
+    	putmes(prefix); /* as string to bypass & 0x7f */
     } 
 }
