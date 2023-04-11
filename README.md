@@ -324,5 +324,13 @@ adding a feature output hook due to being able to print `$` terminated literal s
 	ESC S " (prints a literal $ character mid string to not terminate print)
 	ESC S # len-1 ... (len MIDI bytes sent)
 	ESC S $ (close MIDI device, disconnect)
+	
+Printing to the list device requires CUPS `lpr`. Reading the reader needs `netcat` for
+a port `17202` raw connection. MIDI requires `amidi` for a virtual MIDI out (this uses
+the `vt52` layer so it works). The `!` forked shell from the monitor as a consequence
+also supports all the `ESC S` and other control codes.
+
+The utilities `vkeybd` and `aconnectgui` might be useful for MIDI too to connect the
+MIDI out to something.
 
  -- Jacko
