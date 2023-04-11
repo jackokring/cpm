@@ -186,6 +186,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     static int state = 0, x, y;
     char buff[32];
     static int pix = 0;
+    static int parse = 0;
 #ifdef DEBUGLOG
     static FILE *log = NULL;
     if (!log)
@@ -427,7 +428,16 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	break;	
     case 11: /* ESC S prefixed */
         /* fun hook */
-        state = 0; /* auto exit after character process */
+        switch(c) {
+        case ' ': /* no operation */
+        default:
+        	break;
+        /* the added extra codes with functioning beyond character absorbtion
+           set paree to non-zero to remain in sequence parsing.
+           This removes the affectation of state beyond a well defined single state. */
+        
+        }
+        if(!parse) state = 0; /* auto exit after character process */
     	break;    
     } 
 }

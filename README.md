@@ -314,8 +314,9 @@ happy.
 
  -- "Benjamin C. W. Sittler" <bsittler@iname.com>
  
-The `ESC S` command sequences:
+The `ESC S` command sequences are a terminal extension, as this is the best method of
+adding a feature output hook due to being able to print `$` terminated literal strings:
 
-	ESC S 
+	ESC S SPC (no operation default)
 
  -- Jacko
