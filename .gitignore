@@ -1,0 +1,6 @@
+**/*.o
+cpm
+cpmtool
+nbproject/*
+z88dk/**/*
+
