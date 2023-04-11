@@ -401,6 +401,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	    break;
 	case '5': /* video mode off */
 	case '7': /* don't preserve status line */
+		/* what custom status line? what no video? */
+		/* inbuilt obsolecence of apps? */
+	    putmes(" \033[92mShinny, shinny. Shinny piece of metal. Empty wallet, here are some ads.\033[0m ");
 	    break;
 	default:
 	    putch(0x1b);
@@ -437,7 +440,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
            This removes the affectation of state beyond a well defined single state. */
         
         }
-        if(!parse) state = 0; /* auto exit after character process */
+        if(!parse) {
+        	state = 0; /* auto exit after character process */
+        parse = 0; /* oops! ready for later */
     	break;    
     } 
 }
