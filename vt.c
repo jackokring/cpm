@@ -191,7 +191,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     static int parse = 0;
     static unsigned int hex = 0;
     static unsigned int mcount = 0;
-    static char prefix[3];
+    static char prefix[4];
     static FILE *midi = NULL;
 #ifdef DEBUGLOG
     static FILE *log = NULL;
@@ -475,7 +475,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         case ' ': /* no operation */
         default:
         	if(c < 32) { /* CC0 control block */
-        		prefix[0] = c + 0xc0;
+        		prefix[0] = c;
         		state = 12;
         		break;
         	}
@@ -504,8 +504,10 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         }
     	break;
     case 12: /* Mini UTF-8. Poor man's UDG. */
-    	prefix[1] = c + 0x80;
-    	prefix[2] = state = 0;    
+    	prefix[1] = (c >> 6) | 0x80 | ((prefix[0] & 0x0f) << 2);
+    	prefix[0] = (prefix[0] >> 4) | 0xc0;
+    	prefix[2] = c & 0x3f | 0x80;
+    	prefix[3] = state = 0;    
     	putmes(prefix); /* as string to bypass & 0x7f */
     } 
 }
