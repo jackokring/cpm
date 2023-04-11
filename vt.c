@@ -444,5 +444,6 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         	state = 0; /* auto exit after character process */
         parse = 0; /* oops! ready for later */
     	break;    
+	}
     } 
 }
