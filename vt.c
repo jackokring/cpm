@@ -83,6 +83,7 @@ int kget(int w)
 
         c = kpoll(w);
         if (c != 27) {
+        	if(c > 0x7f) c = -1; /* UTF filter */
                 return c;
         }
         /* We got ESC.. see if any chars follow */

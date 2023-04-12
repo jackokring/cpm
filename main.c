@@ -830,7 +830,7 @@ input(z80info *z80, byte haddr, byte laddr, byte *val)
 #endif
 		}
 
-		*val = data & 0x7F;
+		*val = data;
 		break;
 
 	/* return 0xFF if we have a character waiting to be read - save the
