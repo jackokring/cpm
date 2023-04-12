@@ -366,21 +366,21 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	default:
 		if(c > 0x7f) { /* 8 bit echo handler */
 		    	c &= 0x7f;
-		    	switch(c & 0x70) {
-		    	case 0x00:
+		    	if((c & 0x60) == 0) {
 		    		/* Fn key */
 		    		prefix[3] = 0;
 		    		/* 0x2648 = 0010 011001 001000 */
 				prefix[2] = 0x08 | 0x80;
 				prefix[1] = 0x19 | 0x80;
 				prefix[0] = 0x02 | 0xe0;
-				prefix[2] += (c & 0x0f);
+				prefix[2] += (c & 0x1f); /* so chess and cards as well */
 				putmes(prefix);
-		    		break;
-		    	case 0x10:
-		    		/* Specials */
-		    		break;
-		    	default: /* classic compact inverse */
+				/* just thinking though that outside the 13 bit range so would
+				   needs a special char ROM in hardware? No as CC0? But control literals as well. */
+				/* 13 bit = 8 kChar = 64 kB @ 8 B/Char. */
+				/* So the control literals are the odd ones out, kind of render activated, like afeature bit. */
+			} else {
+		    		/* classic compact inverse */
 		    		putmes("\033[7m");
 		    		putch(c);
 		    		putmes("\033[27m");	
