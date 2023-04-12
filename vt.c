@@ -359,6 +359,41 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	case 0x12: case 0x13: /* DC2, DC3 / ^R, ^S (XOFF) */
 	    break;
 	default:
+		if(c > 0x7f) { /* 8 bit echo handler */
+		    	c &= 0x7f;
+		    	switch(c & 0x70) {
+		    	case 0x00:
+		    		/* Fn key */
+		    		prefix[3] = 0;
+		    		switch(c & 0x0c) {  
+			    	case 0x04: /* Sft */
+			    		putmes("⇧");
+			    		break;
+				case 0x08: /* Alt */
+					putmes("⎇");
+					break;
+				case 0x0c:/* Ctl */
+					putmes("⎈");
+					break;
+				default:
+					break;
+				}
+		    		/* 0x2460 = 0010 010001 100000 */
+				prefix[2] = (c & 3) | 0x80 | 0x20;
+				prefix[1] = 0x11 | 0x80;
+				prefix[0] = 0x02 | 0xe0;
+				putmes(prefix);
+		    		break;
+		    	case 0x10:
+		    		/* Specials */
+		    		break;
+		    	default: /* classic compact inverse */
+		    		putmes("\033[7m");
+		    		putch(c);
+		    		putmes("\033[27m");	
+		    	}
+	    		return;
+    		}
 	    putch(c);
 	}
 	break;
@@ -513,8 +548,13 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     case 10:
 	state = 0;
 	if(c < 32) {
-		putmes("\033[90m^"); /* literal escape (bold) */
-		putch(c + 64); /* code CTRL +32 is space gen slow, but funny */  
+		/* 0x2400 = 0010 010000 000000 */
+		prefix[3] = 0;
+		prefix[2] = c | 0x80;
+		prefix[1] = 0x10 | 0x80;
+		prefix[0] = 0x02 | 0xe0;
+		putmes("\033[90m"); /* literal escape (bold) */
+		putmes(prefix); /* code CTRL +32 is space gen slow, but funny */  
 		putmes("\033[0m");
 	} else putch(c);
 	break;	
@@ -553,7 +593,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         }
     	break;
     case 12: /* Mini UTF-8. Poor man's UDG. */
-    	prefix[1] = (c >> 6) | 0x80 | ((prefix[0] & 0x0f) << 2);
+    	prefix[1] = (c >> 6) | 0xe0 | ((prefix[0] & 0x0f) << 2);
     	prefix[0] = (prefix[0] >> 4) | 0xc0;
     	prefix[2] = (c & 0x3f) | 0x80;
     	prefix[3] = state = 0;    
