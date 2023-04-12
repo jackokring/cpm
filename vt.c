@@ -70,6 +70,7 @@ void kpush(int c)
 int kget(int w)
 {
         int c;
+        int meta;
         if (stuff_ptr) {
         	int x;
         	c = stuff[0];
@@ -103,20 +104,69 @@ int kget(int w)
                         return 'S' - '@';
                 } else if (c == '3') { /* Delete key */
                         c = kpoll(0);
-                        return 'G' - '@';
+                        if(c == '~') {
+		                return 'G' - '@';
+                        }
+                        c -= 'P';
+                        if(c < 0 || c > 3) {
+                        	kpush('[');
+                        	kpush('3');
+		        	kpush(c + 'P');
+		                return 27;
+                        }
+                        /* a function F1 to F4 xterm */
+                        return c | 0x8c; /* high LAlt+Fn */
                 } else if (c == '2') { /* Insert key */
                         c = kpoll(0);
-                        return 'V' - '@';
+                        if(c == '~') {
+		                return 'V' - '@';
+                        }
+                        c -= 'P';
+                        if(c < 0 || c > 3) {
+                        	kpush('[');
+                        	kpush('2');
+		        	kpush(c + 'P');
+		                return 27;
+                        }
+                        /* a function F1 to F4 xterm */
+                        return c | 0x90; /* high Shift+Fn */
                 } else if (c == '5') { /* PgUp */
                         c = kpoll(0);
-                        return 'R' - '@';
+                        if(c == '~') {
+		                return 'R' - '@';
+                        }
+                        c -= 'P';
+                        if(c < 0 || c > 3) {
+                        	kpush('[');
+                        	kpush('5');
+		        	kpush(c + 'P');
+		                return 27;
+                        }
+                        /* a function F1 to F4 xterm */
+                        return c | 0x84; /* high Ctrl+Fn */
                 } else if (c == '6') { /* PgDn */
                         c = kpoll(0);
                         return 'C' - '@';
-                } else if (c == '1' || c == '7') { /* Home */
+                } else if (/* c == '1' ||*/ c == '7') { /* Home */
                 	kpush('s');
                         c = kpoll(0);
                         return 'Q' - '@';
+                } else if (c == '1' || c == '9') { /* Home-ish */
+                	meta = c - '1';
+                	c = kpoll(0);
+                	if(c == '~') { /* although [9~ is nothing */
+		        	kpush('s');
+		                return 'Q' - '@';
+                        } 
+                        c -= 'P';
+                        if(c < 0 || c > 7) {
+                        	kpush('[');
+                        	kpush('1' + meta);
+		        	kpush(c + 'P');
+		                return 27;
+                        }
+                        /* a function F1 to F4 xterm */
+                        return c | 0x80 | meta; /* high Fn (and Meta+Fn) */
                 } else if (c == '4' || c == '8') { /* End */
                         kpush('d');
                         c = kpoll(0);
