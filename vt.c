@@ -128,7 +128,7 @@ int kget(int w)
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x84; /* high Shift+Fn */
+                        return c | 0x80; /* high Shift+Fn */
                 } else if (c == '5') { /* PgUp */
                         c = kpoll(0);
                         if(c == '~') {
@@ -142,7 +142,7 @@ int kget(int w)
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x8c; /* high Ctrl+Fn */
+                        return c | 0x84; /* high Ctrl+Fn */
                 } else if (c == '6') { /* PgDn */
                         c = kpoll(0);
                         return 'C' - '@';
@@ -157,14 +157,19 @@ int kget(int w)
 		                return 'Q' - '@';
                         } 
                         c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
-                        if(c < 0 || c > 7) {
+                        if(c < 0 || c > 3) {
                         	kpush('[');
                         	kpush('1');
 		        	kpush(c + 'P');
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x80; /* high Fn */
+                        return c | 0x8c; /* high Fn */
+                        /* well it sort of was a nice cardinal, fixed, mutable */
+                        /* accidentally leading to F1 = king, F2 = queen, F3 = rook, F4 = bishop */
+                        /* Then it would be knight as lesser rook as lesser king,
+                           and pawn as lesser bishop ans lesser queen. */
+                        /* Then I eventually came up with house and baby. */ 
                 } else if (c == '4' || c == '8') { /* End */
                         kpush('d');
                         c = kpoll(0);
@@ -365,23 +370,11 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		    	case 0x00:
 		    		/* Fn key */
 		    		prefix[3] = 0;
-		    		switch(c & 0x0c) {  
-			    	case 0x04: /* Sft */
-			    		putmes("⇧");
-			    		break;
-				case 0x08: /* Alt */
-					putmes("⎇");
-					break;
-				case 0x0c:/* Ctl */
-					putmes("⎈");
-					break;
-				default:
-					break;
-				}
-		    		/* 0x2460 = 0010 010001 100000 */
-				prefix[2] = (c & 3) | 0x80 | 0x20;
-				prefix[1] = 0x11 | 0x80;
+		    		/* 0x2648 = 0010 011001 001000 */
+				prefix[2] = 0x08 | 0x80;
+				prefix[1] = 0x19 | 0x80;
 				prefix[0] = 0x02 | 0xe0;
+				prefix[2] += (c & 0x0f);
 				putmes(prefix);
 		    		break;
 		    	case 0x10:
