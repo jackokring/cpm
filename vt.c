@@ -70,7 +70,6 @@ void kpush(int c)
 int kget(int w)
 {
         int c;
-        int meta;
         if (stuff_ptr) {
         	int x;
         	c = stuff[0];
@@ -107,7 +106,7 @@ int kget(int w)
                         if(c == '~') {
 		                return 'G' - '@';
                         }
-                        c -= 'P';
+                        c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
                         	kpush('[');
                         	kpush('3');
@@ -115,13 +114,13 @@ int kget(int w)
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x8c; /* high LAlt+Fn */
+                        return c | 0x88; /* high LAlt+Fn */
                 } else if (c == '2') { /* Insert key */
                         c = kpoll(0);
                         if(c == '~') {
 		                return 'V' - '@';
                         }
-                        c -= 'P';
+                        c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
                         	kpush('[');
                         	kpush('2');
@@ -129,13 +128,13 @@ int kget(int w)
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x90; /* high Shift+Fn */
+                        return c | 0x84; /* high Shift+Fn */
                 } else if (c == '5') { /* PgUp */
                         c = kpoll(0);
                         if(c == '~') {
 		                return 'R' - '@';
                         }
-                        c -= 'P';
+                        c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
                         	kpush('[');
                         	kpush('5');
@@ -143,7 +142,7 @@ int kget(int w)
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x84; /* high Ctrl+Fn */
+                        return c | 0x8c; /* high Ctrl+Fn */
                 } else if (c == '6') { /* PgDn */
                         c = kpoll(0);
                         return 'C' - '@';
@@ -151,22 +150,21 @@ int kget(int w)
                 	kpush('s');
                         c = kpoll(0);
                         return 'Q' - '@';
-                } else if (c == '1' || c == '9') { /* Home-ish */
-                	meta = c - '1';
+                } else if (c == '1') { /* Home-ish */
                 	c = kpoll(0);
-                	if(c == '~') { /* although [9~ is nothing */
+                	if(c == '~') { /* although [9~ is nothing ... leave Meta for the OS. */
 		        	kpush('s');
 		                return 'Q' - '@';
                         } 
-                        c -= 'P';
+                        c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 7) {
                         	kpush('[');
-                        	kpush('1' + meta);
+                        	kpush('1');
 		        	kpush(c + 'P');
 		                return 27;
                         }
                         /* a function F1 to F4 xterm */
-                        return c | 0x80 | meta; /* high Fn (and Meta+Fn) */
+                        return c | 0x80; /* high Fn */
                 } else if (c == '4' || c == '8') { /* End */
                         kpush('d');
                         c = kpoll(0);
