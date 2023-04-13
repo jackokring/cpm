@@ -60,10 +60,10 @@ Here is CP/M WordStar running on Ubuntu in an xterm:
 
 ![CP/M WordStar](cpmws.png)
 
-### Command mode
+### Edited Command mode (20023-04-13)
 
 You may hit Ctrl-_ (Ctrl-underscore- usually you have hold Shift and Ctrl at
-the same time to do this), or any of the F1 - F4 keys to interrupt the
+the same time to do this) to interrupt the
 emulation and bring up the Z-80 command prompt.  From this prompt a number
 of commands are available:
 
