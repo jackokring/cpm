@@ -309,11 +309,19 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			/* Hard limit indicator */
 			putmes(" \033[92mYou are in a queue. All our operatives are using remote controls. We'll get back to you as soon a possible.\033[0m ");
 			break;
+		/* techically the next for represent an object hierachy */
+		/* so the ad3a picked RS as the record of a new screen */
+		/* so US fits in as a system of bytes as the unit representing a record on a screen */
+		/* that would make GS the group of screens an animation or video or perhaps an app sequencing */
+		/* and as GS as thought would then make FS the whole play list */
+		/* a higher level would have to be a collection of purposes */
+		/* Database/Table/Record/Field are such a group too */
 		case 0x1c: /* FS ^\ */
 			state = 10; /* escape control literal */
 			break;
 		case 0x1d: /* GS ^] */ 
-			/* escape sequence close/reset */
+			/* lucky for prefix notations, and the default RUN prefix before LIT or HALT */
+			putmes(" \033[92mBye, that fart really tied the room together.\033[0m ");
 			break;
 		/* case 0x1e: / RS ^^ / adm3a - home */
 		case 0x1f: /* US ^_ (used on input to enter monitor) */
