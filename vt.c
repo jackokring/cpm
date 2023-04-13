@@ -81,6 +81,7 @@ int kget(int w)
         	return c;
         }
 
+	c = kpoll(w);
         while(c > 0x7f) c = kpoll(w); /* UTF filter */
         if (c != 27) {
                 return c;
@@ -379,7 +380,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			} else {
 		    		/* classic compact inverse */
 		    		putmes("\033[7m");
-		    		putch(c);
+		    		putch(c); /* note dir prints a space in inverse on an 8 bit terminal */
 		    		putmes("\033[27m");	
 		    	}
 	    		return;

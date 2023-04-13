@@ -336,7 +336,8 @@ also supports all the `ESC S` and other useful control `ADM-3A` codes.
 The utilities `vkeybd` and `aconnectgui` might be useful for MIDI too to connect the
 MIDI out to something.
 
-I also mapped in some 8 bit character behaviour, just on the console.
+I also mapped in some 8 bit character behaviour, just on the console. NB. a `dir` will
+actually output a inverted space on an 8 bit terminal.
 
  -- Jacko
  
