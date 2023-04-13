@@ -23,3 +23,9 @@ You may not house the baby if it is not looked after by an adjacent piece.
 
 7. And then you play, remembering only kights can jump over houses and babies, and neither houses nor babies can be captured.
 If you are in stalemate, check to see if you can move the house or your baby. You can't desert your baby to escape stalemate.
+
+8. The house consistency rule applies in relation to moving into check by the house. On your turn the house is "yours"
+and so you could move next to it but have you moved into check? In this sense the house can't attack the king. The house
+is therefore not active against the king.
+
+Some say this changes the whole game of Chess. Just adding a house and two different coloured babies.
