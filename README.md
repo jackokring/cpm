@@ -337,7 +337,14 @@ The utilities `vkeybd` and `aconnectgui` might be useful for MIDI too to connect
 MIDI out to something.
 
 I also mapped in some 8 bit character behaviour, just on the console. NB. a `dir` will
-actually output a inverted space on an 8 bit terminal.
+actually output a inverted space on an 8 bit terminal. If you want to use a `ADM-3A`
+terminal with any linux CLI application, start `./cpm`, enter the monitor mode by
+`Ctrl`+`Shift`+`_`, then enter `!` as the command with the newline. Then you're in.
+
+It's an 8 bit super `ADM+3A` kind of. A `Kaypro II` extended terminal emulator.
+It seemed more reasonable to use this extra functionality, while still allowing
+quite a lot of `ANSI` and `VT` control. It makes easy connections needing this
+terminal format by redirection of standard input and output.
 
  -- Jacko
  
