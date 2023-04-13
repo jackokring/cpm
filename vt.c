@@ -93,6 +93,7 @@ int kget(int w)
         	return 27;
         } else if (c == '[') {
                 c = kpoll(0);
+                /* cursor control code choices */
                 if (c == 'A') { /* Up arrow */
                         return 'E' - '@';
                 } else if (c == 'B') { /* Down arrow */
@@ -170,6 +171,8 @@ int kget(int w)
                         /* Then it would be knight as lesser rook as lesser king,
                            and pawn as lesser bishop ans lesser queen. */
                         /* Then I eventually came up with house and baby. */ 
+                        
+                        /* check 8 bit output handling for more */
                 } else if (c == '4' || c == '8') { /* End */
                         kpush('d');
                         c = kpoll(0);
@@ -184,34 +187,9 @@ int kget(int w)
                 	kpush('[');
                 	kpush(c);
                         return 27;
-		}
-        } else if (c == 'O') {
-                c = kpoll(0);
-                if (c == 'A') { /* Up arrow */
-                        return 'E' - '@';
-                } else if (c == 'B') { /* Down arrow */
-                        return 'X' - '@';
-                } else if (c == 'C') { /* Right arrow */
-                        return 'D' - '@';
-                } else if (c == 'D') { /* Left arrow */
-                        return 'S' - '@';
-                } else if (c == 'd') { /* Ctrl left arrow (rxvt) */
-                        return 'A' - '@';
-                } else if (c == 'c') { /* Ctrl right arrow (rxvt) */
-                        return 'F' - '@';
-                } else if (c == 'H') { /* Home */
-                        kpush('s');
-                        return 'Q' - '@';
-                } else if (c == 'F') { /* End */
-                        kpush('d');
-                        return 'Q' - '@';
-		} else if (c == 'P' || c == 'Q' || c == 'R' || c == 'S') {
-			return INTR_CHAR;
-                } else {
-                	kpush('O');
-                	kpush(c);
-                	return 27;
-		}
+		} /* end vt52 handling of important codes */
+		/* cursor control code choices */
+		/* I assume this is kept for remove input use as the linux console is vt */
         } else {
         	kpush(c);
         	return 27;
@@ -219,12 +197,12 @@ int kget(int w)
 }
 
 /*
-[5~ PgUp
-[6~ PgDn
-[7~ Home
-[8~ End
-Od  Ctrl-Ltarw
-Oc  Ctrl-Rtarw
+ESC [5~ PgUp
+ESC [6~ PgDn
+ESC [7~ Home
+ESC [8~ End
+ESC Od  Ctrl-Ltarw
+ESC Oc  Ctrl-Rtarw
 */
 
 void putch(int c) {	/* output character without postprocessing */

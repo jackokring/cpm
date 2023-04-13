@@ -269,7 +269,7 @@ Version history:
 		copyrighted CP/M 2.2.
 	Added date/time support for P2DOS and its utilities.
 
-## Readme from cpm-0.2.1-mod2
+## Edited Readme from cpm-0.2.1-mod2 (20023-04-13)
 
 The Kaypro 2x supports several extensions to the ADM 3A terminal
 escapes, and I added translations to vt52() for some of these
@@ -316,6 +316,8 @@ happy.
 
  -- "Benjamin C. W. Sittler" <bsittler@iname.com>
  
+# Some Additional Output Escape Sequences
+ 
 The `ESC S` command sequences are a terminal extension, as this is the best method of
 adding a feature output hook due to being able to print `$` terminated literal strings:
 
@@ -335,3 +337,7 @@ The utilities `vkeybd` and `aconnectgui` might be useful for MIDI too to connect
 MIDI out to something.
 
  -- Jacko
+ 
+# Input Escape Sequences
+
+
