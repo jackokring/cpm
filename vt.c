@@ -92,15 +92,13 @@ int kget(int w)
         	return 27;
         } else if (c == '[') {
                 c = kpoll(0);
-                /* cursor control code choices */
-                if (c == 'A') { /* Up arrow */
-                        return 'E' - '@';
-                } else if (c == 'B') { /* Down arrow */
-                        return 'X' - '@';
-                } else if (c == 'C') { /* Right arrow */
-                        return 'D' - '@';
-                } else if (c == 'D') { /* Left arrow */
-                        return 'S' - '@';
+                /* cursor control code choices vt52 to adm 3a */
+                /* yes, doing the output first is a BLINKY.exe joke */
+                /* vt52 to adm-3a supplied ... NABU ... */
+                if (c >= 'A' && c <= 'D') { /* Up arrow */ /* Down arrow */ /* Right arrow */ /* Left arrow */
+                	kpush('O');
+                	kpush(c);
+                        return 27;
                 } else if (c == '3') { /* Delete key */
                         c = kpoll(0);
                         if(c == '~') {
@@ -147,14 +145,15 @@ int kget(int w)
                         c = kpoll(0);
                         return 'C' - '@';
                 } else if (/* c == '1' ||*/ c == '7') { /* Home */
-                	kpush('s');
-                        c = kpoll(0);
-                        return 'Q' - '@';
+                	kpush('O');
+                	kpush('H');
+                        return 27;
                 } else if (c == '1') { /* Home-ish */
                 	c = kpoll(0);
                 	if(c == '~') { /* although [9~ is nothing ... leave Meta for the OS. */
-		        	kpush('s');
-		                return 'Q' - '@';
+		        	kpush('O');
+                		kpush('H');
+                        	return 27;
                         } 
                         c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
@@ -173,15 +172,17 @@ int kget(int w)
                         
                         /* check 8 bit output handling for more */
                 } else if (c == '4' || c == '8') { /* End */
-                        kpush('d');
-                        c = kpoll(0);
-                        return 'Q' - '@';
+                        kpush('O');
+                	kpush('F');
+                        return 27;
                 } else if (c == 'H') { /* Home */
-                        kpush('s');
-                        return 'Q' - '@';
+                        kpush('O');
+                	kpush('H');
+                        return 27;
                 } else if (c == 'F') { /* End */
-                        kpush('d');
-                        return 'Q' - '@';
+                        kpush('O');
+                	kpush('F');
+                        return 27;
                 } else {
                 	kpush('[');
                 	kpush(c);
