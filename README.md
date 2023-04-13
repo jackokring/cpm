@@ -331,13 +331,28 @@ adding a feature output hook due to being able to print `$` terminated literal s
 Printing to the list device requires CUPS `lpr`. Reading the reader needs `netcat` for
 a port `17202` raw connection. MIDI requires `amidi` for a virtual MIDI out (this uses
 the `vt52` layer so it works). The `!` forked shell from the monitor as a consequence
-also supports all the `ESC S` and other control codes.
+also supports all the `ESC S` and other useful control `ADM-3A` codes.
 
 The utilities `vkeybd` and `aconnectgui` might be useful for MIDI too to connect the
 MIDI out to something.
 
+I also mapped in some 8 bit character behaviour, just on the console.
+
  -- Jacko
  
 # Input Escape Sequences
+
+The code has been altered to for a VT taking 52, to map ADM-3A output from VT52 input.
+So you'll be wanting ADM-3A versions of any binaries. I understand these were quite
+popular, and `Tektronix 4010` graphics emulation is an obvious posibility you `Vectrex`
+fans. Currently `^]` (GS) really ties the room together.
+
+I mapped `Insert` and `delete` to an obvious lowercase extension of the `PgUp` and `PgDn`.
+Obviously you'll have to go back to origional `WordStar` keys or get fixing the binary.
+I thinkn this is more functionally correct as future `NABU` might make a better `ADM-3A`
+than an over featured `VT52`. Apparently I've mapped the `F1` to `F4` keys to non-ASCII
+codes 140 to 144. Shift, alt and control can reduce these.
+
+  -- Jacko
 
 
