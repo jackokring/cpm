@@ -323,9 +323,9 @@ adding a feature output hook due to being able to print `$` terminated literal s
 
 	ESC S ctrl low (UTF-8 of ctrl*256+low. 13 bit)
 	ESC S SPC (no operation default)
-	ESC S ! (send raw MIDI byte, auto opens device)
+	ESC S ! (raw vt52 mode, can't escape from it)
 	ESC S " (prints a literal $ character mid string to not terminate print)
-	ESC S # len-1 ... (len MIDI bytes sent)
+	ESC S # len-1 ... (len MIDI bytes send, after opening MIDI)
 	ESC S $ (close MIDI device, disconnect)
 	
 Printing to the list device requires CUPS `lpr`. Reading the reader needs `netcat` for

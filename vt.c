@@ -102,7 +102,9 @@ int kget(int w)
                 } else if (c == '3') { /* Delete key */
                         c = kpoll(0);
                         if(c == '~') {
-		                return 'G' - '@';
+		                kpush('O');
+		        	kpush('d'); /* lower case */
+		                return 27;
                         }
                         c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
@@ -116,7 +118,9 @@ int kget(int w)
                 } else if (c == '2') { /* Insert key */
                         c = kpoll(0);
                         if(c == '~') {
-		                return 'V' - '@';
+		                kpush('O');
+		        	kpush('c'); /* lower case */
+		                return 27;
                         }
                         c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
@@ -129,8 +133,14 @@ int kget(int w)
                         return c | 0x80; /* high Shift+Fn */
                 } else if (c == '5') { /* PgUp */
                         c = kpoll(0);
+                        if (c >= 'A' && c <= 'D') {
+		        	/* do nothing */
+		        	/* made PgUp/PgDn/Ins/Del do like arrows but with lower case letter */
+		        }
                         if(c == '~') {
-		                return 'R' - '@';
+		                kpush('O');
+		        	kpush('a'); /* lower case */
+		                return 27;
                         }
                         c -= 'P'; /* CTL/ALT/SFT/---:F4/F3/F2/F1 low nibble */
                         if(c < 0 || c > 3) {
@@ -143,7 +153,9 @@ int kget(int w)
                         return c | 0x84; /* high Ctrl+Fn */
                 } else if (c == '6') { /* PgDn */
                         c = kpoll(0);
-                        return 'C' - '@';
+                        kpush('O');
+		        kpush('b'); /* lower case */
+		        return 27;
                 } else if (/* c == '1' ||*/ c == '7') { /* Home */
                 	kpush('O');
                 	kpush('H');
@@ -201,8 +213,9 @@ ESC [5~ PgUp
 ESC [6~ PgDn
 ESC [7~ Home
 ESC [8~ End
-ESC Od  Ctrl-Ltarw
-ESC Oc  Ctrl-Rtarw
+ESC Od  Ctrl-Ltarw (made delete key do this)
+ESC Oc  Ctrl-Rtarw (made insert key do this)
+(used PgUp/PgDn for Y axis ab)
 */
 
 void putch(int c) {	/* output character without postprocessing */
@@ -238,7 +251,6 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		mcount = c + 1; /* get counter */
 		parse = 3;
 		return;
-	case 1:
 	case 3:
 		/* send MIDI byte. */
         	if(midi == NULL) {
@@ -248,18 +260,14 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         	if(midi != NULL) {
         		putc(c, midi);
         	}
-        	if(parse == 3) {
-        		mcount--;
-        		if(mcount != 0) return; /* remain in parse loop */
-        	}
+		mcount--;
+		if(mcount != 0) return; /* remain in parse loop */
         	parse = 0; /* finished */
         	return;
+        case 1:
+        	putch(c); /* raw vt52+ terminal locked mode */
+        	return;
 	}
-    if(c == 0x1d) /* GS ^] */ {
-	/* escape sequence close/reset */
-	state = 0;
-	return;
-    }
     switch (state) {
     case 0:
 	switch (c) {
@@ -303,6 +311,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			break;
 		case 0x1c: /* FS ^\ */
 			state = 10; /* escape control literal */
+			break;
+		case 0x1d: /* GS ^] */ 
+			/* escape sequence close/reset */
 			break;
 		/* case 0x1e: / RS ^^ / adm3a - home */
 		case 0x1f: /* US ^_ (used on input to enter monitor) */
@@ -544,7 +555,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         /* the added extra codes with functioning beyond character absorbtion
            set paree to non-zero to remain in sequence parsing.
            This removes the affectation of state beyond a well defined single state. */
-        case '!': /* MIDI using alsa ... vkeybd& aconnectgui& popen("amidi -p virtual -s /dev/stdin", "w") */
+        case '!': 
         	parse = 1;
         	state = 0;
         	break;
@@ -554,6 +565,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         	state = 0; 
         	break;
         case '#': /* MIDI multibyte. Can't send a 0x24 byte in a print string loop. */
+        	/* MIDI using alsa ... vkeybd& aconnectgui& popen("amidi -p virtual -s /dev/stdin", "w") */
         	parse = 2;
         	state = 0;
         	break;
