@@ -304,7 +304,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 			putmes(" \033[91mThe body of Christ. Blessed Mary Mother of God. Hands together for holy code handling. Like an 'er gin, boop, boop. Touched for the very first time. \033[0m ");
 			/* the best constant syn jokes are the best */
 			break;
-		case 0x17: /* ETB (back later, busy) ^W */
+		case 0x17: /* ETB (back later, busy) ^W */ /* clear to end of screen */
 			putmes(" \033[92m'$\033[0m ");
 			/* I believe */
 			break;
@@ -342,6 +342,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	    break;
 	case 0x1a:		/* adm3a clear screen */
 	case 0x0c:		/* vt52 clear screen */
+		/* adm3a right */ /* 0x0b up */ /* lf = down (no implicit CR) */ /* bs = left */
 	    putmes("\033[H\033[2J");
 	    break;
 	case 0x1e:		/* adm3a cursor home */
@@ -391,7 +392,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	    putch(c);
 	}
 	break;
-    case 1:	/* esc was sent */
+    case 1:	/* esc was sent */ /* A -> ASCII, G -> Greek */
 	switch (c) {
         case 0x1b:
 	    putch(c);
