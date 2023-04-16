@@ -276,7 +276,10 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		/* Jacko override put CTRL */
 		/*^ the irony of LF equates to VT when the CR is not auto (the LF/CR what do auto point?) */
 		/* Always pass ^D */
-		case 0: /* NUL (C string terminal, but nothing as a SYN duplicate but zero, so flash default) */
+		case 0: /* NUL (C string terminal, but nothing as a SYN duplicate but zero, so flash default) ^@ */
+			break;
+		case 5: /* 5 is actually send ID string ^E */
+			kpush(0x06); /* an ID string OK to loop echo */
 			break;
 		case 6: /* ACK (got you) */
 			putmes("\033[92m"); /* green ^F */
@@ -287,12 +290,20 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0xf: /* SI ^O */
 			putmes("\033[0m"); /* default */
 			break;
-		case 0x10: /* DLE (ask root RPC options) */
+		case 0x10: /* DLE (ask root RPC options) */ /* vt52 uses for control code literal escape */
 			putmes("\033[95m"); /* magenta ^P */
 			break;
 		case 0x11: /* DC1 (user do) */
 			putmes("\033[94m"); /* blue ^Q */ /* XON */
 			break;
+		case 0x12: /* DC2 / ^R */
+			/* bright black */
+			putmes("\033[90m");
+		    	break;
+		case 0x13: /* DC3 / ^S (XOFF) */
+			/* dark white */
+			putmes("\033[37m");
+		    	break;
 		case 0x14: /* DC4 (user undo) */
 			putmes("\033[93m"); /* yellow ^T */
 			break;
@@ -331,7 +342,20 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x1f: /* US ^_ (used on input to enter monitor) */
 			printf("\r\n^_ (AF=%04x BC=%04x DE=%04x HL =%04x SP=%04x)\n", AF, BC, DE, HL, SP);
 			break; /* better */
+		/* cursor motion relative not really viable */
+		case 0x0c: /* FF = adm3a right ^L */ 
+			putmes("\033[H\033[2J"); /* an obvious clear screen indicator */
+			break;
+		case 0x0b: /* VT = 0x0b up ^K */ 
+			/* I remember this cookie from MS-DOS */
+			/* without position codes it was home, y*^L, x*^J */
 			
+			break;
+		/* case 0x0a: LF = down (no implicit CR) ^J - Leads to ERROR in render as LF is auto ^M
+			putmes("\033[1B");
+			break;
+		case 0x08: BS = left ^H 
+			break; */
 #ifdef VBELL
         case 0x07:              /* BEL: flash screen */
             putmes("\033[?5h\033[?5l");
@@ -341,8 +365,6 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	    putmes("\b \b");
 	    break;
 	case 0x1a:		/* adm3a clear screen */
-	case 0x0c:		/* vt52 clear screen */
-		/* adm3a right */ /* 0x0b up */ /* lf = down (no implicit CR) */ /* bs = left */
 	    putmes("\033[H\033[2J");
 	    break;
 	case 0x1e:		/* adm3a cursor home */
@@ -360,10 +382,8 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	case 3:		/* delete line */
 	    putmes("\033[M");
 	    break;
-	case 0x18: case 5:	/* clear to eol */
+	case 0x18:	/* clear to eol ^X */
 	    putmes("\033[K");
-	    break;
-	case 0x12: case 0x13: /* DC2, DC3 / ^R, ^S (XOFF) */
 	    break;
 	default:
 		if(c > 0x7f) { /* 8 bit echo handler */
@@ -397,7 +417,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         case 0x1b:
 	    putch(c);
 	    break;
-	case '=':
+	case '=': /* official adm3a */
 	case 'Y': /* adm3a steals vt52 ESC A to D cursor option */
 	    state = 2;
 	    break;

@@ -295,6 +295,8 @@ Here are the added escape sequences:
 	ESC C 6 (restore cursor position)
 	ESC * row+32 col+32 (set pixel)
 	ESC SPC row+32 col+32 (clear pixel)
+	ESC Y row+32 col+32 (set location, vt52)
+	ESC = row+32 col+32 (set location)
 
 The following have sarcastic implementations:
 
@@ -346,11 +348,13 @@ It seemed more reasonable to use this extra functionality, while still allowing
 quite a lot of `ANSI` and `VT` control. It makes easy connections needing this
 terminal format by redirection of standard input and output.
 
+The motion control codes are not supported. `^A` is a shortcut for set location.
+
  -- Jacko
  
 # Input Escape Sequences
 
-The code has been altered for a VT taking 52, to map ADM-3A output from VT52 input.
+The code has been altered for a VT taking 52, to map ADM-3A output from `xterm` input.
 So you'll be wanting ADM-3A versions of any binaries. I understand these were quite
 popular, and `Tektronix 4010` graphics emulation is an obvious posibility you `Vectrex`
 fans. Currently `^]` (GS) really ties the room together, but then again maybe an `xterm`
