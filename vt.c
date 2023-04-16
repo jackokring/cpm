@@ -60,6 +60,8 @@ int constat()
 int stuff[FIFO_SIZE];
 int stuff_ptr;
 
+int parse = 0;
+
 void kpush(int c)
 {
 	if (c != -1 && stuff_ptr != FIFO_SIZE) {
@@ -83,7 +85,7 @@ int kget(int w)
 
 	c = kpoll(w);
         while(c > 0x7f) c = kpoll(w); /* UTF filter */
-        if (c != 27) {
+        if (c != 27 || parse == 2) { /* and vt52/100+ mode */
                 return c;
         }
         /* We got ESC.. see if any chars follow */
@@ -234,7 +236,6 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
     static int state = 0, x, y;
     char buff[32];
     static int pix = 0;
-    static int parse = 0;
     static unsigned int hex = 0;
     static unsigned int mcount = 0;
     static char prefix[4];
