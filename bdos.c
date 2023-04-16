@@ -347,6 +347,7 @@ char *bdos_decode(int n)
 	    case 40: return "Write Random with Zero Fill (Use 34)"; /* Write Random with Zero Fill (rare? but 34) */ 
 	    /* CP/M 2.2 ends here */
 	    /* case 41: */ /* seems to use chdir() */
+	    /* so no numer 41, thy shalt not escape chroot */
 	    default: return "Unknown";
 	}
 }
