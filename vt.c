@@ -266,7 +266,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
         	parse = 0; /* finished */
         	return;
         case 1:
-        	putch(c); /* raw vt52+ terminal locked mode */
+        	putch(c & 0x7f); /* raw vt52+ terminal locked mode ASCII only */
         	return;
 	}
     switch (state) {
@@ -320,7 +320,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x1c: /* FS ^\ */
 			state = 10; /* escape control literal */
 			break;
-		case 0x1d: /* GS ^] */ 
+		case 0x1d: /* GS ^] */ /* Techtronix 4010 graphical mode entry point was here */
 			/* lucky for prefix notations, and the default RUN prefix before LIT or HALT */
 			putmes(" \033[92mBye, that fart really tied the room together.\033[0m ");
 			break;
