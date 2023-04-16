@@ -350,10 +350,11 @@ terminal format by redirection of standard input and output.
  
 # Input Escape Sequences
 
-The code has been altered to for a VT taking 52, to map ADM-3A output from VT52 input.
+The code has been altered for a VT taking 52, to map ADM-3A output from VT52 input.
 So you'll be wanting ADM-3A versions of any binaries. I understand these were quite
 popular, and `Tektronix 4010` graphics emulation is an obvious posibility you `Vectrex`
-fans. Currently `^]` (GS) really ties the room together.
+fans. Currently `^]` (GS) really ties the room together, but then again maybe an `xterm`
+pass through goes 4014.
 
 I mapped `Insert` and `delete` to an obvious lowercase extension of the `PgUp` and `PgDn`.
 Obviously you'll have to go back to origional `WordStar` keys or get fixing the binary.

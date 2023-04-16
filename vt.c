@@ -298,6 +298,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x15: /* NAK (say waht?) */
 			putmes("\033[91m"); /* red ^U */
 			break;
+		/* These may change later as they don't seem to be defined as anything exciting */
 		case 0x16: /* SYN (achives phase lock so needs bit changes) ^V */
 			putmes(" \033[91mThe body of Christ. Blessed Mary Mother of God. Hands together for holy code handling. Like an 'er gin, boop, boop. Touched for the very first time. \033[0m ");
 			/* the best constant syn jokes are the best */
@@ -320,9 +321,10 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x1c: /* FS ^\ */
 			state = 10; /* escape control literal */
 			break;
-		case 0x1d: /* GS ^] */ /* Techtronix 4010 graphical mode entry point was here */
+		case 0x1d: /* GS ^] */ /* Techtronix 4014 graphical mode entry point was here */
 			/* lucky for prefix notations, and the default RUN prefix before LIT or HALT */
-			putmes(" \033[92mBye, that fart really tied the room together.\033[0m ");
+			/* putmes(" \033[92mBye, that fart really tied the room together.\033[0m "); */
+			putch(0x1d); /* apparently a pass through is fine for Techtronix 4014 graphics */
 			break;
 		/* case 0x1e: / RS ^^ / adm3a - home */
 		case 0x1f: /* US ^_ (used on input to enter monitor) */
@@ -424,7 +426,7 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 	default:		/* some true ANSI sequence? */
 	    state = 0;
 	    putch(0x1b);
-	    putch(c);
+	    putch(c); /* ESC P does all manor of ReGIS and Sixel graphics stuff */
 	}
 	break;
     case 2:
