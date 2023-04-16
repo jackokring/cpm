@@ -349,7 +349,9 @@ void vt52(int c) {	/* simple vt52,adm3a => ANSI conversion */
 		case 0x0b: /* VT = 0x0b up ^K */ 
 			/* I remember this cookie from MS-DOS */
 			/* without position codes it was home, y*^L, x*^J */
-			
+			/* a bit of Zerobiwan force from the NutJob.NET */
+			/* Kweesy Johnson? */
+			putmes("\033[2K\r"); /* redo line seems appropriate (he work on the underground didn't you know? */
 			break;
 		/* case 0x0a: LF = down (no implicit CR) ^J - Leads to ERROR in render as LF is auto ^M
 			putmes("\033[1B");
